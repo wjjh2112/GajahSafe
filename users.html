@@ -33,7 +33,6 @@
 
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
-
 </head>
 
 <body>
@@ -189,8 +188,46 @@
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
+                        <!-- Pop-up form -->
+                        <div id="addUserForm" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h4>Generate Registration Link</h4><br>
+                                <form id="generateLinkForm">
+                                    <div class="form-group">
+                                            <label for="expiryDays">Link Expiry (days)</label>
+                                            <input style="display:block;
+                                            padding: 8px 12px;
+                                            cursor: text;
+                                            border: 1px solid #aaa;
+                                            border-radius: 4px" type="number" id="expiryDays" name="expiryDays" min="1" required class="form-text">
+                                    </div>
+                                    <div class="form-group button-radio-group">
+                                        <label>Role</label>
+                                        <div style="justify-content: end;">
+                                            <label for="adminRole" class="button-radio-label">
+                                                <input type="radio" name="role" id="adminRole" value="admin" class="form-radio-input">
+                                                <span class="button-radio-button">Admin</span>
+                                            </label>
+                                            <label for="viewerRole" class="button-radio-label">
+                                                <input type="radio" name="role" id="viewerRole" value="viewer" class="form-radio-input">
+                                                <span class="button-radio-button">Viewer</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="generateLinkBtn" class="au-btn" style="width: 100%;">Generate Link</button>
+                                    <div id="generatedLinkArea" style="display: none;">
+                                        <div class="input-group">
+                                            <input type="text" id="generatedLink" readonly class="form-text">
+                                            <button type="button" id="copyLinkBtn" class="au-btn--trans-backg"><i class="fas fa-copy"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
                         <div class="row">
-                            <div class="col">
+                            <div class="col-12">
                                 <div class="au-card">
                                     <div class="au-card-header">
                                         <h3 class="title-2">Users</h3><br>
@@ -206,26 +243,26 @@
                                                 </div>
                                             </div>
                                             <div class="table-data__tool-right">
-                                                <button class="au-btn au-btn-icon au-btn--small">
+                                                <button id="addUserBtn" class="au-btn au-btn-icon au-btn--small">
                                                     <i class="zmdi zmdi-plus"></i> User
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="au-card-body">
-                                        <div class="table-responsive table-data">
-                                            <table class="table">
+                                        <div class="table-container">
+                                            <table class="table table-data">
                                                 <thead>
                                                     <tr>
                                                         <td><label class="au-checkbox">
                                                             <input type="checkbox">
-                                                            <span class="au-checkmark"></span>
+                                                            <div class="au-checkmark"></div>
                                                         </label></td>
-                                                        <td>name</td>
-                                                        <td>ref. id</td>
-                                                        <td>role</td>
-                                                        <td>status</td>
-                                                        <td>action</td>
+                                                        <th>name</th>
+                                                        <th>ref. id</th>
+                                                        <th>role</th>
+                                                        <th>status</th>
+                                                        <th class="text-center">action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -245,7 +282,7 @@
                                                         <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
                                                         <td><p>Admin</p></td>
                                                         <td><p>Active</p></td>
-                                                        <td><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
                                                     </tr>
                                                     <tr>
                                                         <td>
@@ -263,7 +300,7 @@
                                                         <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
                                                         <td><p>Viewer</p></td>
                                                         <td><p>Active</p></td>
-                                                        <td><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
                                                     </tr>
                                                     <tr>
                                                         <td>
@@ -281,20 +318,443 @@
                                                         <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
                                                         <td><p>Viewer</p></td>
                                                         <td><p>Active</p></td>
-                                                        <td><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Lori Lynch</h4>
+                                                                <span><a href="#">johndoe@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>tzLkGXr4r2Hjqiciaoq9Ag</p></td>
+                                                        <td><p>Admin</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Hisham Bin Tohak</h4>
+                                                                <span><a href="#">hisham@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>7Uwd5moa1tyybpWmzRZhX</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="au-checkbox">
+                                                                <input type="checkbox">
+                                                                <span class="au-checkmark"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data__info">
+                                                                <h4>Wajihah Zaidi</h4>
+                                                                <span><a href="#">wajii@gmail.com</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td><p>hdKHvQ7xEFGXoAdqxpfrq7</p></td>
+                                                        <td><p>Viewer</p></td>
+                                                        <td><p>Active</p></td>
+                                                        <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="copyright">
-                                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
                                     </div>
                                 </div>
                             </div>
@@ -306,6 +766,8 @@
         </div>
         <!-- END PAGE CONTAINER-->
     </div>
+
+    
 
     <!-- Jquery JS-->
     <script src="vendor/jquery-3.2.1.min.js"></script>
@@ -330,6 +792,63 @@
 
     <!-- Main JS-->
     <script src="js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('addUserForm');
+    const addUserBtn = document.getElementById('addUserBtn');
+    const closeBtn = document.getElementsByClassName('close')[0];
+    const generateLinkBtn = document.getElementById('generateLinkBtn');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const generatedLinkArea = document.getElementById('generatedLinkArea');
+    const generatedLink = document.getElementById('generatedLink');
+    const expiryDaysInput = document.getElementById('expiryDays');
+    const roleRadios = document.getElementsByName('role');
+
+    // Show the modal
+    addUserBtn.addEventListener('click', function() {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Disable scrolling
+    });
+
+    // Close the modal
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Enable scrolling
+    });
+
+    // Generate link button click
+    generateLinkBtn.addEventListener('click', function() {
+        const expiryDays = expiryDaysInput.value;
+        const selectedRole = document.querySelector('input[name="role"]:checked');
+
+        if (!expiryDays || !selectedRole) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        const role = selectedRole.value;
+        const link = generateLink(expiryDays, role);
+        generatedLink.value = link;
+        generatedLinkArea.style.display = 'block';
+    });
+
+    // Copy link to clipboard
+    copyLinkBtn.addEventListener('click', function() {
+        generatedLink.select();
+        document.execCommand('copy');
+        alert('Link copied to clipboard.');
+    });
+
+    // Function to generate the link
+    function generateLink(expiryDays, role) {
+        // Replace with your actual link generation logic
+        return `https://example.com/register?expiry=${expiryDays}&role=${role}`;
+    }
+});
+
+    </script>
+    
 
     <script>
         $(document).ready(function() {
