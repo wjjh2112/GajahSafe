@@ -4545,7 +4545,6 @@ input[type="file"] {
 .table-container .table-data thead {
     position: sticky;
     top: 0;
-    z-index: 1;
     background: #fff;
     color: #333;
     border-top: 1px solid #ddd;
