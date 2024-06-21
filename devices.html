@@ -189,9 +189,9 @@
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <div class="row" style="justify-content: end; margin: 10px;">
-                            <a href="addDevice.html" class="au-btn au-btn-icon au-btn">
-                                <i class="zmdi zmdi-plus"></i>New Deivce
-                            </a>
+                            <button id="addDeviceBtn" class="au-btn au-btn-icon">
+                                <i class="zmdi zmdi-plus"></i> New DEvice
+                            </button>
                         </div>
                         <!-- ELECTRIC FENCES ROW -->
                         <div class="row">
@@ -577,6 +577,13 @@
 
     <!-- Main JS-->
     <script src="js/main.js"></script>
+
+    <script>
+        document.getElementById('addDeviceBtn').addEventListener('click', function() {
+            window.location.href = 'addDevice.html';
+        });
+    </script>
+    
 
 </body>
 
