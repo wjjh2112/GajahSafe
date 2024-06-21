@@ -16,8 +16,6 @@ $(function() {
             firstDay: 1
         },
         autoUpdateInput: false
-    }, function(start, end, label) {
-        filterTable();
     });
 
     // Handle Apply button click on Date Range Picker
