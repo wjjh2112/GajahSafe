@@ -610,6 +610,13 @@ section {
     font-size: 14px;
 }
 
+.au-btn--trans-backg {
+    padding: 0 20px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #fd5959;
+}
+
 /*Page Loader*/
 .page-loader {
     background: #f8f8f8;
@@ -979,6 +986,63 @@ input[type="file"] {
     justify-content: flex-end; /* Align content to the end (right side) */
     margin-right: 20px;
 }
+
+
+/* ----- Pop Up Modal ----- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    position: relative; /* Ensure relative positioning for absolute elements */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input[type="text"] {
+    flex: 1;
+    padding-right: 40px; /* Space for the copy button */
+}
+
+.input-group button {
+    position: absolute;
+    right: 0;
+}
+
+
 
 
 /* ----- Input ----- */
@@ -4358,94 +4422,69 @@ input[type="file"] {
 }
 
 /* ----- Table ----- */
+
 .table {
+    width: 100%;
+    table-layout: auto;
     margin: 0;
 }
 
-.table-responsive.table--no-card {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+.table-container {
+    overflow-x: auto;
+    max-height: 400px;
+    border-radius: 8px;
+}
+
+.table-responsive {
     margin: 10px;
     position: relative;
     overflow: auto;
     max-height: 500px;
 }
 
-.table {
-    width: 100%;
-    min-width: 800px; /* Adjust as needed */
-    table-layout: fixed;
-    margin: 0;
-}
-
 .table-earning {
-    border-collapse: separate;
-    display: table;
-    border-radius: 10px;
     width: 100%;
+    border-collapse: collapse;
 }
 
-.table-earning thead {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+.table-earning th, .table-earning td {
+    padding: 20px 12px;
+    border: none;
+}
+
+.table-container .table-earning thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     background: #333;
     color: #fff;
     border-radius: 4px;
-    overflow-y: auto;
 }
 
-.table-earning thead th {
-    background: #333;
+.table-earning th {
+    background-color: #333;
+    text-align: left;
     font-size: 16px;
     color: #fff;
-    vertical-align: middle;
     font-weight: 400;
     text-transform: uppercase;
-    line-height: 1;
-    padding: 22px 40px;
-    white-space: nowrap;
-    text-align: center;
 }
 
-.table-earning thead th.text-right {
-    padding-left: 15px;
-    padding-right: 65px;
-}
-
-.table-earning tbody {
-    display: block;
-    max-height: 450px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.table-earning tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-}
-
-.table-earning tbody td {
+.table-earning td {
     color: #808080;
-    padding: 12px 40px;
-    white-space: nowrap;
-    text-align: center;
-    overflow: hidden;
-}
-
-.table-earning tbody td.text-right {
-    padding-left: 15px;
-    padding-right: 40px;
 }
 
 .table-earning tbody tr:hover td {
     color: #555;
     cursor: pointer;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fff;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #f5f5f5;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -4474,94 +4513,63 @@ input[type="file"] {
 }
 
 .table-wrap {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    -moz-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
 @media (min-width: 992px) and (max-width: 1519px) {
     .table-wrap {
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -webkit-flex-direction: column;
-        -moz-box-orient: vertical;
-        -moz-box-direction: normal;
-        -ms-flex-direction: column;
         flex-direction: column;
     }
 }
 
 @media (max-width: 991px) {
     .table-wrap {
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -webkit-flex-direction: column;
-        -moz-box-orient: vertical;
-        -moz-box-direction: normal;
-        -ms-flex-direction: column;
         flex-direction: column;
     }
 }
 
-.table-style1 {
-    max-width: 280px;
-    margin-bottom: 30px;
-}
-
-.table-style1 .table tr:last-child td {
-    border-bottom: none;
-}
-
-.table-style1 .table tr td:last-child {
-    padding-right: 30px;
-}
-
-.table-style1 .table td {
-    font-size: 14px;
-    color: #808080;
-    border-top: none;
-    border-bottom: 1px solid #f2f2f2;
-    padding: 12px 6px;
-    vertical-align: middle;
-}
 
 .table-data {
-    height: 472px;
-    overflow-y: auto;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff; 
 }
 
-.table-data thead tr td {
-    font-size: 12px;
-    font-weight: 600;
-    color: #808080;
+.table-data th, .table-data td {
+    padding: 20px 12px;
+    border: none;
+    border-bottom: 1px solid #ddd; 
+}
+
+.table-container .table-data thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+    color: #333;
+    border-top: 1px solid #ddd;
+}
+
+.table-data th {
+    background-color: #fff;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    font-weight: 400;
     text-transform: uppercase;
+    border-top: 1px solid #ddd;
 }
 
-.table-data .table td {
-    border-top: none;
-    border-bottom: 1px solid #f2f2f2;
-    padding-top: 23px;
-    padding-bottom: 33px;
-    padding-left: 40px;
-    padding-right: 10px;
+.table-data td {
+    color: #808080;
 }
 
-.table-data .table tr td:last-child {
-    padding-right: 24px;
+.table-data tbody tr {
+    border-bottom: 1px solid #ddd;
 }
 
 .table-data tbody tr:hover td .more {
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
     transform: scale(1);
 }
 
@@ -4579,6 +4587,20 @@ input[type="file"] {
 
 .table-data__info span a:hover {
     color: #666;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.au-checkbox {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.au-checkbox input[type="checkbox"] {
+    margin-right: 8px;
 }
 
 #dateRangePicker {
