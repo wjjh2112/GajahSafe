@@ -33,6 +33,15 @@
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
 
+    <style>
+        .chart-header {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -200,91 +209,46 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Frequency of Elephant Detected In A Month</h3>
-                                        <canvas id="elfDetectedMonth-chart"></canvas>
+                                        <h3 class="title-2 m-b-40">Electric Fence</h3>
+                                        <div class="default-tab">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="nav-weekly-tab" data-toggle="tab" href="#nav-week" role="tab" aria-controls="nav-week" aria-selected="true">Weekly</a>
+                                                    <a class="nav-item nav-link" id="nav-monthly-tab" data-toggle="tab" href="#nav-month" role="tab" aria-controls="nav-month" aria-selected="false">Monthly</a>
+                                                    <a class="nav-item nav-link" id="nav-yearly-tab" data-toggle="tab" href="#nav-year" role="tab" aria-controls="nav-year" aria-selected="false">Yearly</a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="nav-week" role="tabpanel" aria-labelledby="nav-week-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="prev-week" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="next-week" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="weekly-header">Monday - Sunday</div>
+                                                    <canvas id="weekly-chart"></canvas>
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-month" role="tabpanel" aria-labelledby="nav-month-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="prev-month" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="next-month" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="monthly-header"><i class="fas fa-arrow-right"></i></div>
+                                                    <canvas id="monthly-chart"></canvas>
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-year" role="tabpanel" aria-labelledby="nav-year-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="prev-year" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="next-year" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="yearly-header">2023</div>
+                                                    <canvas id="yearly-chart"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Frequency of Elephant Detected In A Week</h3>
-                                        <canvas id="elfDetectedWeek-chart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Team Commits</h3>
-                                        <canvas id="team-chart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Bar chart</h3>
-                                        <canvas id="barChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Rader chart</h3>
-                                        <canvas id="radarChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Line Chart</h3>
-                                        <canvas id="lineChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Doughut Chart</h3>
-                                        <canvas id="doughutChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Pie Chart</h3>
-                                        <canvas id="pieChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Polar Chart</h3>
-                                        <canvas id="polarChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="au-card m-b-30">
-                                    <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Single Bar Chart</h3>
-                                        <canvas id="singelBarChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="copyright">
-                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
                                 </div>
                             </div>
                         </div>
@@ -294,7 +258,6 @@
             <!-- END MAIN CONTENT-->
         </div>
         <!-- END PAGE CONTAINER-->
-
     </div>
 
     <!-- Jquery JS-->
@@ -320,6 +283,7 @@
 
     <!-- Main JS-->
     <script src="js/main.js"></script>
+    <script src="js/statistics.js"></script>
 
 </body>
 
