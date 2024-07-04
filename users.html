@@ -10,7 +10,7 @@
     <meta name="keywords" content="au theme template">
 
     <!-- Title Page-->
-    <title>GajahSafe - Users</title>
+    <title>GajahSafe - <span data-i18n="users"></span></title>
 
     <!-- Fontfaces CSS-->
     <link href="css/font-face.css" rel="stylesheet" media="all">
@@ -58,27 +58,27 @@
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
                             <a href="index.html">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                                <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard"></span></a>
                         </li>
                         <li>
                             <a href="history.html">
-                                <i class="fas fa-archive"></i>History</a>
+                                <i class="fas fa-archive"></i><span data-i18n="history"></span></a>
                         </li>
                         <li>
                             <a href="statistics.html">
-                                <i class="fas fa-chart-bar"></i>Statistics</a>
+                                <i class="fas fa-chart-bar"></i><span data-i18n="statistics"></span></a>
                         </li>
                         <li>
                             <a href="reports.html">
-                                <i class="fas fa-table"></i>Reports</a>
+                                <i class="fas fa-table"></i><span data-i18n="reports"></span></a>
                         </li>
                         <li class="has-sub">
                             <a href="users.html">
-                                <i class="far fa-users"></i>Users</a>
+                                <i class="far fa-users"></i><span data-i18n="users"></span></a>
                         </li>
                         <li>
                             <a href="devices.html">
-                                <i class="fas fa-wrench"></i>Devices</a>
+                                <i class="fas fa-wrench"></i><span data-i18n="devices"></span></a>
                         </li>
                     </ul>
                 </div>
@@ -98,27 +98,27 @@
                     <ul class="list-unstyled navbar__list">
                         <li>
                             <a href="index.html">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                                <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard"></span></a>
                         </li>
                         <li>
                             <a href="history.html">
-                                <i class="fas fa-archive"></i>History</a>
+                                <i class="fas fa-archive"></i><span data-i18n="history"></span></a>
                         </li>
                         <li>
                             <a href="statistics.html">
-                                <i class="fas fa-chart-bar"></i>Statistics</a>
+                                <i class="fas fa-chart-bar"></i><span data-i18n="statistics"></span></a>
                         </li>
                         <li>
                             <a href="reports.html">
-                                <i class="fas fa-table"></i>Reports</a>
+                                <i class="fas fa-table"></i><span data-i18n="reports"></span></a>
                         </li>
                         <li class="active has-sub">
                             <a href="users.html">
-                                <i class="far fa-users"></i>Users</a>
+                                <i class="far fa-users"></i><span data-i18n="users"></span></a>
                         </li>
                         <li>
                             <a href="devices.html">
-                                <i class="fas fa-wrench"></i>Devices</a>
+                                <i class="fas fa-wrench"></i><span data-i18n="devices"></span></a>
                         </li>
                     </ul>
                 </nav>
@@ -137,38 +137,38 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                            <img id="avatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">John Doe &nbsp;&nbsp;</a>
+                                            <a class="js-acc-btn" href="#" id="userName"></a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
-                                                    <a href="#">
-                                                        <img src="images/icon/avatar-01.jpg" alt="John Doe" />
-                                                    </a>
+                                                    <img id="dropdownAvatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
                                                 </div>
                                                 <div class="content">
-                                                    <h5 class="name">
-                                                        <a href="#">john doe &nbsp;&nbsp;</a>
-                                                    </h5>
-                                                    <span class="email">johndoe@example.com</span>
+                                                    <h5 class="name" id="dropdownUserName"></h5>
+                                                    <span class="email" id="dropdownUserEmail"></span>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
-                                                        <i class="zmdi zmdi-account"></i>Account</a>
+                                                        <i class="zmdi zmdi-account"></i><span data-i18n="account"></span></a>
                                                 </div>
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
-                                                        <i class="zmdi zmdi-settings"></i>Setting</a>
+                                                        <i class="zmdi zmdi-settings"></i><span data-i18n="settings"></span></a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="#" id="languageSwitchBtn">
+                                                        <i class="zmdi zmdi-globe"></i><span data-i18n="language"></span></a>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
-                                                <a href="#">
-                                                    <i class="zmdi zmdi-power"></i>Logout</a>
+                                                <a href="#" id="logoutBtn">
+                                                    <i class="zmdi zmdi-power"></i><span data-i18n="logout"></span></a>
                                             </div>
                                         </div>
                                     </div>
@@ -184,6 +184,27 @@
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
+                        <!-- LANGUAGE POP UP -->
+                        <div id="languageModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h4>Change Language</h4><br>
+                                <form id="languageForm">
+                                    <div class="form-group button-radio-group">
+                                        <div>
+                                            <label for="langEn" class="button-radio-label">
+                                                <input type="radio" name="language" id="langEn" value="english" class="form-radio-input">
+                                                <span class="button-radio-button inactive-language" id="langBtnEn"><a onclick="changeLanguage('en')">English</a></span>
+                                            </label>
+                                            <label for="langMs" class="button-radio-label">
+                                                <input type="radio" name="language" id="langMs" value="malay" class="form-radio-input">
+                                                <span class="button-radio-button inactive-language" id="langBtnMs"><a onclick="changeLanguage('ms')">Bahasa Melayu</a></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <!-- Pop-up form -->
                         <div id="addUserForm" class="modal">
                             <div class="modal-content">
