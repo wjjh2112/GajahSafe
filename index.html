@@ -181,14 +181,10 @@
                                                         <i class="zmdi zmdi-settings"></i><span data-i18n="settings">Settings</span></a>
                                                 </div>
                                                 <div class="account-dropdown__item">
-                                                    <nav>
-                                                    <ul>
-                                                        <li><a href="index.html" onclick="changeLanguage('en')">English</a></li>
-                                                        <li><a href="index.html" onclick="changeLanguage('ms')">Bahasa Melayu</a></li>
-                                                    </ul>
-                                                </nav>
+                                                    <a href="#" id="languageSwitchBtn">
+                                                        <i class="zmdi zmdi-settings"></i><span data-i18n="language">Language</span></a>
+                                                </div>
                                             </div>
-                                                
                                             <div class="account-dropdown__footer">
                                                 <a href="#" id="logoutBtn">
                                                     <i class="zmdi zmdi-power"></i><span data-i18n="logout">Logout</span></a>
@@ -203,10 +199,33 @@
             </header>
             <!-- HEADER DESKTOP-->
 
-            <!-- MAIN CONTENT-->
-            <div class="main-content">
-                <div id="googleMapIndex" class="map-contentIndex"></div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- LANGUAGE POP UP -->
+        <div id="languageModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h4>Change Language</h4><br>
+                <form id="languageForm">
+                    <div class="form-group button-radio-group">
+                        <label>Role</label>
+                        <div style="justify-content: end;">
+                            <label for="langEn" class="button-radio-label">
+                                <input type="radio" name="language" id="langEn" value="english" class="form-radio-input">
+                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('en')">English</a></span>
+                            </label>
+                            <label for="langMs" class="button-radio-label">
+                                <input type="radio" name="language" id="langMs" value="malay" class="form-radio-input">
+                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('ms')">Bahasa Melayu</a></span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
+        </div>
+        <!-- GOOGLE MAP -->
+        <div id="googleMapIndex" class="map-contentIndex"></div>
+    </div>
             <!-- END MAIN CONTENT-->
         </div>
         <!-- END PAGE CONTAINER-->
@@ -282,10 +301,11 @@
         });
     </script>
     <script>
-        // Function to change language
-        function changeLanguage(lang) {
+// Function to change language
+function changeLanguage(lang) {
             localStorage.setItem('preferredLanguage', lang);
             loadLanguage(lang);
+            document.getElementById('languageModal').style.display = "none"; // Hide modal after language change
         }
 
         // Function to load language JSON
@@ -313,6 +333,32 @@
         // Call this function on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadPreferredLanguage();
+
+            // Get the modal
+            var modal = document.getElementById("languageModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("languageSwitchBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
         });
     </script>
 
