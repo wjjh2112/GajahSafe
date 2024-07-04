@@ -929,6 +929,16 @@ section {
     border-color: #fd5959;
 }
 
+.active-language {
+    background-color: #fd5959;
+    color: #fff;
+}
+
+.inactive-language {
+    background-color: #fff;
+    color: #fd5959;
+}
+
 
 .form-group input[type="text"]{
     display:block;
