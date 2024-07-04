@@ -51,6 +51,15 @@
                 margin-top: 0;
             }
         }
+
+        .button-radio-button a.current-language {
+            background-color: red;
+            color: white;
+        }
+        .button-radio-button a.other-language {
+            background-color: white;
+            color: red;
+        }
     </style>
 </head>
 
@@ -80,23 +89,23 @@
                                 <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard">Dashboard</span></a>
                         </li>
                         <li>
-                            <a href="history.html" data-i18n="history">
+                            <a href="history.html">
                                 <i class="fas fa-archive"></i><span data-i18n="history">History</span></a>
                         </li>
                         <li>
-                            <a href="statistics.html" data-i18n="statistics">
+                            <a href="statistics.html">
                                 <i class="fas fa-chart-bar"></i><span data-i18n="statistics">Statistics</span></a>
                         </li>
                         <li>
-                            <a href="reports.html" data-i18n="reports">
+                            <a href="reports.html">
                                 <i class="fas fa-table"></i><span data-i18n="reports">Reports</span></a>
                         </li>
                         <li>
-                            <a href="users.html" data-i18n="users">
+                            <a href="users.html">
                                 <i class="far fa-users"></i><span data-i18n="users">Users</span></a>
                         </li>
                         <li>
-                            <a href="devices.html" data-i18n="devices">
+                            <a href="devices.html">
                                 <i class="fas fa-wrench"></i><span data-i18n="devices">Devices</span></a>
                         </li>
                     </ul>
@@ -120,23 +129,23 @@
                                 <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard">Dashboard</span></a>
                         </li>
                         <li>
-                            <a href="history.html" data-i18n="history">
+                            <a href="history.html">
                                 <i class="fas fa-archive"></i><span data-i18n="history">History</span></a>
                         </li>
                         <li>
-                            <a href="statistics.html" data-i18n="statistics">
+                            <a href="statistics.html">
                                 <i class="fas fa-chart-bar"></i><span data-i18n="statistics">Statistics</span></a>
                         </li>
                         <li>
-                            <a href="reports.html" data-i18n="reports">
+                            <a href="reports.html">
                                 <i class="fas fa-table"></i><span data-i18n="reports">Reports</span></a>
                         </li>
                         <li>
-                            <a href="users.html" data-i18n="users">
+                            <a href="users.html">
                                 <i class="far fa-users"></i><span data-i18n="users">Users</span></a>
                         </li>
                         <li>
-                            <a href="devices.html" data-i18n="devices">
+                            <a href="devices.html">
                                 <i class="fas fa-wrench"></i><span data-i18n="devices">Devices</span></a>
                         </li>
                     </ul>
@@ -212,11 +221,11 @@
                         <div style="justify-content: end;">
                             <label for="langEn" class="button-radio-label">
                                 <input type="radio" name="language" id="langEn" value="english" class="form-radio-input">
-                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('en')">English</a></span>
+                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('en')" class="language-button" data-lang="en">English</a></span>
                             </label>
                             <label for="langMs" class="button-radio-label">
                                 <input type="radio" name="language" id="langMs" value="malay" class="form-radio-input">
-                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('ms')">Bahasa Melayu</a></span>
+                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('ms')" class="language-button" data-lang="ms">Bahasa Melayu</a></span>
                             </label>
                         </div>
                     </div>
@@ -306,6 +315,7 @@ function changeLanguage(lang) {
             localStorage.setItem('preferredLanguage', lang);
             loadLanguage(lang);
             document.getElementById('languageModal').style.display = "none"; // Hide modal after language change
+            updateLanguageButtonStyles(lang); // Update button styles
         }
 
         // Function to load language JSON
@@ -328,6 +338,21 @@ function changeLanguage(lang) {
         function loadPreferredLanguage() {
             const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ms';
             loadLanguage(preferredLanguage);
+            updateLanguageButtonStyles(preferredLanguage); // Update button styles on load
+        }
+
+        // Function to update language button styles
+        function updateLanguageButtonStyles(currentLang) {
+            const languageButtons = document.querySelectorAll('.language-button');
+            languageButtons.forEach(button => {
+                if (button.getAttribute('data-lang') === currentLang) {
+                    button.classList.add('current-language');
+                    button.classList.remove('other-language');
+                } else {
+                    button.classList.add('other-language');
+                    button.classList.remove('current-language');
+                }
+            });
         }
 
         // Call this function on page load
