@@ -3,6 +3,38 @@
   // USE STRICT
   "use strict";
 
+  // main.js
+
+// Assuming you have a function to load user data
+document.addEventListener('DOMContentLoaded', function() {
+  // Your existing code to load user data
+
+  // Function to switch language
+  function switchLanguage(lang) {
+      // Implement logic to update all text elements on the page based on lang
+      // Example: Update dashboard menu item
+      document.querySelector('.navbar__list li:nth-child(1) a').textContent = lang.dashboard;
+      document.querySelector('.navbar__list li:nth-child(2) a').textContent = lang.history;
+      // Repeat for all menu items and other text elements
+  }
+
+  // Language toggle event
+  document.getElementById('languageToggle').addEventListener('click', function(event) {
+      event.preventDefault();
+      if (currentLang === 'en') {
+          switchLanguage(msLang); // Switch to Malay
+          currentLang = 'ms';
+      } else {
+          switchLanguage(enLang); // Switch to English
+          currentLang = 'en';
+      }
+  });
+
+  // Function to initialize with default language (English)
+  switchLanguage(enLang); // or msLang if Malay is default
+});
+
+
   try {
     //WidgetChart 1
     var ctx = document.getElementById("widgetChart1");

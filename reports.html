@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <nav class="navbar-mobile">
+            <div class="navbar-mobile">
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
@@ -66,7 +66,7 @@
                         </li>
                         <li>
                             <a href="history.html">
-                                <i class="fas fa-chart-bar"></i>History</a>
+                                <i class="fas fa-archive"></i>History</a>
                         </li>
                         <li>
                             <a href="statistics.html">
@@ -78,15 +78,15 @@
                         </li>
                         <li>
                             <a href="users.html">
-                                <i class="far fa-check-square"></i>Users</a>
+                                <i class="far fa-users"></i>Users</a>
                         </li>
                         <li>
                             <a href="devices.html">
-                                <i class="fas fa-calendar-alt"></i>Devices</a>
+                                <i class="fas fa-wrench"></i>Devices</a>
                         </li>
                     </ul>
                 </div>
-            </nav>
+            </div>
         </header>
         <!-- END HEADER MOBILE-->
 
@@ -106,7 +106,7 @@
                         </li>
                         <li>
                             <a href="history.html">
-                                <i class="fas fa-chart-bar"></i>History</a>
+                                <i class="fas fa-archive"></i>History</a>
                         </li>
                         <li>
                             <a href="statistics.html">
@@ -118,11 +118,11 @@
                         </li>
                         <li>
                             <a href="users.html">
-                                <i class="far fa-check-square"></i>Users</a>
+                                <i class="far fa-users"></i>Users</a>
                         </li>
                         <li>
                             <a href="devices.html">
-                                <i class="fas fa-calendar-alt"></i>Devices</a>
+                                <i class="fas fa-wrench"></i>Devices</a>
                         </li>
                     </ul>
                 </nav>
@@ -144,7 +144,7 @@
                                             <img src="images/icon/avatar-01.jpg" alt="John Doe" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">john doe</a>
+                                            <a class="js-acc-btn" href="#">John Doe &nbsp;&nbsp;</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
@@ -155,7 +155,7 @@
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">john doe</a>
+                                                        <a href="#">john doe &nbsp;&nbsp;</a>
                                                     </h5>
                                                     <span class="email">johndoe@example.com</span>
                                                 </div>
@@ -168,10 +168,6 @@
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
                                                         <i class="zmdi zmdi-settings"></i>Setting</a>
-                                                </div>
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-money-box"></i>Billing</a>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
@@ -198,11 +194,11 @@
                             </button>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-12">
                                 <!-- DATA TABLE -->
                                 <div class="au-card">
                                     <div class="au-card-header">
-                                        <h3 class="title-2">Reports</h3><br>
+                                        <h3 class="title-2">Damaged Reports</h3><br>
                                         <div class="table-data__tool">
                                             <div class="table-data__tool-left">
                                                 <div class="rs-select2--light rs-select2--md">
@@ -330,6 +326,57 @@
                                     <!-- END DATA TABLE -->
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <div class="au-card m-b-30">
+                                    <div class="au-card-inner">
+                                        <h3 class="title-2 m-b-40">Damages</h3>
+                                        <div class="default-tab">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="nav-weekly-tab" data-toggle="tab" href="#nav-week" role="tab" aria-controls="nav-week" aria-selected="true">Weekly</a>
+                                                    <a class="nav-item nav-link" id="nav-monthly-tab" data-toggle="tab" href="#nav-month" role="tab" aria-controls="nav-month" aria-selected="false">Monthly</a>
+                                                    <a class="nav-item nav-link" id="nav-yearly-tab" data-toggle="tab" href="#nav-year" role="tab" aria-controls="nav-year" aria-selected="false">Yearly</a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="nav-week" role="tabpanel" aria-labelledby="nav-week-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="prev-week" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="next-week" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="weekly-header">Monday - Sunday</div>
+                                                    <canvas id="weekly-chart"></canvas>
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-month" role="tabpanel" aria-labelledby="nav-month-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="prev-month" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="next-month" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="monthly-header"><i class="fas fa-arrow-right"></i></div>
+                                                    <canvas id="monthly-chart"></canvas>
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-year" role="tabpanel" aria-labelledby="nav-year-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="prev-year" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="next-year" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="yearly-header">2024</div>
+                                                    <canvas id="yearly-chart"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="au-card m-b-30">
+                                    <div class="au-card-inner">
+                                        <h3 class="title-2 m-b-40">Pie Chart</h3>
+                                        <canvas id="pieChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -368,11 +415,10 @@
     <!-- Date Range Picker JS -->
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="js/reports.js"></script>
-
+    
     <!-- Main JS-->
     <script src="js/main.js"></script>
-
+    <script src="js/reports.js"></script>
     
 </body>
 

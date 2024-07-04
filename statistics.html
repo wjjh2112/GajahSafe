@@ -30,6 +30,9 @@
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
 
+    <!-- Date Range Picker CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
 
@@ -40,6 +43,24 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+
+        #googleMapAlert {
+            width: 100%;
+            height: 500px;
+        }
+
+        .info-window-content {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .info-window-content strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .info-window-content .alert-item {
+            margin-bottom: 10px;
+        }
+
     </style>
 
 </head>
@@ -62,7 +83,7 @@
                     </div>
                 </div>
             </div>
-            <nav class="navbar-mobile">
+            <div class="navbar-mobile">
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
@@ -71,7 +92,7 @@
                         </li>
                         <li>
                             <a href="history.html">
-                                <i class="fas fa-chart-bar"></i>History</a>
+                                <i class="fas fa-archive"></i>History</a>
                         </li>
                         <li class="has-sub">
                             <a href="statistics.html">
@@ -83,15 +104,15 @@
                         </li>
                         <li>
                             <a href="users.html">
-                                <i class="far fa-check-square"></i>Users</a>
+                                <i class="far fa-users"></i>Users</a>
                         </li>
                         <li>
                             <a href="devices.html">
-                                <i class="fas fa-calendar-alt"></i>Devices</a>
+                                <i class="fas fa-wrench"></i>Devices</a>
                         </li>
                     </ul>
                 </div>
-            </nav>
+            </div>
         </header>
         <!-- END HEADER MOBILE-->
 
@@ -111,7 +132,7 @@
                         </li>
                         <li>
                             <a href="history.html">
-                                <i class="fas fa-chart-bar"></i>History</a>
+                                <i class="fas fa-archive"></i>History</a>
                         </li>
                         <li class="active has-sub">
                             <a href="statistics.html">
@@ -123,11 +144,11 @@
                         </li>
                         <li>
                             <a href="users.html">
-                                <i class="far fa-check-square"></i>Users</a>
+                                <i class="far fa-users"></i>Users</a>
                         </li>
                         <li>
                             <a href="devices.html">
-                                <i class="fas fa-calendar-alt"></i>Devices</a>
+                                <i class="fas fa-wrench"></i>Devices</a>
                         </li>
                     </ul>
                 </nav>
@@ -149,7 +170,7 @@
                                             <img src="images/icon/avatar-01.jpg" alt="John Doe" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">john doe</a>
+                                            <a class="js-acc-btn" href="#">John Doe &nbsp;&nbsp;</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
@@ -160,7 +181,7 @@
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">john doe</a>
+                                                        <a href="#">john doe &nbsp;&nbsp;</a>
                                                     </h5>
                                                     <span class="email">johndoe@example.com</span>
                                                 </div>
@@ -173,10 +194,6 @@
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
                                                         <i class="zmdi zmdi-settings"></i>Setting</a>
-                                                </div>
-                                                <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-money-box"></i>Billing</a>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
@@ -193,7 +210,6 @@
             </header>
             <!-- HEADER DESKTOP-->
 
-
             <!-- MAIN CONTENT-->
             <div class="main-content">
                 <div class="section__content section__content--p30">
@@ -202,9 +218,9 @@
                             <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
-                                        <h3 class="title-2 tm-b-5">Event Heatmap (Last 30 days)</h3><br>
+                                        <h3 class="title-2 tm-b-5">Electric Fences Alerts</h3><p>in the last 24 Hours</p><br>
                                         <div class="row no-gutters">
-                                            <img src="images/EventHeatmap.png">
+                                            <div id="googleMapAlert" class="map-content"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -243,12 +259,197 @@
                                                         <button id="prev-year" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
                                                         <button id="next-year" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
                                                     </div>
-                                                    <div class="chart-header" id="yearly-header">2023</div>
+                                                    <div class="chart-header" id="yearly-header">2024</div>
                                                     <canvas id="yearly-chart"></canvas>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="au-card">
+                                    <div class="au-card-header">
+                                        <h3 class="title-2">Alerts</h3><br>
+                                        <div class="table-data__tool">
+                                            <div class="table-data__tool-left">
+                                                <div class="rs-select2--light rs-select2--md">
+                                                    <select class="js-select2" name="location" id="locationFilter">
+                                                        <option selected="All Alerts">All Types of Alerts</option>
+                                                        <option value="Electricity Shutdown">Electricity Shutdown</option>
+                                                        <option value="Pushed / Pulled">Pushed / Pulled</option>
+                                                    </select>
+                                                    <div class="dropDownSelect2"></div>
+                                                </div>
+                                                <div class="rs-select2--light">
+                                                    <input type="text" id="dateRangePicker" name="daterange" placeholder="Select Date Range"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="au-card-body">
+                                        <div class="table-container">
+                                            <table class="table table-striped table-earning">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Device Id</th>
+                                                        <th>Electricity Shutdown</th>
+                                                        <th>Pushed / Pulled</th>
+                                                        <th>Datetime</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Electric Fence 3</td>
+                                                        <td>Yes</td>
+                                                        <td>No</td>
+                                                        <td>28/06/2024, 16:08:30</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>28/06/2024, 14:16:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 1</td>
+                                                        <td>Yes</td>
+                                                        <td>Yes</td>
+                                                        <td>14/06/2024, 11:08:30</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 1</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>12/05/2024, 13:08:57</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>Yes</td>
+                                                        <td>No</td>
+                                                        <td>05/05/2024, 10:10:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 3</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>18/04/2024, 22:13:10</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 6</td>
+                                                        <td>Yes</td>
+                                                        <td>Yes</td>
+                                                        <td>11/03/2024, 17:47:50</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>01/02/2024, 12:08:57</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 4</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>18/04/2024, 16:10:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 3</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>28/06/2024, 17:13:10</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 6</td>
+                                                        <td>Yes</td>
+                                                        <td>Yes</td>
+                                                        <td>29/06/2024, 18:47:50</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>29/06/2024, 23:08:57</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 4</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>29/06/2024, 21:10:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 3</td>
+                                                        <td>Yes</td>
+                                                        <td>No</td>
+                                                        <td>27/06/2024, 09:08:30</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>27/06/2024, 14:16:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 1</td>
+                                                        <td>Yes</td>
+                                                        <td>Yes</td>
+                                                        <td>27/06/2024, 16:08:30</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 1</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>25/06/2024, 18:08:57</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>Yes</td>
+                                                        <td>No</td>
+                                                        <td>25/06/2024, 07:10:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 3</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>24/06/2024, 04:13:10</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 3</td>
+                                                        <td>Yes</td>
+                                                        <td>No</td>
+                                                        <td>01/07/2024, 16:08:30</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 2</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>01/07/2024, 14:16:40</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 1</td>
+                                                        <td>Yes</td>
+                                                        <td>Yes</td>
+                                                        <td>01/07/2024, 11:08:30</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Electric Fence 1</td>
+                                                        <td>No</td>
+                                                        <td>Yes</td>
+                                                        <td>01/07/2024, 13:08:57</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- END DATA TABLE -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="copyright">
+                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
                                 </div>
                             </div>
                         </div>
@@ -266,24 +467,30 @@
     <script src="vendor/bootstrap-4.1/popper.min.js"></script>
     <script src="vendor/bootstrap-4.1/bootstrap.min.js"></script>
     <!-- Vendor JS       -->
-    <script src="vendor/slick/slick.min.js">
-    </script>
+    <script src="vendor/slick/slick.min.js"></script>
     <script src="vendor/wow/wow.min.js"></script>
     <script src="vendor/animsition/animsition.min.js"></script>
-    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
-    </script>
+    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
     <script src="vendor/counter-up/jquery.waypoints.min.js"></script>
-    <script src="vendor/counter-up/jquery.counterup.min.js">
-    </script>
+    <script src="vendor/counter-up/jquery.counterup.min.js"></script>
     <script src="vendor/circle-progress/circle-progress.min.js"></script>
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="vendor/select2/select2.min.js">
-    </script>
+    <script src="vendor/select2/select2.min.js"></script>
 
     <!-- Main JS-->
     <script src="js/main.js"></script>
+
+    <!-- Page Specific JS -->
     <script src="js/statistics.js"></script>
+
+    <!-- Date Range Picker JS -->
+    <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <!-- Google Map JS -->
+    <script src="js/google_map_electricFenceAlert.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM9c47J86uYl4dYw0NdwWdmE7BrwQ4xIc&callback=myMapAlert" async defer></script>
 
 </body>
 

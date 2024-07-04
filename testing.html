@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bilingual Website</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/i18next@21.6.0/i18next.min.js"></script>
+    <script src="https://unpkg.com/jquery-i18next@1.2.1/jquery-i18next.min.js"></script>
+</head>
+<body>
+    <div id="content">
+        <h1 data-i18n="welcome">Welcome</h1>
+        <p data-i18n="description">This is a bilingual website.</p>
+    </div>
+    <select id="languageSwitcher">
+        <option value="en">English</option>
+        <option value="ms">Malay</option>
+    </select>
+    <script src="scripts/translations.js"></script>
+</body>
+</html>

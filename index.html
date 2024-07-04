@@ -30,7 +30,6 @@
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
     <link href="vendor/vector-map/jqvmap.min.css" rel="stylesheet" media="all">
-    
 
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
@@ -53,7 +52,6 @@
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -78,28 +76,28 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li class="has-sub">
-                            <a href="index.html">
+                            <a href="index.html" data-i18n="dashboard">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                         </li>
                         <li>
-                            <a href="history.html">
-                                <i class="fas fa-chart-bar"></i>History</a>
+                            <a href="history.html" data-i18n="history">
+                                <i class="fas fa-archive"></i>History</a>
                         </li>
                         <li>
-                            <a href="statistics.html">
+                            <a href="statistics.html" data-i18n="statistics">
                                 <i class="fas fa-chart-bar"></i>Statistics</a>
                         </li>
                         <li>
-                            <a href="reports.html">
+                            <a href="reports.html" data-i18n="reports">
                                 <i class="fas fa-table"></i>Reports</a>
                         </li>
                         <li>
-                            <a href="users.html">
-                                <i class="far fa-check-square"></i>Users</a>
+                            <a href="users.html" data-i18n="users">
+                                <i class="far fa-users"></i>Users</a>
                         </li>
                         <li>
-                            <a href="devices.html">
-                                <i class="fas fa-calendar-alt"></i>Devices</a>
+                            <a href="devices.html" data-i18n="devices">
+                                <i class="fas fa-wrench"></i>Devices</a>
                         </li>
                     </ul>
                 </div>
@@ -118,28 +116,28 @@
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
                         <li class="active has-sub">
-                            <a href="index.html">
+                            <a href="index.html" data-i18n="dashboard">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                         </li>
                         <li>
-                            <a href="history.html">
-                                <i class="fas fa-chart-bar"></i>History</a>
+                            <a href="history.html" data-i18n="history">
+                                <i class="fas fa-archive"></i>History</a>
                         </li>
                         <li>
-                            <a href="statistics.html">
+                            <a href="statistics.html" data-i18n="statistics">
                                 <i class="fas fa-chart-bar"></i>Statistics</a>
                         </li>
                         <li>
-                            <a href="reports.html">
+                            <a href="reports.html" data-i18n="reports">
                                 <i class="fas fa-table"></i>Reports</a>
                         </li>
                         <li>
-                            <a href="users.html">
-                                <i class="far fa-check-square"></i>Users</a>
+                            <a href="users.html" data-i18n="users">
+                                <i class="far fa-users"></i>Users</a>
                         </li>
                         <li>
-                            <a href="devices.html">
-                                <i class="fas fa-calendar-alt"></i>Devices</a>
+                            <a href="devices.html" data-i18n="devices">
+                                <i class="fas fa-wrench"></i>Devices</a>
                         </li>
                     </ul>
                 </nav>
@@ -158,42 +156,42 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                            <img id="avatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">John Doe &nbsp;&nbsp;</a>
+                                            <a class="js-acc-btn" href="#" id="userName"></a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
-                                                    <a href="#">
-                                                        <img src="images/icon/avatar-01.jpg" alt="John Doe" />
-                                                    </a>
+                                                    <img id="dropdownAvatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
                                                 </div>
                                                 <div class="content">
-                                                    <h5 class="name">
-                                                        <a href="#">john doe &nbsp;&nbsp;</a>
-                                                    </h5>
-                                                    <span class="email">johndoe@example.com</span>
+                                                    <h5 class="name" id="dropdownUserName"></h5>
+                                                    <span class="email" id="dropdownUserEmail"></span>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
-                                                        <i class="zmdi zmdi-account"></i>Account</a>
+                                                        <i class="zmdi zmdi-account"></i><span data-i18n="account">Account</span></a>
                                                 </div>
                                                 <div class="account-dropdown__item">
                                                     <a href="#">
-                                                        <i class="zmdi zmdi-settings"></i>Setting</a>
+                                                        <i class="zmdi zmdi-settings"></i><span data-i18n="settings">Settings</span></a>
                                                 </div>
                                                 <div class="account-dropdown__item">
-                                                    <a href="#">
-                                                        <i class="zmdi zmdi-money-box"></i>Billing</a>
-                                                </div>
+                                                    <nav>
+                                                    <ul>
+                                                        <li><a href="index.html" onclick="changeLanguage('en')">English</a></li>
+                                                        <li><a href="index.html" onclick="changeLanguage('ms')">Bahasa Melayu</a></li>
+                                                    </ul>
+                                                </nav>
                                             </div>
+                                                
                                             <div class="account-dropdown__footer">
-                                                <a href="#">
-                                                    <i class="zmdi zmdi-power"></i>Logout</a>
+                                                <a href="#" id="logoutBtn">
+                                                    <i class="zmdi zmdi-power"></i><span data-i18n="logout">Logout</span></a>
                                             </div>
                                         </div>
                                     </div>
@@ -204,9 +202,10 @@
                 </div>
             </header>
             <!-- HEADER DESKTOP-->
+
             <!-- MAIN CONTENT-->
             <div class="main-content">
-                <div id="googleMap" class="map-content"></div>
+                <div id="googleMapIndex" class="map-contentIndex"></div>
             </div>
             <!-- END MAIN CONTENT-->
         </div>
@@ -220,20 +219,16 @@
     <script src="vendor/bootstrap-4.1/popper.min.js"></script>
     <script src="vendor/bootstrap-4.1/bootstrap.min.js"></script>
     <!-- Vendor JS       -->
-    <script src="vendor/slick/slick.min.js">
-    </script>
+    <script src="vendor/slick/slick.min.js"></script>
     <script src="vendor/wow/wow.min.js"></script>
     <script src="vendor/animsition/animsition.min.js"></script>
-    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
-    </script>
+    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
     <script src="vendor/counter-up/jquery.waypoints.min.js"></script>
-    <script src="vendor/counter-up/jquery.counterup.min.js">
-    </script>
+    <script src="vendor/counter-up/jquery.counterup.min.js"></script>
     <script src="vendor/circle-progress/circle-progress.min.js"></script>
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="vendor/select2/select2.min.js">
-    </script>
+    <script src="vendor/select2/select2.min.js"></script>
     <script src="vendor/vector-map/jquery.vmap.js"></script>
     <script src="vendor/vector-map/jquery.vmap.min.js"></script>
     <script src="vendor/vector-map/jquery.vmap.sampledata.js"></script>
@@ -249,10 +244,78 @@
     <script src="js/main.js"></script>
 
     <!-- Google Map -->
-    <script src="js/google_map.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUb3jDWJQ28vDJhuQZxkC0NXr_zycm8D0&callback=myMap"></script>
+    <script src="js/google_map_devices_index.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM9c47J86uYl4dYw0NdwWdmE7BrwQ4xIc&callback=myMapDevicesIndex" async defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve user data from sessionStorage
+            const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+            if (userData) {
+                // Update user information in the header
+                document.getElementById('avatarImg').src = userData.avatar;
+                document.getElementById('userName').textContent = userData.name;
+
+                // Update user information in the dropdown
+                document.getElementById('dropdownAvatarImg').src = userData.avatar;
+                document.getElementById('dropdownUserName').textContent = userData.name;
+                document.getElementById('dropdownUserEmail').textContent = userData.email;
+            } else {
+                // Redirect to login page if user data is not found
+                window.location.href = 'login.html';
+            }
+
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    // Clear sessionStorage
+                    sessionStorage.removeItem('userData');
+
+                    // Redirect to login page
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+    </script>
+    <script>
+        // Function to change language
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            loadLanguage(lang);
+        }
+
+        // Function to load language JSON
+        async function loadLanguage(lang) {
+            try {
+                const response = await fetch(`languages/${lang}.json`);
+                const translations = await response.json();
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[key]) {
+                        element.textContent = translations[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading language:', error);
+            }
+        }
+
+        // Function to load the preferred language from localStorage
+        function loadPreferredLanguage() {
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ms';
+            loadLanguage(preferredLanguage);
+        }
+
+        // Call this function on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPreferredLanguage();
+        });
+    </script>
 
 </body>
 
 </html>
-<!-- end document-->
