@@ -56,24 +56,21 @@
 
 <body>
     <div class="page-wrapper">
-        <!-- HEADER MOBILE-->
-        <div id="header-mobile-container"></div>
-        <!-- END HEADER MOBILE-->
+        <!-- Include header-mobile.html -->
+        <div data-include="header-mobile.html"></div>
 
-        <!-- MENU SIDEBAR-->
-        <div id="menu-sidebar-container"></div>
-        <!-- END MENU SIDEBAR-->
+        <!-- Include menu-sidebar.html -->
+        <div data-include="menu-sidebar.html"></div>
 
         <!-- PAGE CONTAINER-->
         <div class="page-container">
-            <!-- HEADER DESKTOP-->
-            <div id="header-desktop-container"></div>
-            <!-- HEADER DESKTOP-->
+            <!-- Include header-desktop.html -->
+            <div data-include="header-desktop.html"></div>
 
             <!-- MAIN CONTENT -->
             <div class="main-content">
-                <!-- LANGUAGE POP UP -->
-                <div id="language-modal-container"></div>
+                <!-- Include language-modal.html -->
+                <div data-include="language-modal.html"></div>
                 <!-- GOOGLE MAP -->
                 <div id="googleMapIndex" class="map-contentIndex"></div>
             </div>
@@ -117,39 +114,12 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM9c47J86uYl4dYw0NdwWdmE7BrwQ4xIc&callback=myMapDevicesIndex" async defer></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load components
-            loadComponent('header-mobile-container', 'header-mobile.html');
-            loadComponent('menu-sidebar-container', 'menu-sidebar.html');
-            loadComponent('header-desktop-container', 'header-desktop.html');
-            loadComponent('language-modal-container', 'language-modal.html');
-
-            // Highlight the active menu item
-            highlightActiveMenuItem();
-
-            // Function to load HTML component
-            function loadComponent(containerId, filePath) {
-                fetch(filePath)
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById(containerId).innerHTML = data;
-                    });
-            }
-
-            // Function to highlight the active menu item
-            function highlightActiveMenuItem() {
-                const path = window.location.pathname;
-                const page = path.split("/").pop();
-                const menuItems = document.querySelectorAll('.navbar-mobile__list li a, .navbar__list li a');
-
-                menuItems.forEach(item => {
-                    if (item.getAttribute('href') === page) {
-                        item.parentElement.classList.add('active');
-                    } else {
-                        item.parentElement.classList.remove('active');
-                    }
-                });
-            }
+        // Function to include HTML files
+        $(function(){
+            $('[data-include]').each(function(){
+                var $this = $(this);
+                $this.load($this.data('include'));
+            });
         });
     </script>
 
