@@ -56,27 +56,179 @@
 
 <body>
     <div class="page-wrapper">
-        <!-- Include header-mobile.html -->
-        <div data-include="header-mobile.html"></div>
+        <!-- HEADER MOBILE-->
+        <header class="header-mobile d-block d-lg-none">
+            <div class="header-mobile__bar">
+                <div class="container-fluid">
+                    <div class="header-mobile-inner">
+                        <a class="logo" href="index.html">
+                            <img src="images/icon/GajahSafeLogo1.png" alt="GajahSafe" />
+                        </a>
+                        <button class="hamburger hamburger--slider" type="button">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-mobile">
+                <div class="container-fluid">
+                    <ul class="navbar-mobile__list list-unstyled">
+                        <li class="has-sub">
+                            <a href="index.html">
+                                <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard">Dashboard</span></a>
+                        </li>
+                        <li>
+                            <a href="history.html">
+                                <i class="fas fa-archive"></i><span data-i18n="history">History</span></a>
+                        </li>
+                        <li>
+                            <a href="statistics.html">
+                                <i class="fas fa-chart-bar"></i><span data-i18n="statistics">Statistics</span></a>
+                        </li>
+                        <li>
+                            <a href="reports.html">
+                                <i class="fas fa-table"></i><span data-i18n="reports">Reports</span></a>
+                        </li>
+                        <li>
+                            <a href="users.html">
+                                <i class="far fa-users"></i><span data-i18n="users">Users</span></a>
+                        </li>
+                        <li>
+                            <a href="devices.html">
+                                <i class="fas fa-wrench"></i><span data-i18n="devices">Devices</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <!-- END HEADER MOBILE-->
 
-        <!-- Include menu-sidebar.html -->
-        <div data-include="menu-sidebar.html"></div>
+        <!-- MENU SIDEBAR-->
+        <aside class="menu-sidebar d-none d-lg-block">
+            <div class="logo">
+                <a href="#">
+                    <img src="images/icon/GajahSafeLogo1.png" alt="GajahSafe" />
+                </a>
+            </div>
+            <div class="menu-sidebar__content js-scrollbar1">
+                <nav class="navbar-sidebar">
+                    <ul class="list-unstyled navbar__list">
+                        <li class="active has-sub">
+                            <a href="index.html">
+                                <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard">Dashboard</span></a>
+                        </li>
+                        <li>
+                            <a href="history.html">
+                                <i class="fas fa-archive"></i><span data-i18n="history">History</span></a>
+                        </li>
+                        <li>
+                            <a href="statistics.html">
+                                <i class="fas fa-chart-bar"></i><span data-i18n="statistics">Statistics</span></a>
+                        </li>
+                        <li>
+                            <a href="reports.html">
+                                <i class="fas fa-table"></i><span data-i18n="reports">Reports</span></a>
+                        </li>
+                        <li>
+                            <a href="users.html">
+                                <i class="far fa-users"></i><span data-i18n="users">Users</span></a>
+                        </li>
+                        <li>
+                            <a href="devices.html">
+                                <i class="fas fa-wrench"></i><span data-i18n="devices">Devices</span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <!-- END MENU SIDEBAR-->
 
         <!-- PAGE CONTAINER-->
         <div class="page-container">
-            <!-- Include header-desktop.html -->
-            <div data-include="header-desktop.html"></div>
+            <!-- HEADER DESKTOP-->
+            <header class="header-desktop">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="header-wrap justify-content-end">
+                            <div class="header-button">
+                                <div class="account-wrap">
+                                    <div class="account-item clearfix js-item-menu">
+                                        <div class="image">
+                                            <img id="avatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
+                                        </div>
+                                        <div class="content">
+                                            <a class="js-acc-btn" href="#" id="userName"></a>
+                                        </div>
+                                        <div class="account-dropdown js-dropdown">
+                                            <div class="info clearfix">
+                                                <div class="image">
+                                                    <img id="dropdownAvatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
+                                                </div>
+                                                <div class="content">
+                                                    <h5 class="name" id="dropdownUserName"></h5>
+                                                    <span class="email" id="dropdownUserEmail"></span>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__body">
+                                                <div class="account-dropdown__item">
+                                                    <a href="#">
+                                                        <i class="zmdi zmdi-account"></i><span data-i18n="account">Account</span></a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="#">
+                                                        <i class="zmdi zmdi-settings"></i><span data-i18n="settings">Settings</span></a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="#" id="languageSwitchBtn">
+                                                        <i class="zmdi zmdi-settings"></i><span data-i18n="language">Language</span></a>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__footer">
+                                                <a href="#" id="logoutBtn">
+                                                    <i class="zmdi zmdi-power"></i><span data-i18n="logout">Logout</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- HEADER DESKTOP-->
 
-            <!-- MAIN CONTENT -->
-            <div class="main-content">
-                <!-- Include language-modal.html -->
-                <div data-include="language-modal.html"></div>
-                <!-- GOOGLE MAP -->
-                <div id="googleMapIndex" class="map-contentIndex"></div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- LANGUAGE POP UP -->
+        <div id="languageModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h4>Change Language</h4><br>
+                <form id="languageForm">
+                    <div class="form-group button-radio-group">
+                        <div>
+                            <label for="langEn" class="button-radio-label">
+                                <input type="radio" name="language" id="langEn" value="english" class="form-radio-input">
+                                <span class="button-radio-button inactive-language" id="langBtnEn"><a onclick="changeLanguage('en')">English</a></span>
+                            </label>
+                            <label for="langMs" class="button-radio-label">
+                                <input type="radio" name="language" id="langMs" value="malay" class="form-radio-input">
+                                <span class="button-radio-button inactive-language" id="langBtnMs"><a onclick="changeLanguage('ms')">Bahasa Melayu</a></span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
+        </div>
+        <!-- GOOGLE MAP -->
+        <div id="googleMapIndex" class="map-contentIndex"></div>
+    </div>
             <!-- END MAIN CONTENT-->
         </div>
         <!-- END PAGE CONTAINER-->
+
     </div>
 
     <!-- Jquery JS-->
@@ -114,16 +266,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBM9c47J86uYl4dYw0NdwWdmE7BrwQ4xIc&callback=myMapDevicesIndex" async defer></script>
 
     <script>
-        // Function to include HTML files
-        $(function(){
-            $('[data-include]').each(function(){
-                var $this = $(this);
-                $this.load($this.data('include'));
-            });
-        });
-    </script>
-
-    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Retrieve user data from sessionStorage
             const userData = JSON.parse(sessionStorage.getItem('userData'));
@@ -154,6 +296,89 @@
                     // Redirect to login page
                     window.location.href = 'login.html';
                 });
+            }
+        });
+    </script>
+    <script>
+        // Function to change language
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            loadLanguage(lang);
+            document.getElementById('languageModal').style.display = "none"; // Hide modal after language change
+
+            // Update button styles
+            updateLanguageButtons(lang);
+        }
+
+        // Function to load language JSON
+        async function loadLanguage(lang) {
+            try {
+                const response = await fetch(`languages/${lang}.json`);
+                const translations = await response.json();
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[key]) {
+                        element.textContent = translations[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading language:', error);
+            }
+        }
+
+        // Function to load the preferred language from localStorage
+        function loadPreferredLanguage() {
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ms';
+            loadLanguage(preferredLanguage);
+            updateLanguageButtons(preferredLanguage);
+        }
+
+        // Function to update language buttons styles
+        function updateLanguageButtons(lang) {
+            const enButton = document.getElementById('langBtnEn');
+            const msButton = document.getElementById('langBtnMs');
+
+            if (lang === 'en') {
+                enButton.classList.add('active-language');
+                enButton.classList.remove('inactive-language');
+                msButton.classList.add('inactive-language');
+                msButton.classList.remove('active-language');
+            } else if (lang === 'ms') {
+                msButton.classList.add('active-language');
+                msButton.classList.remove('inactive-language');
+                enButton.classList.add('inactive-language');
+                enButton.classList.remove('active-language');
+            }
+        }
+
+        // Call this function on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPreferredLanguage();
+
+            // Get the modal
+            var modal = document.getElementById("languageModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("languageSwitchBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
             }
         });
     </script>
