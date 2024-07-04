@@ -221,11 +221,11 @@
                         <div style="justify-content: end;">
                             <label for="langEn" class="button-radio-label">
                                 <input type="radio" name="language" id="langEn" value="english" class="form-radio-input">
-                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('en')" class="language-button" data-lang="en">English</a></span>
+                                <span class="button-radio-button inactive-language" id="langBtnEn"><a onclick="changeLanguage('en')">English</a></span>
                             </label>
                             <label for="langMs" class="button-radio-label">
                                 <input type="radio" name="language" id="langMs" value="malay" class="form-radio-input">
-                                <span class="button-radio-button"><a href="#" onclick="changeLanguage('ms')" class="language-button" data-lang="ms">Bahasa Melayu</a></span>
+                                <span class="button-radio-button inactive-language" id="langBtnMs"><a onclick="changeLanguage('ms')">Bahasa Melayu</a></span>
                             </label>
                         </div>
                     </div>
@@ -310,12 +310,14 @@
         });
     </script>
     <script>
-// Function to change language
-function changeLanguage(lang) {
+        // Function to change language
+        function changeLanguage(lang) {
             localStorage.setItem('preferredLanguage', lang);
             loadLanguage(lang);
             document.getElementById('languageModal').style.display = "none"; // Hide modal after language change
-            updateLanguageButtonStyles(lang); // Update button styles
+
+            // Update button styles
+            updateLanguageButtons(lang);
         }
 
         // Function to load language JSON
@@ -338,21 +340,25 @@ function changeLanguage(lang) {
         function loadPreferredLanguage() {
             const preferredLanguage = localStorage.getItem('preferredLanguage') || 'ms';
             loadLanguage(preferredLanguage);
-            updateLanguageButtonStyles(preferredLanguage); // Update button styles on load
+            updateLanguageButtons(preferredLanguage);
         }
 
-        // Function to update language button styles
-        function updateLanguageButtonStyles(currentLang) {
-            const languageButtons = document.querySelectorAll('.language-button');
-            languageButtons.forEach(button => {
-                if (button.getAttribute('data-lang') === currentLang) {
-                    button.classList.add('current-language');
-                    button.classList.remove('other-language');
-                } else {
-                    button.classList.add('other-language');
-                    button.classList.remove('current-language');
-                }
-            });
+        // Function to update language buttons styles
+        function updateLanguageButtons(lang) {
+            const enButton = document.getElementById('langBtnEn');
+            const msButton = document.getElementById('langBtnMs');
+
+            if (lang === 'en') {
+                enButton.classList.add('active-language');
+                enButton.classList.remove('inactive-language');
+                msButton.classList.add('inactive-language');
+                msButton.classList.remove('active-language');
+            } else if (lang === 'ms') {
+                msButton.classList.add('active-language');
+                msButton.classList.remove('inactive-language');
+                enButton.classList.add('inactive-language');
+                enButton.classList.remove('active-language');
+            }
         }
 
         // Call this function on page load
