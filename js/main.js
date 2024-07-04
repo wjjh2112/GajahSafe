@@ -1,31 +1,3 @@
-
-document.addEventListener('DOMContentLoaded', function() {
-  const currentPage = window.location.pathname;
-
-  function setActivePage() {
-      const navbarLinks = document.querySelectorAll('.navbar-mobile__list a');
-      navbarLinks.forEach(link => {
-          if (link.getAttribute('href') === currentPage) {
-              link.closest('li').classList.add(' class="has-sub"');
-          } else {
-              link.closest('li').classList.remove(' class="has-sub"');
-          }
-      });
-
-      const sidebarLinks = document.querySelectorAll('.navbar-sidebar a');
-      sidebarLinks.forEach(link => {
-          if (link.getAttribute('href') === currentPage) {
-              link.closest('li').classList.add(' class="active has-sub"');
-          } else {
-              link.closest('li').classList.remove(' class="active has-sub"');
-          }
-      });
-  }
-
-  setActivePage();
-});
-
-
 // Function to change language
 function changeLanguage(lang) {
   localStorage.setItem('preferredLanguage', lang);
