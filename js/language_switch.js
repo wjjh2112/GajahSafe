@@ -59,8 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get the button that opens the modal
     var btn = document.getElementById("languageSwitchBtn");
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    // Get the button that close the modal
+    var closeLanguageModal = document.getElementById("closeLanguageModal");
+    
+
+    closeLanguageModal.onclick = function() {
+        languageModal.style.display = "none";
+    };
 
     // When the user clicks the button, open the modal 
     btn.onclick = function() {
