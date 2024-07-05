@@ -405,7 +405,7 @@ $(function() {
             var dateText = dateCell.textContent.trim();
             var rowDate = moment(dateText, 'DD/MM/YYYY', true); // Parse date with strict mode
 
-            var locationMatch = (selectedLocation === 'All Location' || selectedLocation === locationText);
+            var locationMatch = (selectedLocation === 'Location' || selectedLocation === locationText);
             var dateMatch = (!startDate || !endDate || rowDate.isBetween(startDate, endDate, null, '[]'));
 
             if (locationMatch && dateMatch) {
