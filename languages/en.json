@@ -44,6 +44,7 @@
 
     "newReport": "New Report",
     "addNewReport": "Add New Report",
+    "selectLocation": "Select Location",
     "fence": "Fence",
     "vehicle": "Vehicle",
     "assets": "Assets",
@@ -85,6 +86,7 @@
     "addNewDevice": "Add New Device",
     "deviceType": "Device Type",
     "deviceName": "Device Name",
+    "selectDeviceType": "Select Device Type",
     "installationDate": "Installation Date",
     "selectStatus": "Select Status",
     "active": "Active",
