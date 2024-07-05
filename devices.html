@@ -187,8 +187,8 @@
                         <!-- LANGUAGE POP UP -->
                         <div id="languageModal" class="modal">
                             <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h4>Change Language</h4><br>
+                                <span class="close" id="closeLanguageModal">&times;</span>
+                                <h4><span data-i18n="changeLanguage"></span></h4><br>
                                 <form id="languageForm">
                                     <div class="form-group button-radio-group">
                                         <div>
@@ -205,194 +205,159 @@
                                 </form>
                             </div>
                         </div>
+
+                        <!-- Edit Device Pop-up form -->
+                        <div id="editDeviceModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeEditDeviceModal">&times;</span>
+                                <h4><span data-i18n="editDevice"></span></h4><br>
+                                <form id="generateLinkForm">
+                                    <!-- Device Location -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-location" class="form-label"><span data-i18n="deviceLocation"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-location" name="device-location" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Device Longitude -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-longitude" name="device-longitude" placeholder="Device Longitude" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Device Latitude -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-latitude" class="form-label"><span data-i18n="deviceLatitude"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-latitude" name="device-latitude" placeholder="Device Latitude" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Status -->
+                                    <div class="form-group button-radio-group">
+                                        <label><span data-i18n="status"></span></label>
+                                        <div style="justify-content: end;">
+                                            <label for="activeStatus" class="button-radio-label">
+                                                <input type="radio" name="status" id="activeStatus" value="active" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="active"></span>
+                                            </label>
+                                            <label for="inactiveStatus" class="button-radio-label">
+                                                <input type="radio" name="status" id="inactiveStatus" value="inactive" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="inactive"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!-- Submit Button -->
+                                    <div class="au-card-footer form-footer">
+                                        <button type="submit" class="au-btn">
+                                            <span data-i18n="update"></span>
+                                        </button>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+
                         <div class="row" style="justify-content: end; margin: 10px;">
                             <button id="addDeviceBtn" class="au-btn au-btn-icon">
-                                <i class="zmdi zmdi-plus"></i> New Device
+                                <i class="zmdi zmdi-plus"></i> <span data-i18n="newDevice"></span>
                             </button>
                         </div>
                         <!-- ELECTRIC FENCES ROW -->
                         <div class="row">
                             <div class="col">
-                                <div class="au-card" sty>
+                                <div class="au-card">
                                     <div class="au-card-header">
-                                        <h3 class="title-2">Electric Fences</h3><br>
+                                        <h3 class="title-2"><span data-i18n="electricFence"></span></h3><br>
                                     </div>
                                     <div class="au-card-body">
-                                            <div class="table-container">
-                                                <table class="table table-data">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>id</th>
-                                                            <th>name</th>
-                                                            <th>location</th>
-                                                            <th>longitude</th>
-                                                            <th>latitude</th>
-                                                            <th class="text-center">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                    <div class="table-data__info"><p>1</p></div>
-                                                            </td>
-                                                            <td>
-                                                                    <div class="table-data__info">
-                                                                        <h4>Electric Fence 1</h4>
-                                                                    </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.448619</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.119894</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                    <div class="table-data__info"><p>2</p></div>
-                                                            </td>
-                                                            <td>
-                                                                    <div class="table-data__info">
-                                                                        <h4>Electric Fence 2</h4>
-                                                                    </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.447861</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.120186</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                </tr>
-                                                <tr>
-                                                            <td>
-                                                                    <div class="table-data__info"><p>3</p></div>
-                                                            </td>
-                                                            <td>
-                                                                    <div class="table-data__info">
-                                                                        <h4>Electric Fence 3</h4>
-                                                                    </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.447075</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.120461</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                </tr>
-                                                <tr>
-                                                            <td>
-                                                                    <div class="table-data__info"><p>4</p></div>
-                                                            </td>
-                                                            <td>
-                                                                    <div class="table-data__info">
-                                                                        <h4>Electric Fence 4</h4>
-                                                                    </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.445806</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.121169</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="table-data__info"><p>5</p></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data__info">
-                                                            <h4>Electric Fence 5</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <p>
-                                                            Dk Ternak Gate
-                                                        </p>
-                                                    </td>
-                                                    <td>
-                                                        <p>103.445539</p>
-                                                    </td>
-                                                    <td>
-                                                        <p>2.121183</p>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <span class="more">
-                                                            <i class="zmdi zmdi-more"></i>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="table-data__info"><p>6</p></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data__info">
-                                                            <h4>Electric Fence 6</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <p>
-                                                            Dk Ternak Gate
-                                                        </p>
-                                                    </td>
-                                                    <td>
-                                                        <p>103.445539</p>
-                                                    </td>
-                                                    <td>
-                                                        <p>2.121183</p>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <span class="more">
-                                                            <i class="zmdi zmdi-more"></i>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-container">
+                                            <table class="table table-data">
+                                                <thead>
+                                                    <tr>
+                                                        <th><span data-i18n="deviceID"></span></th>
+                                                        <th><span data-i18n="name"></span></th>
+                                                        <th><span data-i18n="location"></span></th>
+                                                        <th><span data-i18n="longitude"></span></th>
+                                                        <th><span data-i18n="latitude"></span></th>
+                                                        <th class="text-center"><span data-i18n="action"></span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr data-name="Electric Fence 1">
+                                                        <td><div class="table-data__info"><p>1</p></div></td>
+                                                        <td><div class="table-data__info"><h4>Electric Fence 1</h4></div></td>
+                                                        <td><p>Dk Ternak Gate</p></td>
+                                                        <td><p>103.448619</p></td>
+                                                        <td><p>2.119894</p></td>
+                                                        <td class="text-center">
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-edit editBtn"></i>
+                                                            </span>
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr data-name="Electric Fence 2">
+                                                        <td><div class="table-data__info"><p>2</p></div></td>
+                                                        <td><div class="table-data__info"><h4>Electric Fence 2</h4></div></td>
+                                                        <td><p>Dk Ternak Gate</p></td>
+                                                        <td><p>103.447861</p></td>
+                                                        <td><p>2.120186</p></td>
+                                                        <td class="text-center">
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-edit editBtn"></i>
+                                                            </span>
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr data-name="Electric Fence 3">
+                                                        <td><div class="table-data__info"><p>3</p></div></td>
+                                                        <td><div class="table-data__info"><h4>Electric Fence 3</h4></div></td>
+                                                        <td><p>Dk Ternak Gate</p></td>
+                                                        <td><p>103.447075</p></td>
+                                                        <td><p>2.120461</p></td>
+                                                        <td class="text-center">
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-edit editBtn"></i>
+                                                            </span>
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr data-name="Electric Fence 4">
+                                                        <td><div class="table-data__info"><p>4</p></div></td>
+                                                        <td><div class="table-data__info"><h4>Electric Fence 4</h4></div></td>
+                                                        <td><p>Dk Ternak Gate</p></td>
+                                                        <td><p>103.445806</p></td>
+                                                        <td><p>2.121169</p></td>
+                                                        <td class="text-center">
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-edit editBtn"></i>
+                                                            </span>
+                                                            <span class="more">
+                                                                <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            
+                                        </div>
                                     </div>
+                                    <!-- END USER DATA-->
                                 </div>
-                                <!-- END USER DATA-->
-                            </div>
                             </div>
                         </div>
                         <!-- END ELECTRIC FENCE ROW -->
@@ -408,147 +373,103 @@
                                                 <table class="table table-data">
                                                     <thead>
                                                         <tr>
-                                                            <th>id</th>
-                                                            <th>name</th>
-                                                            <th>location</th>
-                                                            <th>longitude</th>
-                                                            <th>latitude</th>
-                                                            <th class="text-center">Action</th>
+                                                            <th><span data-i18n="deviceID"></span></th>
+                                                            <th><span data-i18n="name"></span></th>
+                                                            <th><span data-i18n="location"></span></th>
+                                                            <th><span data-i18n="longitude"></span></th>
+                                                            <th><span data-i18n="latitude"></span></th>
+                                                            <th class="text-center"><span data-i18n="action"></span></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
+                                                            <tr data-name="Camera 1">
+                                                                <td>
                                                                     <div class="table-data__info"><p>1</p></div>
-                                                            </td>
-                                                            <td>
+                                                                </td>
+                                                                <td>
                                                                     <div class="table-data__info">
                                                                         <h4>Camera 1</h4>
                                                                     </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.448619</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.119894</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
+                                                                </td>
+                                                                <td>
+                                                                    <p>Dk Ternak Gate</p>
+                                                                </td>
+                                                                <td><p>103.448619</p></td>
+                                                                <td><p>2.119894</p></td>
+                                                                <td class="text-center">
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-edit editBtn"></i>
+                                                                    </span>
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr data-name="Camera 2">
+                                                                <td>
                                                                     <div class="table-data__info"><p>2</p></div>
-                                                            </td>
-                                                            <td>
+                                                                </td>
+                                                                <td>
                                                                     <div class="table-data__info">
                                                                         <h4>Camera 2</h4>
                                                                     </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.447861</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.120186</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
+                                                                </td>
+                                                                <td><p>Dk Ternak Gate</p></td>
+                                                                <td><p>103.447861</p></td>
+                                                                <td><p>2.120186</p></td>
+                                                                <td class="text-center">
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-edit editBtn"></i>
+                                                                    </span>
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr data-name="Camera 3">
+                                                                <td>
                                                                     <div class="table-data__info"><p>3</p></div>
-                                                            </td>
-                                                            <td>
+                                                                </td>
+                                                                <td>
                                                                     <div class="table-data__info">
                                                                         <h4>Camera 3</h4>
                                                                     </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.447075</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.120461</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
+                                                                </td>
+                                                                <td><p>Dk Ternak Gate</p></td>
+                                                                <td><p>103.447075</p></td>
+                                                                <td><p>2.120461</p></td>
+                                                                <td class="text-center">
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-edit editBtn"></i>
+                                                                    </span>
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr data-name="Camera 4">
+                                                                <td>
                                                                     <div class="table-data__info"><p>4</p></div>
-                                                            </td>
-                                                            <td>
+                                                                </td>
+                                                                <td>
                                                                     <div class="table-data__info">
                                                                         <h4>Camera 4</h4>
                                                                     </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.445806</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.121169</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                                        </span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                    <div class="table-data__info"><p>5</p></div>
-                                                            </td>
-                                                            <td>
-                                                                    <div class="table-data__info">
-                                                                        <h4>Camera 5</h4>
-                                                                    </div>
-                                                            </td>
-                                                            <td>
-                                                                        <p>
-                                                                            Dk Ternak Gate
-                                                                        </p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>103.445539</p>
-                                                            </td>
-                                                            <td>
-                                                                        <p>2.121183</p>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                        <span class="more">
-                                                                            <i class="zmdi zmdi-more"></i>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                                </td>
+                                                                <td><p>Dk Ternak Gate</p></td>
+                                                                <td><p>103.445806</p></td>
+                                                                <td><p>2.121169</p></td>
+                                                                <td class="text-center">
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-edit editBtn"></i>
+                                                                    </span>
+                                                                    <span class="more">
+                                                                        <i class="zmdi zmdi-delete deleteBtn"></i>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
                                     </div>
                                 </div>
                                 <!-- END USER DATA-->
@@ -598,10 +519,51 @@
     <!-- Language Switch JS -->
     <script src="js/language_switch.js"></script>
 
-    <!--   Add Device Button Script   -->
     <script>
         document.getElementById('addDeviceBtn').addEventListener('click', function() {
             window.location.href = 'addDevice.html';
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the modal
+            var modal = document.getElementById("editDeviceModal");
+
+            // Get the <span> element that closes the modal
+            var closeEditDeviceModal = document.getElementById("closeEditDeviceModal");
+
+            // Add click event listeners to all edit buttons
+            document.querySelectorAll('.editBtn').forEach((btn) => {
+                btn.addEventListener('click', function() {
+                    modal.style.display = "block";
+                });
+            });
+
+            // When the user clicks on <span> (x), close the modal
+            closeEditDeviceModal.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Add click event listeners to all delete buttons
+            document.querySelectorAll('.deleteBtn').forEach((btn) => {
+                btn.addEventListener('click', function() {
+                    var deviceRow = btn.closest('tr');
+                    var deviceName = deviceRow.getAttribute('data-name');
+                    if (confirm("Confirm to delete " + deviceName)) {
+                        deviceRow.remove();
+                    } else {
+                        window.location.href = "devices.html";
+                    }
+                });
+            });
         });
     </script>
     
