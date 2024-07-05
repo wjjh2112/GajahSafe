@@ -191,8 +191,8 @@
                         <!-- LANGUAGE POP UP -->
                         <div id="languageModal" class="modal">
                             <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h4>Change Language</h4><br>
+                                <span class="close" id="closeLanguageModal">&times;</span>
+                                <h4><span data-i18n="changeLanguage"></span></h4><br>
                                 <form id="languageForm">
                                     <div class="form-group button-radio-group">
                                         <div>
@@ -219,12 +219,12 @@
                                 <!-- DATA TABLE -->
                                 <div class="au-card">
                                     <div class="au-card-header">
-                                        <h3 class="title-2">Damaged Reports</h3><br>
+                                        <h3 class="title-2"><span data-i18n="damagedReports"></h3><br>
                                         <div class="table-data__tool">
                                             <div class="table-data__tool-left">
                                                 <div class="rs-select2--light rs-select2--md">
                                                     <select class="js-select2" name="location" id="locationFilter">
-                                                        <option selected="All Location">All Location</option>
+                                                        <option selected="All Location"><span data-i18n="location"></option>
                                                         <option value="Dk Ternak">Dk Ternak</option>
                                                         <option value="Johor">Johor</option>
                                                         <option value="Pahang">Pahang</option>
@@ -243,12 +243,12 @@
                                             <table class="table table-striped table-earning">
                                                 <thead>
                                                     <tr>
-                                                        <th>Location</th>
-                                                        <th>EF Damaged</th>
-                                                        <th>CAM Damaged</th>
-                                                        <th>Date</th>
-                                                        <th>Officer</th>
-                                                        <th>Actions</th>
+                                                        <th><span data-i18n="location"></th>
+                                                        <th><span data-i18n="EFDamaged"></th>
+                                                        <th><span data-i18n="CAMDamaged"></th>
+                                                        <th><span data-i18n="date"></th>
+                                                        <th><span data-i18n="officer"></th>
+                                                        <th><span data-i18n="action"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -258,7 +258,7 @@
                                                         <td>No</td>
                                                         <td>14/06/2024</td>
                                                         <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
+                                                        <td><a href="#"><span data-i18n="view"></span></a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Dk Ternak</td>
@@ -266,23 +266,7 @@
                                                         <td>No</td>
                                                         <td>12/05/2024</td>
                                                         <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dk Ternak</td>
-                                                        <td>No</td>
-                                                        <td>No</td>
-                                                        <td>05/05/2024</td>
-                                                        <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dk Ternak</td>
-                                                        <td>No</td>
-                                                        <td>No</td>
-                                                        <td>18/04/2024</td>
-                                                        <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
+                                                        <td><a href="#"><span data-i18n="view"></span></a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Dk Ternak</td>
@@ -290,23 +274,7 @@
                                                         <td>No</td>
                                                         <td>11/03/2024</td>
                                                         <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dk Ternak</td>
-                                                        <td>No</td>
-                                                        <td>No</td>
-                                                        <td>01/02/2024</td>
-                                                        <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dk Ternak</td>
-                                                        <td>No</td>
-                                                        <td>No</td>
-                                                        <td>18/04/2024</td>
-                                                        <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
+                                                        <td><a href="#"><span data-i18n="view"></span></a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Johor</td>
@@ -314,23 +282,7 @@
                                                         <td>No</td>
                                                         <td>11/03/2024</td>
                                                         <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Johor</td>
-                                                        <td>No</td>
-                                                        <td>No</td>
-                                                        <td>01/02/2024</td>
-                                                        <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Pahang</td>
-                                                        <td>No</td>
-                                                        <td>No</td>
-                                                        <td>12/05/2024</td>
-                                                        <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
+                                                        <td><a href="#"><span data-i18n="view"></span></a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pahang</td>
@@ -338,7 +290,7 @@
                                                         <td>No</td>
                                                         <td>05/05/2024</td>
                                                         <td>Dev</td>
-                                                        <td><a href="#">View</a></td>
+                                                        <td><a href="#"><span data-i18n="view"></span></a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -351,13 +303,13 @@
                             <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Damages</h3>
+                                        <h3 class="title-2 m-b-40"><span data-i18n="damages"></span></h3>
                                         <div class="default-tab">
                                             <nav>
                                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                    <a class="nav-item nav-link active" id="nav-weekly-tab" data-toggle="tab" href="#nav-week" role="tab" aria-controls="nav-week" aria-selected="true">Weekly</a>
-                                                    <a class="nav-item nav-link" id="nav-monthly-tab" data-toggle="tab" href="#nav-month" role="tab" aria-controls="nav-month" aria-selected="false">Monthly</a>
-                                                    <a class="nav-item nav-link" id="nav-yearly-tab" data-toggle="tab" href="#nav-year" role="tab" aria-controls="nav-year" aria-selected="false">Yearly</a>
+                                                    <a class="nav-item nav-link active" id="nav-weekly-tab" data-toggle="tab" href="#nav-week" role="tab" aria-controls="nav-week" aria-selected="true"><span data-i18n="weekly"></span></a>
+                                                    <a class="nav-item nav-link" id="nav-monthly-tab" data-toggle="tab" href="#nav-month" role="tab" aria-controls="nav-month" aria-selected="false"><span data-i18n="monthly"></span></a>
+                                                    <a class="nav-item nav-link" id="nav-yearly-tab" data-toggle="tab" href="#nav-year" role="tab" aria-controls="nav-year" aria-selected="false"><span data-i18n="yearly"></span></a>
                                                 </div>
                                             </nav>
                                             <div class="tab-content pl-3 pt-2" id="nav-tabContent">
@@ -366,7 +318,7 @@
                                                         <button id="prev-week" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
                                                         <button id="next-week" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
                                                     </div>
-                                                    <div class="chart-header" id="weekly-header">Monday - Sunday</div>
+                                                    <div class="chart-header" id="weekly-header"></div>
                                                     <canvas id="weekly-chart"></canvas>
                                                 </div>
                                                 <div class="tab-pane fade" id="nav-month" role="tabpanel" aria-labelledby="nav-month-tab">
@@ -382,7 +334,7 @@
                                                         <button id="prev-year" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
                                                         <button id="next-year" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
                                                     </div>
-                                                    <div class="chart-header" id="yearly-header">2024</div>
+                                                    <div class="chart-header" id="yearly-header"></div>
                                                     <canvas id="yearly-chart"></canvas>
                                                 </div>
                                             </div>
@@ -393,7 +345,7 @@
                             <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
-                                        <h3 class="title-2 m-b-40">Types of Damages</h3>
+                                        <h3 class="title-2 m-b-40"><span data-i18n="typesOfDamages"></span></h3>
                                         <canvas id="pieChart"></canvas>
                                     </div>
                                 </div>
