@@ -1,8 +1,7 @@
-
 document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('addUserForm');
+    const modal = document.getElementById('addUserModal');
     const addUserBtn = document.getElementById('addUserBtn');
-    const closeBtn = document.getElementsByClassName('close')[0];
+    const closeBtn = document.getElementById('closeAddUserModal');
     const generateLinkBtn = document.getElementById('generateLinkBtn');
     const copyLinkBtn = document.getElementById('copyLinkBtn');
     const generatedLinkArea = document.getElementById('generatedLinkArea');
