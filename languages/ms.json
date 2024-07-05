@@ -44,6 +44,7 @@
 
     "newReport": "Laporan Baharu",
     "addNewReport": "Tambah Laporan Baharu",
+    "selectLocation": "Sila Pilih Lokasi",
     "fence": "Pagar",
     "vehicle": "Kenderaan",
     "assets": "Aset",
@@ -85,6 +86,7 @@
     "addNewDevice": "Tambah Peranti Baharu",
     "deviceType": "Jenis Peranti",
     "deviceName": "Nama Peranti",
+    "selectDeviceType": "Sila Pilih Jenis Peranti",
     "installationDate": "Tarikh Pemasangan",
     "selectStatus": "Sila Pilih Status",
     "active": "Aktif",
