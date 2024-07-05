@@ -392,17 +392,17 @@ $(function() {
         filterTable();
     });
 
-    // Handle location filter change
-    $('#locationFilter').change(function() {
+    // Handle alert filter change
+    $('#alertFilter').change(function() {
         filterTable();
     });
 
     // Store the original rows
     var originalRows = Array.from(document.querySelectorAll('.table-earning tbody tr'));
 
-    // Function to filter table by location and date range
+    // Function to filter table by alert and date range
     function filterTable() {
-        var selectedAlertType = $('#locationFilter').val();
+        var selectedAlertType = $('#alertFilter').val();
         var dateRange = $('#dateRangePicker').val();
         var table = document.querySelector('.table-earning tbody');
         
