@@ -189,7 +189,7 @@
                         <div id="languageModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeLanguageModal">&times;</span>
-                                <h4>Change Language</h4><br>
+                                <h4><span data-i18n="changeLanguage"></span></h4><br>
                                 <form id="languageForm">
                                     <div class="form-group button-radio-group">
                                         <div>
@@ -210,20 +210,20 @@
                         <!-- DATA TABLE -->
                         <div class="au-card">
                             <div class="au-card-header">
-                                <h3 class="title-2">Add New Device</h3><br>
+                                <h3 class="title-2"><span data-i18n="addNewDevice"></span></h3><br>
                             </div>
                             <div class="card-body card-block">
                                 <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                     <!-- Device Type -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
-                                            <label for="device-type" class="form-label">Device Type</label>
+                                            <label for="device-type" class="form-label"><span data-i18n="deviceType"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
                                             <select name="device-type" class="js-select2" id="device-type">
-                                                <option selected="selected">Select Device Type</option>
-                                                <option value="Camera">Camera</option>
-                                                <option value="Electric Fence">Electric Fence</option>
+                                                <option selected="selected"><span data-i18n="selectDeviceType"></span></option>
+                                                <option value="Camera"><span data-i18n="camera"></span></option>
+                                                <option value="Electric Fence"><span data-i18n="electricFence"></span></option>
                                             </select>
                                             <div class="dropDownSelect2"></div>
                                         </div>
@@ -231,50 +231,50 @@
                                     <!-- Device Name -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
-                                            <label for="device-name" class="form-label">Device Name</label>
+                                            <label for="device-name" class="form-label"><span data-i18n="deviceName"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
-                                            <input type="text" id="device-name" name="device-name" placeholder="Enter Device Name" class="form-control">
+                                            <input type="text" id="device-name" name="device-name" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Device Location -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
-                                            <label for="device-location" class="form-label">Device Location</label>
+                                            <label for="device-location" class="form-label"><span data-i18n="deviceLocation"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
-                                            <input type="text" id="device-location" name="device-location" placeholder="Enter Device Location" class="form-control">
+                                            <input type="text" id="device-location" name="device-location" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Device Longitude -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
-                                            <label for="device-longitude" class="form-label">Device Longitude</label>
+                                            <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
-                                            <input type="text" id="device-longitude" name="device-longitude" placeholder="Enter Device Longitude" class="form-control">
+                                            <input type="text" id="device-longitude" name="device-longitude" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Device Latitude -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
-                                            <label for="device-latitude" class="form-label">Device Latitude</label>
+                                            <label for="device-latitude" class="form-label"><span data-i18n="deviceLatitude"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
-                                            <input type="text" id="device-latitude" name="device-latitude" placeholder="Enter Device Latitude" class="form-control">
+                                            <input type="text" id="device-latitude" name="device-latitude" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Installation Date -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
-                                            <label for="installation-date" class="form-label">Installation Date</label>
+                                            <label for="installation-date" class="form-label"><span data-i18n="installationDate"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
                                             <input type="date" id="installation-date" name="installation-date" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Status -->
-                                    <div class="row form-group">
+                                    <!-- <div class="row form-group">
                                         <div class="col col-md-3">
                                             <label for="status" class="form-label">Status</label>
                                         </div>
@@ -286,11 +286,24 @@
                                             </select>
                                             <div class="dropDownSelect2"></div>
                                         </div>
+                                    </div> -->
+                                    <div class="form-group button-radio-group">
+                                        <label><span data-i18n="status"></span></label>
+                                        <div style="justify-content: end;">
+                                            <label for="activeStatus" class="button-radio-label">
+                                                <input type="radio" name="status" id="activeStatus" value="active" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="active"></span>
+                                            </label>
+                                            <label for="inactiveStatus" class="button-radio-label">
+                                                <input type="radio" name="status" id="inactiveStatus" value="inactive" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="inactive"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                     <!-- Submit Button -->
                                     <div class="au-card-footer form-footer">
                                         <button type="submit" class="au-btn">
-                                            Submit &nbsp;<i class="fas fa-arrow-right"></i>
+                                            <span data-i18n="submit"></span> &nbsp;<i class="fas fa-arrow-right"></i>
                                         </button>
                                     </div>
                                 </form>
@@ -326,37 +339,8 @@
     <!-- Main JS-->
     <script src="js/main.js"></script>
 
-    <!-- Damage Checkbox JS -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var checkboxes = document.querySelectorAll('.form-check-input');
-        
-            checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', function() {
-                    var parent = this.closest('.checkbox');
-                    var inputs = parent.querySelectorAll('.damage-input');
-        
-                    if (this.checked) {
-                        inputs.forEach(function(input) {
-                            input.style.display = 'inline-block';
-                        });
-                    } else {
-                        inputs.forEach(function(input) {
-                            input.style.display = 'none';
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-
-    <!-- Date & Time JS -->
-    <script>
-    </script>
-
-    <!-- Upload Images File JS -->
-    <script>
-    </script>
+    <!-- Language Switch JS -->
+    <script src="js/language_switch.js"></script>
 
 </body>
 
