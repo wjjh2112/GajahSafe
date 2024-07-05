@@ -187,8 +187,8 @@
                         <!-- LANGUAGE POP UP -->
                         <div id="languageModal" class="modal">
                             <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h4>Change Language</h4><br>
+                                <span class="close" id="closeLanguageModal">&times;</span>
+                                <h4><span data-i18n="changeLanguage"></span></h4><br>
                                 <form id="languageForm">
                                     <div class="form-group button-radio-group">
                                         <div>
@@ -206,13 +206,13 @@
                             </div>
                         </div>
                         <!-- Pop-up form -->
-                        <div id="addUserForm" class="modal">
+                        <div id="addUserModal" class="modal">
                             <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h4>Generate Registration Link</h4><br>
+                                <span class="close" id="closeAddUserModal">&times;</span>
+                                <h4><span data-i18n="generateLinkHeader"></span></h4><br>
                                 <form id="generateLinkForm">
                                     <div class="form-group">
-                                            <label for="expiryDays">Link Expiry (days)</label>
+                                            <label for="expiryDays"><span data-i18n="linkExp"></span></label>
                                             <input style="display:block;
                                             padding: 8px 12px;
                                             cursor: text;
@@ -220,19 +220,19 @@
                                             border-radius: 4px" type="number" id="expiryDays" name="expiryDays" min="1" required class="form-text">
                                     </div>
                                     <div class="form-group button-radio-group">
-                                        <label>Role</label>
+                                        <label><span data-i18n="role"></span></label>
                                         <div style="justify-content: end;">
                                             <label for="adminRole" class="button-radio-label">
                                                 <input type="radio" name="role" id="adminRole" value="admin" class="form-radio-input">
-                                                <span class="button-radio-button">Admin</span>
+                                                <span class="button-radio-button" data-i18n="admin"></span>
                                             </label>
                                             <label for="viewerRole" class="button-radio-label">
                                                 <input type="radio" name="role" id="viewerRole" value="viewer" class="form-radio-input">
-                                                <span class="button-radio-button">Viewer</span>
+                                                <span class="button-radio-button" data-i18n="viewer"></span>
                                             </label>
                                         </div>
                                     </div>
-                                    <button type="button" id="generateLinkBtn" class="au-btn" style="width: 100%;">Generate Link</button>
+                                    <button type="button" id="generateLinkBtn" class="au-btn" style="width: 100%;"><span data-i18n="generateButton"></span></button>
                                     <div id="generatedLinkArea" style="display: none;">
                                         <div class="input-group">
                                             <input type="text" id="generatedLink" readonly class="form-text">
@@ -245,7 +245,7 @@
 
                         <div class="row" style="justify-content: end; margin: 10px;">
                             <button id="addUserBtn" class="au-btn au-btn-icon">
-                                <i class="zmdi zmdi-plus"></i> User
+                                <i class="zmdi zmdi-plus"></i> <span data-i18n="user"></span>
                             </button>
                         </div>
 
@@ -253,7 +253,7 @@
                             <div class="col-12">
                                 <div class="au-card">
                                     <div class="au-card-header">
-                                        <h3 class="title-2">Users</h3><br>
+                                        <h3 class="title-2"><span data-i18n="users"></span></h3><br>
                                         <div class="table-data__tool">
                                             <div class="table-data__tool-left">
                                                 <div class="rs-select2--light rs-select2--md">
@@ -276,11 +276,11 @@
                                                             <input type="checkbox">
                                                             <div class="au-checkmark"></div>
                                                         </label></td>
-                                                        <th>name</th>
-                                                        <th>ref. id</th>
-                                                        <th>role</th>
-                                                        <th>status</th>
-                                                        <th class="text-center">action</th>
+                                                        <th><span data-i18n="name"></span></th>
+                                                        <th><span data-i18n="refID"></span></th>
+                                                        <th><span data-i18n="role"></span></th>
+                                                        <th><span data-i18n="status"></span></th>
+                                                        <th class="text-center"><span data-i18n="action"></span></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
