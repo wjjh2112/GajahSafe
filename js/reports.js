@@ -23,57 +23,109 @@ document.addEventListener('DOMContentLoaded', function () {
     updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
     updateHeader('yearly-header', `${currentYearlyYear}`);
 
-    document.getElementById('prev-week').addEventListener('click', function () {
-        currentWeek = (currentWeek > 1) ? currentWeek - 1 : 52;
-        if (currentWeek === 52) {
-            currentWeeklyYear -= 1;
+    // Previous and Next buttons for weekly chart
+    const prevWeekButton = document.getElementById('prev-week');
+    const nextWeekButton = document.getElementById('next-week');
+
+    prevWeekButton.addEventListener('click', function () {
+        if (currentWeeklyYear > 2024 || (currentWeeklyYear === 2024 && currentWeek > 1)) {
+            currentWeek = (currentWeek > 1) ? currentWeek - 1 : 52;
+            if (currentWeek === 52) {
+                currentWeeklyYear -= 1;
+            }
+            updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
+            weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
+            updateChart(weeklyChart, weeklyData, weeklyData.labels);
         }
-        updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
-        weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
-        updateChart(weeklyChart, weeklyData, weeklyData.labels);
+        updatePrevNextButtons();
     });
 
-    document.getElementById('next-week').addEventListener('click', function () {
-        currentWeek = (currentWeek < 52) ? currentWeek + 1 : 1;
-        if (currentWeek === 1) {
-            currentWeeklyYear += 1;
+    nextWeekButton.addEventListener('click', function () {
+        const currentDate = new Date();
+        const maxWeek = getCurrentWeekNumber(currentDate);
+        if (currentWeeklyYear < currentDate.getFullYear() || (currentWeeklyYear === currentDate.getFullYear() && currentWeek < maxWeek)) {
+            currentWeek = (currentWeek < 52) ? currentWeek + 1 : 1;
+            if (currentWeek === 1) {
+                currentWeeklyYear += 1;
+            }
+            updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
+            weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
+            updateChart(weeklyChart, weeklyData, weeklyData.labels);
         }
-        updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
-        weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
-        updateChart(weeklyChart, weeklyData, weeklyData.labels);
+        updatePrevNextButtons();
     });
 
-    document.getElementById('prev-month').addEventListener('click', function () {
-        currentMonth = (currentMonth > 0) ? currentMonth - 1 : 11;
-        if (currentMonth === 11) {
-            currentMonthlyYear -= 1;
+    // Previous and Next buttons for monthly chart
+    const prevMonthButton = document.getElementById('prev-month');
+    const nextMonthButton = document.getElementById('next-month');
+
+    prevMonthButton.addEventListener('click', function () {
+        if (currentMonthlyYear > 2024 || (currentMonthlyYear === 2024 && currentMonth > 0)) {
+            currentMonth = (currentMonth > 0) ? currentMonth - 1 : 11;
+            if (currentMonth === 11) {
+                currentMonthlyYear -= 1;
+            }
+            updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
+            monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
+            updateChart(monthlyChart, monthlyData, monthlyData.labels);
         }
-        updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
-        monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
-        updateChart(monthlyChart, monthlyData, monthlyData.labels);
+        updatePrevNextButtons();
     });
 
-    document.getElementById('next-month').addEventListener('click', function () {
-        currentMonth = (currentMonth < 11) ? currentMonth + 1 : 0;
-        if (currentMonth === 0) {
-            currentMonthlyYear += 1;
+    nextMonthButton.addEventListener('click', function () {
+        const currentDate = new Date();
+        const maxMonth = currentDate.getMonth();
+        if (currentMonthlyYear < currentDate.getFullYear() || (currentMonthlyYear === currentDate.getFullYear() && currentMonth < maxMonth)) {
+            currentMonth = (currentMonth < 11) ? currentMonth + 1 : 0;
+            if (currentMonth === 0) {
+                currentMonthlyYear += 1;
+            }
+            updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
+            monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
+            updateChart(monthlyChart, monthlyData, monthlyData.labels);
         }
-        updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
-        monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
-        updateChart(monthlyChart, monthlyData, monthlyData.labels);
+        updatePrevNextButtons();
     });
 
-    document.getElementById('prev-year').addEventListener('click', function () {
-        currentYearlyYear -= 1;
-        updateHeader('yearly-header', `${currentYearlyYear}`);
-        updateChart(yearlyChart, calculateYearlyData(currentYearlyYear, tableData), yearlyChart.data.labels);
+    // Previous and Next buttons for yearly chart
+    const prevYearButton = document.getElementById('prev-year');
+    const nextYearButton = document.getElementById('next-year');
+
+    prevYearButton.addEventListener('click', function () {
+        if (currentYearlyYear > 2024) {
+            currentYearlyYear -= 1;
+            updateHeader('yearly-header', `${currentYearlyYear}`);
+            updateChart(yearlyChart, calculateYearlyData(currentYearlyYear, tableData), yearlyChart.data.labels);
+        }
+        updatePrevNextButtons();
     });
 
-    document.getElementById('next-year').addEventListener('click', function () {
-        currentYearlyYear += 1;
-        updateHeader('yearly-header', `${currentYearlyYear}`);
-        updateChart(yearlyChart, calculateYearlyData(currentYearlyYear, tableData), yearlyChart.data.labels);
+    nextYearButton.addEventListener('click', function () {
+        const currentDate = new Date();
+        if (currentYearlyYear < currentDate.getFullYear()) {
+            currentYearlyYear += 1;
+            updateHeader('yearly-header', `${currentYearlyYear}`);
+            updateChart(yearlyChart, calculateYearlyData(currentYearlyYear, tableData), yearlyChart.data.labels);
+        }
+        updatePrevNextButtons();
     });
+
+    function updatePrevNextButtons() {
+        // For weekly chart
+        const maxWeeklyDate = new Date();
+        maxWeeklyDate.setDate(maxWeeklyDate.getDate() - maxWeeklyDate.getDay()); // Get start of current week
+        prevWeekButton.disabled = (currentWeeklyYear <= 2024 && currentWeek <= 1);
+        nextWeekButton.disabled = (currentWeeklyYear >= maxWeeklyDate.getFullYear() && currentWeek >= getCurrentWeekNumber(maxWeeklyDate));
+
+        // For monthly chart
+        const maxMonthlyDate = new Date();
+        prevMonthButton.disabled = (currentMonthlyYear <= 2024 && currentMonth <= 0);
+        nextMonthButton.disabled = (currentMonthlyYear >= maxMonthlyDate.getFullYear() && currentMonth >= maxMonthlyDate.getMonth());
+
+        // For yearly chart
+        prevYearButton.disabled = (currentYearlyYear <= 2024);
+        nextYearButton.disabled = (currentYearlyYear >= maxMonthlyDate.getFullYear());
+    }
 
     function createChart(ctx, data, labels) {
         return new Chart(ctx, {
@@ -140,10 +192,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                         ticks: {
                             fontFamily: "Poppins",
-                            beginAtZero: true, // Ensure y-axis starts at zero
-                            suggestedMin: 0, 
+                            beginAtZero: true,
+                            suggestedMin: 0,
                             suggestedMax: 5,
-                        stepSize: 1, 
+                            stepSize: 1,
                         }
                     }]
                 },
@@ -184,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        return parsedData;
+        return parsedData.filter(item => item.datetime >= new Date(2024, 0, 1) && item.datetime <= new Date());
     }
 
     function calculateWeeklyData(weekNumber, year, data) {
@@ -289,7 +341,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const pastDaysOfYear = (d - firstDayOfYear) / 86400000;
         return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
+
+    // Initialize buttons state
+    updatePrevNextButtons();
 });
+
 
 
     //pie chart
