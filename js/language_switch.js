@@ -11,12 +11,17 @@ function changeLanguage(lang) {
 // Function to load language JSON
 async function loadLanguage(lang) {
     try {
-        const response = await fetch(languages/${lang}.json);
+        const response = await fetch(`languages/${lang}.json`);
         const translations = await response.json();
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             if (translations[key]) {
-                element.textContent = translations[key];
+                // Check if the element is an option within a select
+                if (element.tagName.toLowerCase() === 'option') {
+                    element.textContent = translations[key];
+                } else {
+                    element.textContent = translations[key];
+                }
             }
         });
     } catch (error) {
@@ -61,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get the button that close the modal
     var closeLanguageModal = document.getElementById("closeLanguageModal");
-    
 
     closeLanguageModal.onclick = function() {
         languageModal.style.display = "none";
