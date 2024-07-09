@@ -16,7 +16,7 @@ async function loadLanguage(lang) {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             if (translations[key]) {
-                if (element.tagName.toLowerCase() === 'option') {
+                if (element.tagName === 'OPTION') {
                     element.textContent = translations[key];
                 } else {
                     element.textContent = translations[key];
