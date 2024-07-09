@@ -11,7 +11,7 @@ function changeLanguage(lang) {
 // Function to load language JSON
 async function loadLanguage(lang) {
     try {
-        const response = await fetch(`languages/${lang}.json`);
+        const response = await fetch(languages/${lang}.json);
         const translations = await response.json();
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
