@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() { 
     // Get the modal
     var modal = document.getElementById("viewReportModal");
 
@@ -26,3 +27,4 @@
             modal.style.display = "none";
         }
     });
+});
