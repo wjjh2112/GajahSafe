@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get the modal
     var modal = document.getElementById("viewReportModal");
 
-    // Get the button that opens the modal
+    // Get the buttons that open the modal
     var viewButtons = document.querySelectorAll(".view-report-btn");
 
     // Get the <span> element that closes the modal
