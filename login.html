@@ -99,41 +99,37 @@
 
     <!-- login JS -->
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(event) {
-          event.preventDefault(); // Prevent the default form submission
-      
-          // Get the email and password from the form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
           const email = document.getElementById('email').value;
           const password = document.getElementById('password').value;
       
           try {
-            // Send login request to the backend
             const response = await fetch('http://13.212.12.152:3000/login', {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ email, password }),
+              body: JSON.stringify({ email, password })
             });
       
-            // Parse the JSON response
             const result = await response.json();
       
             if (result.success) {
-              // Handle successful login
-              alert(`Login successful! Welcome, ${result.user.fullname}`);
-              // Optionally, you can redirect to another page or update the UI
-              window.location.href = 'index.html'; // Redirect to the dashboard or home page
+              // Save user data to local storage or session
+              localStorage.setItem('user', JSON.stringify(result.user));
+              // Redirect to dashboard or home page
+              window.location.href = 'index.html';
             } else {
-              // Handle failed login
-              alert('Login failed. Please check your email and password.');
+              alert(result.message);
             }
           } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred during login.');
           }
         });
       </script>
+      
       
 
 
