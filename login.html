@@ -98,36 +98,38 @@
     <script src="js/main.js"></script>
 
     <!-- login JS -->
-<script>
-document.getElementById('loginForm').addEventListener('submit', async (event) => {
-  event.preventDefault(); // Prevent default form submission
-  
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  
-  try {
-    const response = await fetch('http://13.212.12.152:3000/login', { // Adjust the endpoint as needed
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
-    
-    if (!response.ok) {
-      throw new Error('Login failed');
-    }
-    
-    const user = await response.json();
-    localStorage.setItem('user', JSON.stringify(user));
-    window.location.href = 'index.html'; // Redirect to your dashboard
-  } catch (error) {
-    console.error('Login error:', error);
-    alert('Login failed. Please check your credentials and try again.');
-  }
-});
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
 
-</script>
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+            const response = await fetch('http://your-ec2-instance-ip:3000/login', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Save user information in local storage or session storage
+                localStorage.setItem('user', JSON.stringify(result.user));
+                // Redirect to the dashboard or main page
+                window.location.href = 'index.html';
+            } else {
+                alert(result.message); // Show error message
+            }
+            } catch (error) {
+            console.error('Error during login:', error);
+            alert('An error occurred during login.');
+            }
+        });
+    </script>
 
 
 </body>
