@@ -56,14 +56,14 @@
                     <h2>Log In</h2>
                 </div>
                 <div class="login-form">
-                    <form action="" method="post">
+                    <form id="loginForm" action="" method="post">
                         <div class="form-group">
                             <label>Email Address</label>
-                            <input class="au-input au-input--full" type="email" name="email" placeholder="Email">
+                            <input class="au-input au-input--full" type="email" name="email" placeholder="Email" id="email">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input class="au-input au-input--full" type="password" name="password" placeholder="Password">
+                            <input class="au-input au-input--full" type="password" name="password" placeholder="Password" id="password">
                         </div>
                         <button class="au-btn au-btn--block m-b-20" type="submit">Log In</button>
                     </form>
@@ -71,6 +71,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Jquery JS-->
     <script src="vendor/jquery-3.2.1.min.js"></script>
@@ -96,37 +97,36 @@
     <!-- Main JS-->
     <script src="js/main.js"></script>
 
-    <!-- login.html -->
+    <!-- login JS -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('.login-form form');
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission for demo
-
-            // Dummy validation (replace with actual login logic)
-            const email = form.querySelector('input[name="email"]').value;
-            const password = form.querySelector('input[name="password"]').value;
-
-            // Dummy check (replace with actual backend validation)
-            if (email === 'johndoe@example.com' && password === 'password') {
-                // Dummy user data (replace with actual user data retrieval)
-                const userData = {
-                    name: 'John Doe',
-                    email: 'johndoe@example.com',
-                    avatar: 'images/icon/avatar-01.jpg'
-                };
-
-                // Store user data in sessionStorage (for demo purposes)
-                sessionStorage.setItem('userData', JSON.stringify(userData));
-
-                // Redirect to index.html or handle UI update
-                window.location.href = 'index.html';
-            } else {
-                alert('Invalid email or password'); // Replace with actual error handling
-            }
-        });
+document.getElementById('loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault(); // Prevent default form submission
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  
+  try {
+    const response = await fetch('http://13.212.12.152:3000/login', { // Adjust the endpoint as needed
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
     });
+    
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+    
+    const user = await response.json();
+    localStorage.setItem('user', JSON.stringify(user));
+    window.location.href = 'dashboard.html'; // Redirect to your dashboard
+  } catch (error) {
+    console.error('Login error:', error);
+    alert('Login failed. Please check your credentials and try again.');
+  }
+});
+
 </script>
 
 
