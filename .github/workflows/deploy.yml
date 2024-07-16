@@ -27,5 +27,6 @@ jobs:
             cd /home/ubuntu/GajahSafe
             git pull origin main
             npm install
+            sudo npm install -g pm2
             pm2 restart all
           EOF
