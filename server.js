@@ -5,7 +5,7 @@ const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Require the User model
+// Require the User model with the correct path
 const User = require('./models/User');
 
 // Connect to MongoDB
