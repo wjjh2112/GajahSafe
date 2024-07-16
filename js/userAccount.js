@@ -1,32 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Retrieve user data from sessionStorage
-  const userData = JSON.parse(sessionStorage.getItem('userData'));
+    // Fetch user data from server
+    fetch('/user-info')
+        .then(response => response.json())
+        .then(userData => {
+            if (userData) {
+                document.getElementById('avatarImg').src = userData.avatar || 'images/icon/avatar-01.jpg';
+                document.getElementById('userName').textContent = userData.name;
 
-  if (userData) {
-      // Update user information in the header
-      document.getElementById('avatarImg').src = userData.avatar;
-      document.getElementById('userName').textContent = userData.name;
-
-      // Update user information in the dropdown
-      document.getElementById('dropdownAvatarImg').src = userData.avatar;
-      document.getElementById('dropdownUserName').textContent = userData.name;
-      document.getElementById('dropdownUserEmail').textContent = userData.email;
-  } else {
-      // Redirect to login page if user data is not found
-      window.location.href = 'login.html';
-  }
-
-  // Logout functionality
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(event) {
-          event.preventDefault(); // Prevent default link behavior
-
-          // Clear sessionStorage
-          sessionStorage.removeItem('userData');
-
-          // Redirect to login page
-          window.location.href = 'login.html';
-      });
-  }
+                // Update user information in the dropdown
+                document.getElementById('dropdownAvatarImg').src = userData.avatar || 'images/icon/avatar-01.jpg';
+                document.getElementById('dropdownUserName').textContent = userData.name;
+                document.getElementById('dropdownUserEmail').textContent = userData.email;
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
 });
