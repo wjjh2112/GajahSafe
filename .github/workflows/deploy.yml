@@ -21,9 +21,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    # Remove or comment out the test step
-    # - name: Run tests
-    #   run: npm test
+    - name: Decode SSH key
+      run: echo "${{ secrets.EC2_KEY }}" | base64 -d > ~/.ssh/id_rsa
+
+    - name: Set permissions for SSH key
+      run: chmod 600 ~/.ssh/id_rsa
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v0.1.1
@@ -31,6 +33,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_KEY }}
+        port: 22
         script: |
           cd /home/ubuntu/GajahSafe
           git pull origin main
