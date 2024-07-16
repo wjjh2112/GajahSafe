@@ -1,19 +1,19 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('user'));
 
-  async function fetchUsers() {
-    try {
-      const response = await fetch('http://13.212.12.152:3000/users');
-      const users = await response.json();
-      if (users.length > 0) {
-        // Assuming you want to display the first user for demo purposes
-        const user = users[0];
-        document.getElementById('userName').textContent = user.fullname;
-        document.getElementById('dropdownUserName').textContent = user.fullname;
-        document.getElementById('dropdownUserEmail').textContent = user.email;
-      }
-    } catch (error) {
-      console.error('Error fetching users:', error);
+    if (user) {
+      // Update the account section with user information
+      document.getElementById('userName').textContent = user.fullname;
+      document.getElementById('dropdownUserName').textContent = user.fullname;
+      document.getElementById('dropdownUserEmail').textContent = user.email;
+      // Optionally, update the avatar image based on user information
+    } else {
+      // Redirect to login page if no user information is found
+      window.location.href = 'login.html';
     }
-  }
+  });
 
-  // Call fetchUsers when the page loads
-  window.onload = fetchUsers;
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user');
+    window.location.href = 'login.html'; // Redirect to login page on logout
+  });
