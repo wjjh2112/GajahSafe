@@ -30,12 +30,7 @@ jobs:
         EC2_USER: ${{ secrets.EC2_USER }}
         EC2_KEY: ${{ secrets.EC2_KEY }}
       run: |
-        # Copy files to EC2 instance
-        scp -o StrictHostKeyChecking=no -i $EC2_KEY -r ./* $EC2_USER@$EC2_HOST:/home/ubuntu/myapp
-
-        # SSH into the EC2 instance and set up the application
-        ssh -o StrictHostKeyChecking=no -i $EC2_KEY $EC2_USER@$EC2_HOST << 'EOF'
-          cd /home/ubuntu/myapp
-          npm install
-          pm2 start server.js --name myapp || pm2 restart myapp
-        EOF
+        echo "${{ secrets.EC2_KEY }}" > /tmp/ssh_key
+        chmod 600 /tmp/ssh_key
+        scp -o StrictHostKeyChecking=no -i /tmp/ssh_key -r ./* $EC2_USER@$EC2_HOST:/home/ubuntu/myapp
+        ssh -o StrictHostKeyChecking=no -i /tmp/ssh_key $EC2_USER@$EC2_HOST "cd /home/ubuntu/myapp && npm install && pm2 restart all"
