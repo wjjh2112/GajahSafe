@@ -21,6 +21,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Create .ssh directory
+      run: mkdir -p ~/.ssh
+
     - name: Decode SSH key
       run: echo "${{ secrets.EC2_KEY }}" | base64 -d > ~/.ssh/id_rsa
 
