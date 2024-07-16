@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Require the User model with the correct path
-const User = require('./models/User');
+const User = require('./models/User.js');
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/dummydb', {
