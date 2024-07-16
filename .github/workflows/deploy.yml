@@ -6,39 +6,24 @@ on:
       - main
 
 jobs:
-  deploy:
+  Deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.EC2_KEY }}
+            HOSTNAME: ${{ secrets.EC2_HOST }}
+            USER_NAME: ubuntu
+      
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Create .ssh directory
-      run: mkdir -p ~/.ssh
-
-    - name: Decode SSH key
-      run: echo "${{ secrets.EC2_KEY }}" | base64 -d > ~/.ssh/id_rsa
-
-    - name: Set permissions for SSH key
-      run: chmod 600 ~/.ssh/id_rsa
-
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@v0.1.1
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.EC2_KEY }}
-        port: 22
-        script: |
-          cd /home/ubuntu/GajahSafe
-          git pull origin main
-          npm install
-          pm2 restart all
+              # Now we have got the access of EC2 and we will start the deploy .
+              cd /home/ubuntu/GajahSafe
+              git pull origin main
+              npm install
+              pm2 restart all
