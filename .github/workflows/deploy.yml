@@ -30,9 +30,9 @@ jobs:
             sudo npm install -g pm2
 
             # Check if the application is already running
-            if pm2 describe app_name > /dev/null; then
-              pm2 restart app_name
+            if pm2 describe GajahSafeApp > /dev/null; then
+              pm2 restart GajahSafeApp
             else
-              pm2 start /home/ubuntu/GajahSafe/your_startup_file.js --name "app_name"
+              pm2 start /home/ubuntu/GajahSafe/server.js --name "GajahSafeApp"
             fi
           EOF
