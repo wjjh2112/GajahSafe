@@ -18,21 +18,31 @@ jobs:
           PRIVATE_KEY: ${{ secrets.EC2_KEY }}
           HOSTNAME: ${{ secrets.EC2_HOST }}
           USER_NAME: ubuntu
-
         run: |
           echo "$PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
-            # Now we have got the access of EC2 and we will start the deploy
+            set -e
+
+            echo "Connected to EC2 instance"
+
             cd /home/ubuntu/GajahSafe
+            echo "Resetting local changes"
+            git reset --hard
+            git clean -fd
+            echo "Pulling latest changes"
             git pull origin main
+            echo "Installing dependencies"
             npm install
             sudo npm install -g pm2
 
-            # Check if the application is already running
             if pm2 describe GajahSafeApp > /dev/null; then
+              echo "Restarting application"
               pm2 restart GajahSafeApp
             else
+              echo "Starting application"
               pm2 start /home/ubuntu/GajahSafe/server.js --name "GajahSafeApp"
             fi
+
+            echo "Deployment completed"
           EOF
