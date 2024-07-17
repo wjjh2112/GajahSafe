@@ -90,8 +90,8 @@ app.post('/addDevice', (req, res) => {
     id: req.body['device-id'],
     name: req.body['device-name'],
     location: req.body['device-location'],
-    longitude: req.body['device-longitude'],
     latitude: req.body['device-latitude'],
+    longitude: req.body['device-longitude'],
     installationDate: req.body['installation-date'],
     status: req.body.status
   };

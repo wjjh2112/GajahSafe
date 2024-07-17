@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const deviceId = document.getElementById('device-id').value;
         const deviceName = document.getElementById('device-name').value;
         const deviceLocation = document.getElementById('device-location').value;
-        const deviceLongitude = document.getElementById('device-longitude').value;
         const deviceLatitude = document.getElementById('device-latitude').value;
+        const deviceLongitude = document.getElementById('device-longitude').value;
         const installationDate = document.getElementById('installation-date').value;
         const status = document.querySelector('input[name="status"]:checked').value;
 
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'device-id': deviceId,
             'device-name': deviceName,
             'device-location': deviceLocation,
-            'device-longitude': deviceLongitude,
             'device-latitude': deviceLatitude,
+            'device-longitude': deviceLongitude,
             'installation-date': installationDate,
             status: status
         };
