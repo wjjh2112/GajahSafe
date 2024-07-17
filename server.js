@@ -90,10 +90,10 @@ app.post('/addDevice', (req, res) => {
     cam_id: req.body['device-id'],
     camName: req.body['device-name'],
     camLocation: req.body['device-location'],
-    camLatitude: req.body['device-latitude'],
-    camLongitude: req.body['device-longitude'],
+    camLat: req.body['device-latitude'],
+    camLong: req.body['device-longitude'],
     camInstallDate: req.body['installation-date'],
-    camStat: req.body.status
+    camStatus: req.body.status
   };
 
   let collectionName;
@@ -106,6 +106,10 @@ app.post('/addDevice', (req, res) => {
     return res.status(400).json({ error: 'Invalid device type' });
   }
 
+  // Convert the date from dd/mm/yyyy to ISO format
+  const [day, month, year] = deviceData.installationDate.split('/');
+  deviceData.installationDate = new Date(`${year}-${month}-${day}`).toISOString();
+
   mongoose.connection.db.collection(collectionName).insertOne(deviceData, (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to add device' });
@@ -113,6 +117,7 @@ app.post('/addDevice', (req, res) => {
     res.status(200).json({ success: true, message: 'Device added successfully' });
   });
 });
+
 
 // Start the server
 app.listen(port, () => {
