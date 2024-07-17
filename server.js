@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -17,13 +18,38 @@ mongoose.connect('mongodb://localhost:27017/dummydb', {
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files (if any)
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files (from root directory)
+app.use(express.static(path.join(__dirname)));
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  // Find user in database
+  mongoose.connection.db.collection('users').findOne({ email, password }, (err, user) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+    // Return user data as JSON
+    res.json({
+      name: user.fullname,
+      email: user.email,
+      avatar: 'images/icon/avatar-01.jpg', // Example static avatar path
+    });
+  });
 });
 
 // Start the server
