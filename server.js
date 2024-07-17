@@ -63,6 +63,16 @@ app.get('/users', (req, res) => {
   });
 });
 
+// Endpoint to fetch all electric fences
+app.get('/electricFences', (req, res) => {
+  mongoose.connection.db.collection('electricFences').find({}).toArray((err, fences) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json(fences);
+  });
+});
+
 
 // Start the server
 app.listen(port, () => {
