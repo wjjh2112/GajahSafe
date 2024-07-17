@@ -86,24 +86,26 @@ app.get('/cameras', (req, res) => {
 // Endpoint to add a new device
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
-  const deviceData = {
-    cam_id: req.body['device-id'],
-    camName: req.body['device-name'],
-    camLocation: req.body['device-location'],
-    camLatitude: req.body['device-latitude'],
-    camLongitude: req.body['device-longitude'],
-    camStat: req.body.status
-  };
-
-  let collectionName;
+  let typePrefix;
 
   if (deviceType === 'Camera') {
-    collectionName = 'cameras';
+    typePrefix = 'cam';
   } else if (deviceType === 'Electric Fence') {
-    collectionName = 'electricFences';
+    typePrefix = 'ef';
   } else {
     return res.status(400).json({ error: 'Invalid device type' });
   }
+
+  const deviceData = {
+    [`${typePrefix}_id`]: req.body['device-id'],
+    [`${typePrefix}Name`]: req.body['device-name'],
+    [`${typePrefix}Location`]: req.body['device-location'],
+    [`${typePrefix}Lat`]: req.body['device-latitude'],
+    [`${typePrefix}Long`]: req.body['device-longitude'],
+    [`${typePrefix}Stat`]: req.body.status
+  };
+
+  const collectionName = deviceType === 'Camera' ? 'cameras' : 'electricFences';
 
   mongoose.connection.db.collection(collectionName).insertOne(deviceData, (err, result) => {
     if (err) {
