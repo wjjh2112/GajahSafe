@@ -18,13 +18,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = document.createElement('tr');
 
             row.innerHTML = `
+                <td><p>${user.user_id}</p></td>
                 <td>
                     <div class="table-data__info">
                         <h4>${user.fullname}</h4>
                         <span><a href="#">${user.email}</a></span>
                     </div>
                 </td>
-                <td><p>${user.user_id}</p></td>
                 <td><p>${user.usertype}</p></td>
                 <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
             `;
