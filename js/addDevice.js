@@ -11,9 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const installationDate = document.getElementById('installation-date').value;
         const status = document.querySelector('input[name="status"]:checked').value;
 
-        // Format the date as dd/mm/yyyy
-        const formattedDate = formatDate(new Date(installationDate));
-
         const deviceData = {
             'device-type': deviceType,
             'device-id': deviceId,
@@ -21,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'device-location': deviceLocation,
             'device-latitude': deviceLatitude,
             'device-longitude': deviceLongitude,
-            'installation-date': formattedDate,
+            'installation-date': installationDate,
             status: status
         };
 
@@ -46,11 +43,4 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error adding device. Check console for details.');
         });
     });
-
-    function formatDate(date) {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
 });
