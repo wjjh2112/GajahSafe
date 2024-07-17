@@ -1052,7 +1052,7 @@ input[type="file"] {
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 5;
+    top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -1066,6 +1066,11 @@ input[type="file"] {
     border: 1px solid #888;
     width: 40%;
     position: relative; /* Ensure relative positioning for absolute elements */
+    max-height: 80%;
+    overflow-y: auto;
+    top: 20%; /* Adjust this value to move the modal content lower */
+    left: 50%;
+    transform: translate(-50%, -20%);
 }
 
 .close {
