@@ -19,12 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             row.innerHTML = `
                 <td>
-                    <label class="au-checkbox">
-                        <input type="checkbox">
-                        <span class="au-checkmark"></span>
-                    </label>
-                </td>
-                <td>
                     <div class="table-data__info">
                         <h4>${user.fullname}</h4>
                         <span><a href="#">${user.email}</a></span>
