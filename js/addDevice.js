@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const deviceLocation = document.getElementById('device-location').value;
         const deviceLatitude = document.getElementById('device-latitude').value;
         const deviceLongitude = document.getElementById('device-longitude').value;
-        const installationDate = document.getElementById('installation-date').value;
         const status = document.querySelector('input[name="status"]:checked').value;
 
         const deviceData = {
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'device-location': deviceLocation,
             'device-latitude': deviceLatitude,
             'device-longitude': deviceLongitude,
-            'installation-date': installationDate,
             status: status
         };
 
