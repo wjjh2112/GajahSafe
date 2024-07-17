@@ -37,20 +37,22 @@ app.post('/login', (req, res) => {
   const { email, password } = req.body;
   // Find user in database
   mongoose.connection.db.collection('users').findOne({ email, password }, (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-    // Return user data as JSON
-    res.json({
-      name: user.fullname,
-      email: user.email,
-      avatar: 'images/icon/avatar-01.jpg', // Example static avatar path
-    });
+      if (err) {
+          return res.status(500).json({ error: 'Internal server error' });
+      }
+      if (!user) {
+          return res.status(401).json({ error: 'Invalid email or password' });
+      }
+      // Return user data including usertype as JSON
+      res.json({
+          name: user.fullname,
+          email: user.email,
+          avatar: 'images/icon/avatar-01.jpg', // Example static avatar path
+          usertype: user.usertype // Include usertype
+      });
   });
 });
+
 
 // Start the server
 app.listen(port, () => {
