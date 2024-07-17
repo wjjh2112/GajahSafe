@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 row.setAttribute('data-name', camera.camName);
                 row.innerHTML = `
-                    <td><div class="table-data__info"><p>${index + 1}</p></div></td>
+                    <td><div class="table-data__info"><p>${camera.cam_id}</p></div></td>
                     <td><div class="table-data__info"><h4>${camera.camName}</h4></div></td>
                     <td><p>${camera.camLocation}</p></td>
                     <td><p>${camera.camLat}</p></td>
