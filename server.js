@@ -92,7 +92,6 @@ app.post('/addDevice', (req, res) => {
     camLocation: req.body['device-location'],
     camLatitude: req.body['device-latitude'],
     camLongitude: req.body['device-longitude'],
-    camInstallDate: req.body['installation-date'],
     camStat: req.body.status
   };
 
