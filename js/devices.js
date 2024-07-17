@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><div class="table-data__info"><p>${fence.ef_id}</p></div></td>
                     <td><div class="table-data__info"><h4>${fence.efName}</h4></div></td>
                     <td><p>${fence.efLocation}</p></td>
-                    <td><p>${fence.efLong}</p></td>
                     <td><p>${fence.efLat}</p></td>
+                    <td><p>${fence.efLong}</p></td>
                     <td class="text-center">
                         <span class="more">
                             <i class="zmdi zmdi-edit editBtn"></i>
