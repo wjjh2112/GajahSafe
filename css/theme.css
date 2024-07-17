@@ -1070,6 +1070,12 @@ input[type="file"] {
     top: 20%; /* Adjust this value to move the modal content lower */
 }
 
+@media (max-width: 991px) {
+    .modal-content {
+        width: 60%;
+    }
+}
+
 .close {
     position: absolute;
     top: 10px;
