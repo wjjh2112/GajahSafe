@@ -1,4 +1,67 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const userTableBody = document.getElementById('userTableBody');
+
+    // Fetch users from the server
+    fetch('/users')
+        .then(response => response.json())
+        .then(users => {
+            // Populate the table with users
+            populateTable(users);
+        })
+        .catch(error => console.error('Error fetching users:', error));
+
+    // Function to populate the table with users
+    function populateTable(users) {
+        userTableBody.innerHTML = ''; // Clear existing rows
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>
+                    <label class="au-checkbox">
+                        <input type="checkbox">
+                        <span class="au-checkmark"></span>
+                    </label>
+                </td>
+                <td>
+                    <div class="table-data__info">
+                        <h4>${user.name}</h4>
+                        <span><a href="#">${user.email}</a></span>
+                    </div>
+                </td>
+                <td><p>${user.refID}</p></td>
+                <td><p>${user.role}</p></td>
+                <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+            `;
+
+            userTableBody.appendChild(row);
+        });
+
+        // Initialize filtering
+        filterUsers($('#userRoleFilter').val());
+
+        // Handle change in user role filter
+        $('#userRoleFilter').change(function() {
+            var role = $(this).val();
+            filterUsers(role);
+        });
+
+        // Function to filter users based on role
+        function filterUsers(role) {
+            $('#userTableBody tr').each(function() {
+                var userRole = $(this).find('td:nth-child(4) p').text().trim().toLowerCase();
+
+                if (role === 'all' || userRole === role.toLowerCase()) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    }
+
+    // Modal functionality
     const modal = document.getElementById('addUserModal');
     const addUserBtn = document.getElementById('addUserBtn');
     const closeBtn = document.getElementById('closeAddUserModal');
@@ -67,29 +130,4 @@ document.addEventListener('DOMContentLoaded', function() {
         // Replace with your actual link generation logic
         return `https://example.com/register?expiry=${expiryDays}&role=${role}`;
     }
-});
-
-
-$(document).ready(function() {
-// Initial filtering based on selected role filter
-filterUsers($('#userRoleFilter').val());
-
-// Handle change in user role filter
-$('#userRoleFilter').change(function() {
-    var role = $(this).val();
-    filterUsers(role);
-});
-
-// Function to filter users based on role
-function filterUsers(role) {
-    $('.table-data tbody tr').each(function() {
-        var userRole = $(this).find('td:nth-child(4) p').text().trim().toLowerCase();
-        
-        if (role === 'all' || userRole === role.toLowerCase()) {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
-    });
-}
 });
