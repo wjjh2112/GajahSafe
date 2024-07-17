@@ -73,6 +73,17 @@ app.get('/electricFences', (req, res) => {
   });
 });
 
+// Endpoint to fetch all cameras
+app.get('/cameras', (req, res) => {
+  mongoose.connection.db.collection('cameras').find({}).toArray((err, cameras) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json(cameras);
+  });
+});
+
+
 
 // Start the server
 app.listen(port, () => {
