@@ -53,6 +53,16 @@ app.post('/login', (req, res) => {
   });
 });
 
+// Endpoint to fetch all users
+app.get('/users', (req, res) => {
+  mongoose.connection.db.collection('users').find({}).toArray((err, users) => {
+      if (err) {
+          return res.status(500).json({ error: 'Internal server error' });
+      }
+      res.json(users);
+  });
+});
+
 
 // Start the server
 app.listen(port, () => {
