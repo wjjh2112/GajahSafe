@@ -83,7 +83,36 @@ app.get('/cameras', (req, res) => {
   });
 });
 
+// Endpoint to add a new device
+app.post('/addDevice', (req, res) => {
+  const deviceType = req.body['device-type'];
+  const deviceData = {
+    id: req.body['device-id'],
+    name: req.body['device-name'],
+    location: req.body['device-location'],
+    longitude: req.body['device-longitude'],
+    latitude: req.body['device-latitude'],
+    installationDate: req.body['installation-date'],
+    status: req.body.status
+  };
 
+  let collectionName;
+
+  if (deviceType === 'Camera') {
+    collectionName = 'cameras';
+  } else if (deviceType === 'Electric Fence') {
+    collectionName = 'electricFences';
+  } else {
+    return res.status(400).json({ error: 'Invalid device type' });
+  }
+
+  mongoose.connection.db.collection(collectionName).insertOne(deviceData, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to add device' });
+    }
+    res.status(200).json({ success: true, message: 'Device added successfully' });
+  });
+});
 
 // Start the server
 app.listen(port, () => {
