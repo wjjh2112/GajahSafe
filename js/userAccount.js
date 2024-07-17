@@ -3,9 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const userData = JSON.parse(sessionStorage.getItem('userData'));
 
     if (userData) {
+        // Extract the first name from the full name
+        const firstName = userData.name.split(' ')[0]; // Splits the name at the first space and takes the first part
+
         // Update user information in the header
         document.getElementById('avatarImg').src = userData.avatar;
-        document.getElementById('userName').textContent = userData.name;
+        document.getElementById('userName').textContent = firstName; // Display first name only
 
         // Update user information in the dropdown
         document.getElementById('dropdownAvatarImg').src = userData.avatar;
