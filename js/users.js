@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Function to filter users based on role
         function filterUsers(role) {
             $('#userTableBody tr').each(function() {
-                var userRole = $(this).find('td:nth-child(4) p').text().trim().toLowerCase();
+                var userRole = $(this).find('td:nth-child(3) p').text().trim().toLowerCase(); // Adjusted to match the correct column
 
                 if (role === 'all' || userRole === role.toLowerCase()) {
                     $(this).show();
