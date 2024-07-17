@@ -1,132 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Function to format date to dd/mm/yyyy
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
+    document.getElementById('addDeviceForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
-    // Fetch electric fences data from the backend
-    fetch('/electricFences')
+        const deviceType = document.getElementById('device-type').value;
+        const deviceId = document.getElementById('device-id').value;
+        const deviceName = document.getElementById('device-name').value;
+        const deviceLocation = document.getElementById('device-location').value;
+        const deviceLatitude = document.getElementById('device-latitude').value;
+        const deviceLongitude = document.getElementById('device-longitude').value;
+        const installationDate = document.getElementById('installation-date').value;
+        const status = document.querySelector('input[name="status"]:checked').value;
+
+        const deviceData = {
+            'device-type': deviceType,
+            'device-id': deviceId,
+            'device-name': deviceName,
+            'device-location': deviceLocation,
+            'device-latitude': deviceLatitude,
+            'device-longitude': deviceLongitude,
+            'installation-date': installationDate,
+            status: status
+        };
+
+        fetch('/addDevice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(deviceData)
+        })
         .then(response => response.json())
         .then(data => {
-            const tableBody = document.getElementById('electricFenceTableBody');
-            tableBody.innerHTML = ''; // Clear any existing rows
-
-            data.forEach(fence => {
-                const row = document.createElement('tr');
-                row.setAttribute('data-name', fence.efName);
-
-                row.innerHTML = `
-                    <td><div class="table-data__info"><p>${fence.ef_id}</p></div></td>
-                    <td><div class="table-data__info"><h4>${fence.efName}</h4></div></td>
-                    <td><p>${fence.efLocation}</p></td>
-                    <td><p>${fence.efLat}</p></td>
-                    <td><p>${fence.efLong}</p></td>
-                    <td class="text-center">
-                        <span class="more">
-                            <i class="zmdi zmdi-edit editBtn"></i>
-                        </span>
-                        <span class="more">
-                            <i class="zmdi zmdi-delete deleteBtn"></i>
-                        </span>
-                    </td>
-                `;
-
-                tableBody.appendChild(row);
-            });
-
-            // Add event listeners to the newly added edit and delete buttons
-            document.querySelectorAll('.editBtn').forEach((btn) => {
-                btn.addEventListener('click', function() {
-                    modal.style.display = "block";
-                });
-            });
-
-            document.querySelectorAll('.deleteBtn').forEach((btn) => {
-                btn.addEventListener('click', function() {
-                    var deviceRow = btn.closest('tr');
-                    var deviceName = deviceRow.getAttribute('data-name');
-                    if (confirm("Confirm to delete " + deviceName)) {
-                        deviceRow.remove();
-                    } else {
-                        window.location.href = "devices.html";
-                    }
-                });
-            });
+            if (data.success) {
+                alert('Device added successfully.');
+                location.reload(); // Reload the page to show the updated table
+            } else {
+                alert('Error adding device: ' + data.message);
+            }
         })
         .catch(error => {
-            console.error('Error fetching electric fences:', error);
+            console.error('Error:', error);
+            alert('Error adding device. Check console for details.');
         });
-    
-    // Fetch camera data and populate the table
-    fetch('/cameras')
-    .then(response => response.json())
-    .then(cameras => {
-        const cameraTableBody = document.getElementById('cameraTableBody');
-        cameraTableBody.innerHTML = ''; // Clear existing rows
-        cameras.forEach((camera, index) => {
-        const row = document.createElement('tr');
-        row.setAttribute('data-name', camera.camName);
-        row.innerHTML = `
-            <td><div class="table-data__info"><p>${index + 1}</p></div></td>
-            <td><div class="table-data__info"><h4>${camera.camName}</h4></div></td>
-            <td><p>${camera.camLocation}</p></td>
-            <td><p>${camera.camLong}</p></td>
-            <td><p>${camera.camLat}</p></td>
-            <td><p>${formatDate(camera.camInstallDate)}</p></td> <!-- Format installation date -->
-            <td class="text-center">
-            <span class="more">
-                <i class="zmdi zmdi-edit editBtn"></i>
-            </span>
-            <span class="more">
-                <i class="zmdi zmdi-delete deleteBtn"></i>
-            </span>
-            </td>
-        `;
-        cameraTableBody.appendChild(row);
-        });
-
-        // Re-attach event listeners for dynamically added edit and delete buttons
-        document.querySelectorAll('.editBtn').forEach((btn) => {
-        btn.addEventListener('click', function() {
-            modal.style.display = "block";
-        });
-        });
-
-        document.querySelectorAll('.deleteBtn').forEach((btn) => {
-        btn.addEventListener('click', function() {
-            var deviceRow = btn.closest('tr');
-            var deviceName = deviceRow.getAttribute('data-name');
-            if (confirm("Confirm to delete " + deviceName)) {
-            deviceRow.remove();
-            } else {
-            window.location.href = "devices.html";
-            }
-        });
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching cameras:', error);
-    });
-
-    // Modal and delete logic remains the same
-    var modal = document.getElementById("editDeviceModal");
-    var closeEditDeviceModal = document.getElementById("closeEditDeviceModal");
-
-    closeEditDeviceModal.onclick = function() {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    document.getElementById('addDeviceBtn').addEventListener('click', function() {
-        window.location.href = 'addDevice.html';
     });
 });
