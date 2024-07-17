@@ -1067,10 +1067,7 @@ input[type="file"] {
     width: 40%;
     position: relative; /* Ensure relative positioning for absolute elements */
     max-height: 80%;
-    overflow-y: auto;
     top: 20%; /* Adjust this value to move the modal content lower */
-    left: 50%;
-    transform: translate(-50%, -20%);
 }
 
 .close {
