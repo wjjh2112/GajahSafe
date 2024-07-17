@@ -78,7 +78,7 @@
     "generateButton": "Generate Link",
     "allUsers": "All Users",
     "name": "Name",
-    "refID": "Ref. ID",
+    "userID": "ID",
     "role": "Role",
     "status": "Status",
 
