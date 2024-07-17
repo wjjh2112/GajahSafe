@@ -91,6 +91,8 @@
     "selectStatus": "Sila Pilih Status",
     "active": "Aktif",
     "inactive": "Tidak Aktif",
+    "deviceLongitude": "Longitud",
+    "deviceLatitude": "Latitud Peranti",
     "longitude": "Longitud",
     "latitude": "Latitud"
 

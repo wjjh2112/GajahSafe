@@ -91,6 +91,8 @@
     "selectStatus": "Select Status",
     "active": "Active",
     "inactive": "Inactive",
+    "deviceLongitude": "Device Longitude",
+    "deviceLatitude": "Device Latitude",
     "longitude": "Longitude",
     "latitude": "Latitude"
 
