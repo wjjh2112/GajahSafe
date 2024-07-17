@@ -87,13 +87,13 @@ app.get('/cameras', (req, res) => {
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
   const deviceData = {
-    id: req.body['device-id'],
-    name: req.body['device-name'],
-    location: req.body['device-location'],
-    latitude: req.body['device-latitude'],
-    longitude: req.body['device-longitude'],
-    installationDate: req.body['installation-date'],
-    status: req.body.status
+    cam_id: req.body['device-id'],
+    camName: req.body['device-name'],
+    camLocation: req.body['device-location'],
+    camLatitude: req.body['device-latitude'],
+    camLongitude: req.body['device-longitude'],
+    camInstallDate: req.body['installation-date'],
+    camStat: req.body.status
   };
 
   let collectionName;
