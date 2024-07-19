@@ -60,13 +60,28 @@ function myMapDevicesIndex() {
             });
 
             const electricFences = await fetchDeviceData('/electricFences');
+            const fenceCoordinates = [];
+
             electricFences.forEach(fence => {
                 addMarker({
                     id: fence.ef_id,
                     position: new google.maps.LatLng(fence.efLat, fence.efLong),
                     icon: electFenceIcon
                 });
+                fenceCoordinates.push({ lat: fence.efLat, lng: fence.efLong });
             });
+
+            if (fenceCoordinates.length) {
+                const electGeofence = new google.maps.Polygon({
+                    paths: fenceCoordinates,
+                    strokeColor: "#fd5959",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#fd5959",
+                    fillOpacity: 0.3
+                });
+                electGeofence.setMap(map);
+            }
         } catch (error) {
             console.error('Error initializing markers:', error);
         }
