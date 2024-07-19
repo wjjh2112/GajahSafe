@@ -210,7 +210,9 @@
                         <div id="editDeviceModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeEditDeviceModal">&times;</span>
-                                <h4><span data-i18n="editDevice"></span></h4><br>
+                                <h4><span data-i18n="editDevice"></span></h4><br>&nbsp;
+                                <h4>Device Name</h4>
+                                <h3>Device ID</h3>
                                 <form id="generateLinkForm">
                                     <!-- Device Location -->
                                     <div class="row form-group">
@@ -221,15 +223,6 @@
                                             <input type="text" id="device-location" name="device-location" class="form-control">
                                         </div>
                                     </div>
-                                    <!-- Device Longitude -->
-                                    <div class="row form-group">
-                                        <div class="col col-md-3">
-                                            <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" id="device-longitude" name="device-longitude" placeholder="Device Longitude" class="form-control">
-                                        </div>
-                                    </div>
                                     <!-- Device Latitude -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
@@ -237,6 +230,15 @@
                                         </div>
                                         <div class="col-12 col-md-9">
                                             <input type="text" id="device-latitude" name="device-latitude" placeholder="Device Latitude" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Device Longitude -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-longitude" name="device-longitude" placeholder="Device Longitude" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Status -->
