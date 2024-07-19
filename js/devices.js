@@ -144,34 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(result => {
             if (result.success) {
-                var deviceRow = document.querySelector(`tr[data-id="${deviceId}"]`);
-                deviceRow.querySelector('td:nth-child(3) p').innerText = deviceLocation;
-                deviceRow.querySelector('td:nth-child(4) p').innerText = deviceLat;
-                deviceRow.querySelector('td:nth-child(5) p').innerText = deviceLong;
+                alert('Device updated successfully!');
                 modal.style.display = "none";
+                document.querySelector('tr[data-id="'+deviceId+'"]').querySelector('td:nth-child(2)').innerText = deviceName;
+                document.querySelector('tr[data-id="'+deviceId+'"]').querySelector('td:nth-child(3)').innerText = deviceLocation;
+                document.querySelector('tr[data-id="'+deviceId+'"]').querySelector('td:nth-child(4)').innerText = deviceLat;
+                document.querySelector('tr[data-id="'+deviceId+'"]').querySelector('td:nth-child(5)').innerText = deviceLong;
+                document.querySelector('tr[data-id="'+deviceId+'"]').querySelector('td:nth-child(6)').innerText = status;
             } else {
-                alert('Failed to update device');
+                alert('Failed to update device.');
             }
         })
         .catch(error => console.error('Error updating device:', error));
     });
-    
-    
 
-    var modal = document.getElementById("editDeviceModal");
-    var closeEditDeviceModal = document.getElementById("closeEditDeviceModal");
-
-    closeEditDeviceModal.onclick = function() {
+    document.getElementById('closeEditDeviceModal').addEventListener('click', function() {
         modal.style.display = "none";
-    };
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    document.getElementById('addDeviceBtn').addEventListener('click', function() {
-        window.location.href = 'addDevice.html';
     });
 });
