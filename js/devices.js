@@ -108,14 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('editDeviceForm').addEventListener('submit', function(event) {
         event.preventDefault();
-
+    
         var deviceId = document.getElementById('editDeviceID').innerText;
         var deviceName = document.getElementById('editDeviceName').innerText;
         var deviceLocation = document.getElementById('device-location').value;
         var deviceLat = document.getElementById('device-latitude').value;
         var deviceLong = document.getElementById('device-longitude').value;
         var status = document.querySelector('input[name="status"]:checked').value;
-
+    
         var updatedData = {
             id: deviceId,
             name: deviceName,
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             longitude: deviceLong,
             status: status
         };
-
+    
         fetch('/updateDevice', {
             method: 'POST',
             headers: {
@@ -135,17 +135,19 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(result => {
             if (result.success) {
+                // Update the table row with new data
                 var deviceRow = document.querySelector(`tr[data-id="${deviceId}"]`);
                 deviceRow.querySelector('td:nth-child(3) p').innerText = deviceLocation;
                 deviceRow.querySelector('td:nth-child(4) p').innerText = deviceLat;
                 deviceRow.querySelector('td:nth-child(5) p').innerText = deviceLong;
                 modal.style.display = "none";
             } else {
-                alert('Failed to update device');
+                alert(result.error || 'Failed to update device');
             }
         })
         .catch(error => console.error('Error updating device:', error));
     });
+    
 
     var modal = document.getElementById("editDeviceModal");
     var closeEditDeviceModal = document.getElementById("closeEditDeviceModal");
