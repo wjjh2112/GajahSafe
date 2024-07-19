@@ -206,12 +206,16 @@
                             </div>
                         </div>
 
-                        <!-- Edit Device Pop-up form -->
+                        <!-- EDIT DEVICE POP UP -->
                         <div id="editDeviceModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeEditDeviceModal">&times;</span>
                                 <h4><span data-i18n="editDevice"></span></h4><br>
-                                <form id="generateLinkForm">
+                                <form id="editDeviceForm">
+                                    <!-- Device Name and ID -->
+                                    <h4 id="editDeviceName">Device Name</h4>
+                                    <h5 id="editDeviceID">(Device ID)</h5>
+
                                     <!-- Device Location -->
                                     <div class="row form-group">
                                         <div class="col col-md-3">
@@ -227,7 +231,7 @@
                                             <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
-                                            <input type="text" id="device-longitude" name="device-longitude" placeholder="Device Longitude" class="form-control">
+                                            <input type="text" id="device-longitude" name="device-longitude" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Device Latitude -->
@@ -236,7 +240,7 @@
                                             <label for="device-latitude" class="form-label"><span data-i18n="deviceLatitude"></span></label>
                                         </div>
                                         <div class="col-12 col-md-9">
-                                            <input type="text" id="device-latitude" name="device-latitude" placeholder="Device Latitude" class="form-control">
+                                            <input type="text" id="device-latitude" name="device-latitude" class="form-control">
                                         </div>
                                     </div>
                                     <!-- Status -->
@@ -259,11 +263,10 @@
                                             <span data-i18n="update"></span>
                                         </button>
                                     </div>
-                                    
                                 </form>
                             </div>
                         </div>
-
+                        <!-- END EDIT DEVICE POP UP -->
 
                         <div class="row" style="justify-content: end; margin: 10px;">
                             <button id="addDeviceBtn" class="au-btn au-btn-icon">
