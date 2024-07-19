@@ -84,6 +84,8 @@
 
     "newDevice": "New Device",
     "addNewDevice": "Add New Device",
+    "editDevice": "Edit Device",
+    "update": "Update",
     "deviceType": "Device Type",
     "deviceName": "Device Name",
     "selectDeviceType": "Select Device Type",
