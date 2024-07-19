@@ -119,6 +119,9 @@ app.post('/addDevice', (req, res) => {
 app.post('/updateDevice', (req, res) => {
   const { id, name, location, latitude, longitude, status } = req.body;
 
+  console.log(`Update request received for ID: ${id}`);
+  console.log(`Update data: ${JSON.stringify({ location, latitude, longitude, status })}`);
+
   // Determine the collection based on the id prefix
   const collectionName = id.startsWith('cam') ? 'cameras' : 'electricFences';
   const typePrefix = id.startsWith('cam') ? 'cam' : 'ef';
@@ -137,15 +140,18 @@ app.post('/updateDevice', (req, res) => {
       updateFields,
       (err, result) => {
           if (err) {
+              console.error('Error updating device:', err);
               return res.status(500).json({ error: 'Failed to update device' });
           }
           if (result.matchedCount === 0) {
+              console.log('No device matched for update');
               return res.status(404).json({ error: 'Device not found' });
           }
           res.status(200).json({ success: true, message: 'Device updated successfully' });
       }
   );
 });
+
 
 
 // Start the server

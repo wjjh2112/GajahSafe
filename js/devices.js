@@ -116,6 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
         var deviceLong = document.getElementById('device-longitude').value;
         var status = document.querySelector('input[name="status"]:checked').value;
     
+        console.log('Data being sent for update:', {
+            id: deviceId,
+            name: deviceName,
+            location: deviceLocation,
+            latitude: deviceLat,
+            longitude: deviceLong,
+            status: status
+        });
+    
         var updatedData = {
             id: deviceId,
             name: deviceName,
@@ -135,18 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(result => {
             if (result.success) {
-                // Update the table row with new data
                 var deviceRow = document.querySelector(`tr[data-id="${deviceId}"]`);
                 deviceRow.querySelector('td:nth-child(3) p').innerText = deviceLocation;
                 deviceRow.querySelector('td:nth-child(4) p').innerText = deviceLat;
                 deviceRow.querySelector('td:nth-child(5) p').innerText = deviceLong;
                 modal.style.display = "none";
             } else {
-                alert(result.error || 'Failed to update device');
+                alert('Failed to update device');
             }
         })
         .catch(error => console.error('Error updating device:', error));
     });
+    
     
 
     var modal = document.getElementById("editDeviceModal");
