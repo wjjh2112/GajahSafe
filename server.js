@@ -119,11 +119,7 @@ app.post('/addDevice', (req, res) => {
 app.post('/updateDevice', (req, res) => {
   const { id, name, location, latitude, longitude, status } = req.body;
 
-  // Determine the collection based on the id prefix
-  const collectionName = id.startsWith('cam') ? 'cameras' : 'electricFences';
-  const typePrefix = id.startsWith('cam') ? 'cam' : 'ef';
-
-  const updateFields = {
+  let updateFields = {
       $set: {
           [`${typePrefix}Name`]: name,
           [`${typePrefix}Location`]: location,
@@ -132,6 +128,8 @@ app.post('/updateDevice', (req, res) => {
           [`${typePrefix}Stat`]: status
       }
   };
+
+  let collectionName = id.startsWith('cam') ? 'cameras' : 'electricFences';
 
   mongoose.connection.db.collection(collectionName).updateOne(
       { [`${typePrefix}_id`]: id },
@@ -147,7 +145,6 @@ app.post('/updateDevice', (req, res) => {
       }
   );
 });
-
 
 // Start the server
 app.listen(port, () => {
