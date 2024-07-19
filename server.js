@@ -115,6 +115,27 @@ app.post('/addDevice', (req, res) => {
   });
 });
 
+// Endpoint to fetch all electric fences
+app.get('/electricFences', (req, res) => {
+  mongoose.connection.db.collection('electricFences').find({}).toArray((err, fences) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json(fences);
+  });
+});
+
+// Endpoint to fetch all cameras
+app.get('/cameras', (req, res) => {
+  mongoose.connection.db.collection('cameras').find({}).toArray((err, cameras) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json(cameras);
+  });
+});
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
