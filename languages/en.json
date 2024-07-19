@@ -83,8 +83,6 @@
     "status": "Status",
 
     "newDevice": "New Device",
-    "editDevice": "Edit Device",
-    "update": "Update",
     "addNewDevice": "Add New Device",
     "deviceType": "Device Type",
     "deviceName": "Device Name",
