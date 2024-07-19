@@ -206,69 +206,67 @@
                             </div>
                         </div>
 
-<!-- EDIT DEVICE POP UP -->
-<div id="editDeviceModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeEditDeviceModal">&times;</span>
-        <h4><span data-i18n="editDevice"></span></h4><br>
-        <form id="editDeviceForm">
-            <!-- Device Name and ID (Non-editable) -->
-            <div class="modal-header">
-                <h4 id="editDeviceName">Device Name</h4>
-                <h5 id="editDeviceID">(Device ID)</h5>
-            </div>
+                        <!-- EDIT DEVICE POP UP -->
+                        <div id="editDeviceModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeEditDeviceModal">&times;</span>
+                                <h4><span data-i18n="editDevice"></span></h4><br>
+                                <form id="editDeviceForm">
+                                    <!-- Device Name and ID -->
+                                    <h4 id="editDeviceName">Device Name</h4>
+                                    <h5 id="editDeviceID">(Device ID)</h5>
 
-            <!-- Device Location -->
-            <div class="row form-group">
-                <div class="col col-md-3">
-                    <label for="device-location" class="form-label"><span data-i18n="deviceLocation"></span></label>
-                </div>
-                <div class="col-12 col-md-9">
-                    <input type="text" id="device-location" name="device-location" class="form-control">
-                </div>
-            </div>
-            <!-- Device Latitude -->
-            <div class="row form-group">
-                <div class="col col-md-3">
-                    <label for="device-latitude" class="form-label"><span data-i18n="deviceLatitude"></span></label>
-                </div>
-                <div class="col-12 col-md-9">
-                    <input type="text" id="device-latitude" name="device-latitude" class="form-control">
-                </div>
-            </div>
-            <!-- Device Longitude -->
-            <div class="row form-group">
-                <div class="col col-md-3">
-                    <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
-                </div>
-                <div class="col-12 col-md-9">
-                    <input type="text" id="device-longitude" name="device-longitude" class="form-control">
-                </div>
-            </div>
-            <!-- Status -->
-            <div class="form-group button-radio-group">
-                <label><span data-i18n="status"></span></label>
-                <div style="justify-content: end;">
-                    <label for="activeStatus" class="button-radio-label">
-                        <input type="radio" name="status" id="activeStatus" value="active" class="form-radio-input">
-                        <span class="button-radio-button" data-i18n="active"></span>
-                    </label>
-                    <label for="inactiveStatus" class="button-radio-label">
-                        <input type="radio" name="status" id="inactiveStatus" value="inactive" class="form-radio-input">
-                        <span class="button-radio-button" data-i18n="inactive"></span>
-                    </label>
-                </div>
-            </div>
-            <!-- Submit Button -->
-            <div class="au-card-footer form-footer">
-                <button type="submit" class="au-btn">
-                    <span data-i18n="update"></span>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- END EDIT DEVICE POP UP -->
+                                    <!-- Device Location -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-location" class="form-label"><span data-i18n="deviceLocation"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-location" name="device-location" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Device Latitude -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-latitude" class="form-label"><span data-i18n="deviceLatitude"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-latitude" name="device-latitude" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Device Longitude -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="device-longitude" class="form-label"><span data-i18n="deviceLongitude"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="device-longitude" name="device-longitude" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- Status -->
+                                    <div class="form-group button-radio-group">
+                                        <label><span data-i18n="status"></span></label>
+                                        <div style="justify-content: end;">
+                                            <label for="activeStatus" class="button-radio-label">
+                                                <input type="radio" name="status" id="activeStatus" value="active" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="active"></span>
+                                            </label>
+                                            <label for="inactiveStatus" class="button-radio-label">
+                                                <input type="radio" name="status" id="inactiveStatus" value="inactive" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="inactive"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!-- Submit Button -->
+                                    <div class="au-card-footer form-footer">
+                                        <button type="submit" class="au-btn">
+                                            <span data-i18n="update"></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END EDIT DEVICE POP UP -->
 
                         <div class="row" style="justify-content: end; margin: 10px;">
                             <button id="addDeviceBtn" class="au-btn au-btn-icon">
