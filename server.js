@@ -125,7 +125,6 @@ app.post('/updateDevice', (req, res) => {
 
   const updateFields = {
       $set: {
-          [`${typePrefix}Name`]: name,
           [`${typePrefix}Location`]: location,
           [`${typePrefix}Lat`]: latitude,
           [`${typePrefix}Long`]: longitude,
