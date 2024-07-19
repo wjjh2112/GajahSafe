@@ -83,6 +83,8 @@
     "status": "Status",
 
     "newDevice": "Peranti Baharu",
+    "editDevice": "Edit Peranti",
+    "update": "Kemas Kini",
     "addNewDevice": "Tambah Peranti Baharu",
     "deviceType": "Jenis Peranti",
     "deviceName": "Nama Peranti",
