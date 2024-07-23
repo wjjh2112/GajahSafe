@@ -84,6 +84,32 @@ app.get('/cameras', (req, res) => {
   });
 });
 
+// Endpoint to fetch a specific electric fence by ID
+app.get('/electricFences/:id', (req, res) => {
+  mongoose.connection.db.collection('electricFences').findOne({ ef_id: req.params.id }, (err, fence) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!fence) {
+      return res.status(404).json({ error: 'Electric Fence not found' });
+    }
+    res.json(fence);
+  });
+});
+
+// Endpoint to fetch a specific camera by ID
+app.get('/cameras/:id', (req, res) => {
+  mongoose.connection.db.collection('cameras').findOne({ cam_id: req.params.id }, (err, camera) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!camera) {
+      return res.status(404).json({ error: 'Camera not found' });
+    }
+    res.json(camera);
+  });
+});
+
 // Endpoint to add a new device
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
@@ -113,6 +139,40 @@ app.post('/addDevice', (req, res) => {
       return res.status(500).json({ error: 'Failed to add device' });
     }
     res.status(200).json({ success: true, message: 'Device added successfully' });
+  });
+});
+
+// Endpoint to update device details
+app.put('/updateDevice', (req, res) => {
+  const { id, location, latitude, longitude, status, type } = req.body;
+  const collection = type === 'Electric Fence' ? 'electricFences' : 'cameras';
+  const updateData = {
+    $set: {
+      [`${type === 'Electric Fence' ? 'efLocation' : 'camLocation'}`]: location,
+      [`${type === 'Electric Fence' ? 'efLat' : 'camLat'}`]: latitude,
+      [`${type === 'Electric Fence' ? 'efLong' : 'camLong'}`]: longitude,
+      [`${type === 'Electric Fence' ? 'efStat' : 'camStat'}`]: status
+    }
+  };
+
+  mongoose.connection.db.collection(collection).updateOne({ [`${type === 'Electric Fence' ? 'ef_id' : 'cam_id'}`]: id }, updateData, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to update device' });
+    }
+    res.status(200).json({ success: true, message: 'Device updated successfully' });
+  });
+});
+
+// Endpoint to delete a device
+app.delete('/deleteDevice', (req, res) => {
+  const { id, type } = req.body;
+  const collection = type === 'Electric Fence' ? 'electricFences' : 'cameras';
+
+  mongoose.connection.db.collection(collection).deleteOne({ [`${type === 'Electric Fence' ? 'ef_id' : 'cam_id'}`]: id }, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to delete device' });
+    }
+    res.status(200).json({ success: true, message: 'Device deleted successfully' });
   });
 });
 
