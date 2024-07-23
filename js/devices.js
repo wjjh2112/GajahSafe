@@ -41,6 +41,48 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching electric fences:', error);
         });
 
+    // Fetch cameras data from the backend
+    fetch('/cameras')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('cameraTableBody');
+            tableBody.innerHTML = ''; // Clear any existing rows
+
+            data.forEach(camera => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-id', camera.cam_id);
+                row.setAttribute('data-name', camera.camName);
+                row.setAttribute('data-location', camera.camLocation);
+                row.setAttribute('data-lat', camera.camLat);
+                row.setAttribute('data-long', camera.camLong);
+                row.setAttribute('data-status', camera.camStat);
+
+                row.innerHTML = `
+                    <td><div class="table-data__info"><p>${camera.cam_id}</p></div></td>
+                    <td><div class="table-data__info"><h4>${camera.camName}</h4></div></td>
+                    <td><p>${camera.camLocation}</p></td>
+                    <td><p>${camera.camLat}</p></td>
+                    <td><p>${camera.camLong}</p></td>
+                    <td class="text-center">
+                        <span class="more">
+                            <i class="zmdi zmdi-edit editBtn"></i>
+                        </span>
+                        <span class="more">
+                            <i class="zmdi zmdi-delete deleteBtn"></i>
+                        </span>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+
+            // Add event listeners to the newly added edit and delete buttons
+            attachEventListeners();
+        })
+        .catch(error => {
+            console.error('Error fetching cameras:', error);
+        });
+
     // Add event listeners for dynamically added edit and delete buttons
     function attachEventListeners() {
         document.querySelectorAll('.editBtn').forEach((btn) => {
