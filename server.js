@@ -84,20 +84,64 @@ app.get('/cameras', (req, res) => {
   });
 });
 
-// Endpoint to update a device
-app.put('/updateDevice/:id', (req, res) => {
-  const deviceId = req.params.id;
-  const updatedDevice = req.body;
+// Endpoint to get device details by type and ID
+app.get('/getDevice', (req, res) => {
+  const { type, id } = req.query; // type = 'Camera' or 'Electric Fence', id = device ID
 
-  mongoose.connection.db.collection('electricFences').updateOne(
-      { ef_id: deviceId },
-      { $set: updatedDevice },
-      (err, result) => {
-          if (err) {
-              return res.status(500).json({ error: 'Failed to update device' });
-          }
-          res.status(200).json({ success: true, message: 'Device updated successfully' });
+  let collectionName;
+  let idField;
+
+  if (type === 'Camera') {
+    collectionName = 'cameras';
+    idField = 'cam_id';
+  } else if (type === 'Electric Fence') {
+    collectionName = 'electricFences';
+    idField = 'ef_id';
+  } else {
+    return res.status(400).json({ error: 'Invalid device type' });
+  }
+
+  mongoose.connection.db.collection(collectionName).findOne({ [idField]: id }, (err, device) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!device) {
+      return res.status(404).json({ error: 'Device not found' });
+    }
+    res.json(device);
+  });
+});
+
+// Endpoint to update device details
+app.post('/updateDevice', (req, res) => {
+  const { type, id } = req.query; // type = 'Camera' or 'Electric Fence', id = device ID
+  const updateData = req.body;
+
+  let collectionName;
+  let idField;
+
+  if (type === 'Camera') {
+    collectionName = 'cameras';
+    idField = 'cam_id';
+  } else if (type === 'Electric Fence') {
+    collectionName = 'electricFences';
+    idField = 'ef_id';
+  } else {
+    return res.status(400).json({ error: 'Invalid device type' });
+  }
+
+  mongoose.connection.db.collection(collectionName).updateOne(
+    { [idField]: id },
+    { $set: updateData },
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to update device' });
       }
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ error: 'Device not found' });
+      }
+      res.status(200).json({ success: true, message: 'Device updated successfully' });
+    }
   );
 });
 
