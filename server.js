@@ -84,44 +84,6 @@ app.get('/cameras', (req, res) => {
   });
 });
 
-const electricFenceSchema = new mongoose.Schema({
-  ef_id: String,
-  efName: String,
-  efLocation: String,
-  efLat: String,
-  efLong: String,
-  efStatus: String
-});
-
-const cameraSchema = new mongoose.Schema({
-  cam_id: String,
-  camName: String,
-  camLocation: String,
-  camLat: String,
-  camLong: String,
-  camStatus: String
-});
-
-const ElectricFence = mongoose.model('ElectricFence', electricFenceSchema);
-const Camera = mongoose.model('Camera', cameraSchema);
-
-app.post('/updateDevice', async (req, res) => {
-  try {
-      const { id, location, lat, long, status, type } = req.body;
-
-      if (type === "electricFence") {
-          await ElectricFence.updateOne({ ef_id: id }, { efLocation: location, efLat: lat, efLong: long, efStatus: status });
-      } else if (type === "camera") {
-          await Camera.updateOne({ cam_id: id }, { camLocation: location, camLat: lat, camLong: long, camStatus: status });
-      }
-
-      res.json({ success: true });
-  } catch (error) {
-      console.error('Error updating device:', error);
-      res.json({ success: false, error: error.message });
-  }
-});
-
 // Endpoint to add a new device
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
