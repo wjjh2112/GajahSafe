@@ -84,34 +84,6 @@ app.get('/cameras', (req, res) => {
   });
 });
 
-// Fetch device details
-app.get('/deviceDetails/:id', async (req, res) => {
-  const id = req.params.id;
-  const collection = db.collection(req.query.type === 'camera' ? 'cameras' : 'electricFences');
-  try {
-      const device = await collection.findOne({ _id: new mongodb.ObjectId(id) });
-      res.json(device);
-  } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch device details' });
-  }
-});
-
-// Update device details
-app.post('/updateDevice/:id', async (req, res) => {
-  const id = req.params.id;
-  const { location, latitude, longitude, status } = req.body;
-  const collection = db.collection(req.query.type === 'camera' ? 'cameras' : 'electricFences');
-  try {
-      await collection.updateOne(
-          { _id: new mongodb.ObjectId(id) },
-          { $set: { location: location, latitude: latitude, longitude: longitude, status: status } }
-      );
-      res.json({ success: true });
-  } catch (error) {
-      res.status(500).json({ success: false, error: 'Failed to update device' });
-  }
-});
-
 // Endpoint to add a new device
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
