@@ -84,23 +84,6 @@ app.get('/cameras', (req, res) => {
   });
 });
 
-// Endpoint to update a device
-app.put('/updateDevice/:id', (req, res) => {
-  const deviceId = req.params.id;
-  const updatedDevice = req.body;
-
-  mongoose.connection.db.collection('electricFences').updateOne(
-      { ef_id: deviceId },
-      { $set: updatedDevice },
-      (err, result) => {
-          if (err) {
-              return res.status(500).json({ error: 'Failed to update device' });
-          }
-          res.status(200).json({ success: true, message: 'Device updated successfully' });
-      }
-  );
-});
-
 // Endpoint to add a new device
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
