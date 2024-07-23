@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             data.forEach(fence => {
                 const row = document.createElement('tr');
-                row.setAttribute('data-name', fence.efName);
+                row.setAttribute('data-id', fence.ef_id);
 
                 row.innerHTML = `
                     <td><div class="table-data__info"><p>${fence.ef_id}</p></div></td>
@@ -42,9 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(cameras => {
             const cameraTableBody = document.getElementById('cameraTableBody');
             cameraTableBody.innerHTML = ''; // Clear existing rows
-            cameras.forEach((camera, index) => {
+            cameras.forEach(camera => {
                 const row = document.createElement('tr');
-                row.setAttribute('data-name', camera.camName);
+                row.setAttribute('data-id', camera.cam_id);
+
                 row.innerHTML = `
                     <td><div class="table-data__info"><p>${camera.cam_id}</p></div></td>
                     <td><div class="table-data__info"><h4>${camera.camName}</h4></div></td>
@@ -60,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </span>
                     </td>
                 `;
+
                 cameraTableBody.appendChild(row);
             });
 
@@ -75,7 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add click event listeners to all edit buttons
         document.querySelectorAll('.editBtn').forEach((btn) => {
             btn.addEventListener('click', function() {
-                modal.style.display = "block";
+                const deviceRow = btn.closest('tr');
+                const deviceId = deviceRow.getAttribute('data-id');
+                const deviceName = deviceRow.querySelector('h4').textContent;
+
+                fetchDeviceDetails(deviceId, deviceName);
             });
         });
 
@@ -83,31 +89,99 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.deleteBtn').forEach((btn) => {
             btn.addEventListener('click', function() {
                 var deviceRow = btn.closest('tr');
-                var deviceName = deviceRow.getAttribute('data-name');
+                var deviceId = deviceRow.getAttribute('data-id');
+                var deviceName = deviceRow.querySelector('h4').textContent;
                 if (confirm("Confirm to delete " + deviceName)) {
-                    deviceRow.remove();
-                } else {
-                    window.location.href = "devices.html";
+                    fetch(`/deleteDevice/${deviceId}`, { method: 'DELETE' })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                deviceRow.remove();
+                            } else {
+                                alert("Failed to delete device");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error deleting device:', error);
+                        });
                 }
             });
         });
     }
 
-    // Modal and delete logic remains the same
-    var modal = document.getElementById("editDeviceModal");
-    var closeEditDeviceModal = document.getElementById("closeEditDeviceModal");
+    // Fetch device details and populate the modal
+    function fetchDeviceDetails(deviceId, deviceName) {
+        const modal = document.getElementById("editDeviceModal");
+        const closeEditDeviceModal = document.getElementById("closeEditDeviceModal");
+        const deviceIdField = document.getElementById("deviceId");
+        const deviceNameField = document.getElementById("deviceName");
+        const locationField = document.getElementById("device-location");
+        const latitudeField = document.getElementById("device-latitude");
+        const longitudeField = document.getElementById("device-longitude");
+        const statusActive = document.getElementById("activeStatus");
+        const statusInactive = document.getElementById("inactiveStatus");
 
-    closeEditDeviceModal.onclick = function() {
-        modal.style.display = "none";
-    };
+        // Fetch the details of the device from the backend
+        fetch(`/deviceDetails/${deviceId}`)
+            .then(response => response.json())
+            .then(device => {
+                deviceIdField.textContent = device._id;
+                deviceNameField.textContent = device[`${device.type}Name`];
+                locationField.value = device[`${device.type}Location`];
+                latitudeField.value = device[`${device.type}Lat`];
+                longitudeField.value = device[`${device.type}Long`];
+                if (device[`${device.type}Stat`] === "active") {
+                    statusActive.checked = true;
+                } else {
+                    statusInactive.checked = true;
+                }
+                modal.style.display = "block";
+            })
+            .catch(error => {
+                console.error('Error fetching device details:', error);
+            });
 
-    window.onclick = function(event) {
-        if (event.target == modal) {
+        closeEditDeviceModal.onclick = function() {
             modal.style.display = "none";
-        }
-    };
+        };
 
-    document.getElementById('addDeviceBtn').addEventListener('click', function() {
-        window.location.href = 'addDevice.html';
-    });
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // Handle form submission
+        document.getElementById("editDeviceForm").onsubmit = function(e) {
+            e.preventDefault();
+            const location = locationField.value;
+            const latitude = latitudeField.value;
+            const longitude = longitudeField.value;
+            const status = document.querySelector('input[name="status"]:checked').value;
+
+            fetch(`/updateDevice/${deviceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    location: location,
+                    latitude: latitude,
+                    longitude: longitude,
+                    status: status
+                })
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload(); // Reload to reflect changes
+                    } else {
+                        alert("Failed to update device");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating device:', error);
+                });
+        };
+    }
 });
