@@ -64,26 +64,90 @@ app.get('/users', (req, res) => {
   });
 });
 
-// Endpoint to fetch all electric fences
+// Define the schema and model for electric fences and cameras
+const electricFenceSchema = new mongoose.Schema({
+  ef_id: String,
+  efName: String,
+  efLocation: String,
+  efLat: String,
+  efLong: String,
+  efStat: String
+});
+
+const cameraSchema = new mongoose.Schema({
+  cam_id: String,
+  camName: String,
+  camLocation: String,
+  camLat: String,
+  camLong: String,
+  camStat: String
+});
+
+const ElectricFence = mongoose.model('ElectricFence', electricFenceSchema);
+const Camera = mongoose.model('Camera', cameraSchema);
+
+// Endpoint to fetch electric fences
 app.get('/electricFences', (req, res) => {
-  mongoose.connection.db.collection('electricFences').find({}).toArray((err, fences) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-    res.json(fences);
+  ElectricFence.find({}, (err, electricFences) => {
+      if (err) {
+          return res.status(500).send(err);
+      }
+      res.send(electricFences);
   });
 });
 
-// Endpoint to fetch all cameras
+// Endpoint to fetch cameras
 app.get('/cameras', (req, res) => {
-  mongoose.connection.db.collection('cameras').find({}).toArray((err, cameras) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-    res.json(cameras);
+  Camera.find({}, (err, cameras) => {
+      if (err) {
+          return res.status(500).send(err);
+      }
+      res.send(cameras);
   });
 });
 
+// Endpoint to update a device
+app.put('/updateDevice/:deviceType/:deviceId', (req, res) => {
+  const { deviceType, deviceId } = req.params;
+  const updateData = req.body;
+
+  let Model;
+  if (deviceType === 'Electric Fence') {
+      Model = ElectricFence;
+  } else if (deviceType === 'Camera') {
+      Model = Camera;
+  } else {
+      return res.status(400).send({ success: false, message: 'Invalid device type' });
+  }
+
+  Model.findOneAndUpdate({ [`${deviceType === 'Electric Fence' ? 'ef_id' : 'cam_id'}`]: deviceId }, updateData, { new: true }, (err, updatedDevice) => {
+      if (err) {
+          return res.status(500).send({ success: false, message: 'Failed to update device' });
+      }
+      res.send({ success: true, updatedDevice });
+  });
+});
+
+// Endpoint to delete a device
+app.delete('/deleteDevice/:deviceType/:deviceId', (req, res) => {
+  const { deviceType, deviceId } = req.params;
+
+  let Model;
+  if (deviceType === 'Electric Fence') {
+      Model = ElectricFence;
+  } else if (deviceType === 'Camera') {
+      Model = Camera;
+  } else {
+      return res.status(400).send({ success: false, message: 'Invalid device type' });
+  }
+
+  Model.findOneAndDelete({ [`${deviceType === 'Electric Fence' ? 'ef_id' : 'cam_id'}`]: deviceId }, (err) => {
+      if (err) {
+          return res.status(500).send({ success: false, message: 'Failed to delete device' });
+      }
+      res.send({ success: true });
+  });
+});
 // Endpoint to add a new device
 app.post('/addDevice', (req, res) => {
   const deviceType = req.body['device-type'];
