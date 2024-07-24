@@ -72,16 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attach event listeners for modal and delete logic
     function attachEventListeners() {
+        console.log('Attaching event listeners');
         // Add click event listeners to all edit buttons
         document.querySelectorAll('.editBtn').forEach(btn => {
             btn.addEventListener('click', function() {
+                console.log('Edit button clicked');
                 const row = btn.closest('tr');
                 const id = row.getAttribute('data-id');
-                const deviceType = row.closest('table').id === 'electricFenceTableBody' ? 'Electric Fence' : 'Camera';
+                const deviceType = row.closest('tbody').id === 'electricFenceTableBody' ? 'Electric Fence' : 'Camera';
 
                 fetch(`/${deviceType === 'Electric Fence' ? 'electricFences' : 'cameras'}/${id}`)
                     .then(response => response.json())
                     .then(device => {
+                        console.log('Device data fetched:', device);
                         document.getElementById('deviceName').textContent = device[deviceType === 'Electric Fence' ? 'efName' : 'camName'];
                         document.getElementById('deviceId').textContent = id;
                         document.getElementById('device-location').value = device[deviceType === 'Electric Fence' ? 'efLocation' : 'camLocation'];
@@ -98,9 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add click event listeners to all delete buttons
         document.querySelectorAll('.deleteBtn').forEach(btn => {
             btn.addEventListener('click', function() {
+                console.log('Delete button clicked');
                 const deviceRow = btn.closest('tr');
                 const deviceId = deviceRow.getAttribute('data-id');
-                const deviceType = deviceRow.closest('table').id === 'electricFenceTableBody' ? 'Electric Fence' : 'Camera';
+                const deviceType = deviceRow.closest('tbody').id === 'electricFenceTableBody' ? 'Electric Fence' : 'Camera';
 
                 if (confirm(`Confirm to delete ${deviceId}`)) {
                     fetch(`/deleteDevice`, {
