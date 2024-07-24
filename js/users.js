@@ -100,16 +100,24 @@ document.addEventListener('DOMContentLoaded', function() {
     generateLinkBtn.addEventListener('click', function() {
         const expiryDays = expiryDaysInput.value;
         const selectedRole = document.querySelector('input[name="role"]:checked');
-
+    
         if (!expiryDays || !selectedRole) {
             alert('Please fill in all fields.');
             return;
         }
-
+    
         const role = selectedRole.value;
-        const link = generateLink(expiryDays, role);
-        generatedLink.value = link;
-        generatedLinkArea.style.display = 'block';
+        
+        // Use async/await to handle the promise
+        (async function() {
+            try {
+                const link = await generateLink(expiryDays, role); // Await the promise
+                generatedLink.value = link;
+                generatedLinkArea.style.display = 'block';
+            } catch (error) {
+                alert('Failed to generate link.');
+            }
+        })();
     });
 
     // Copy link to clipboard
@@ -120,31 +128,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Function to generate the link
-    function generateLink(expiryDays, role) {
+    async function generateLink(expiryDays, role) {
         const token = generateToken(); // Generate a unique token for the link
-        // Save the token, expiry days, and role to the server
-        fetch('/generateLink', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token, expiryDays, role })
-        })
-        .then(response => response.json())
-        .then(data => {
+    
+        try {
+            const response = await fetch('/generateLink', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token, expiryDays, role })
+            });
+            const data = await response.json();
             if (data.success) {
                 const baseUrl = window.location.origin;
                 return `${baseUrl}/register.html?token=${token}`;
             } else {
-                alert('Failed to generate link.');
-                return '';
+                throw new Error('Failed to generate link.');
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error generating link:', error);
-            alert('Error generating link.');
-            return '';
-        });
+            throw error;
+        }
     }
 
     // Function to generate a unique token
