@@ -64,6 +64,52 @@ app.get('/users', (req, res) => {
   });
 });
 
+// Endpoint to generate a registration link
+app.post('/generateRegistrationLink', async (req, res) => {
+  const { expiryDays, role } = req.body;
+  if (!expiryDays || !role) {
+    return res.status(400).json({ error: 'Missing expiryDays or role' });
+  }
+
+  const token = crypto.randomBytes(20).toString('hex'); // Generate a random token
+  const expiryDate = new Date();
+  expiryDate.setDate(expiryDate.getDate() + parseInt(expiryDays));
+
+  try {
+    await new RegistrationLink({ token, role, expiryDate }).save();
+    res.json({ link: `https://example.com/register?token=${token}` });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to generate link' });
+  }
+});
+
+// Endpoint to handle user registration
+app.post('/register', async (req, res) => {
+  const { token, email, fullname, password } = req.body;
+
+  try {
+    const registrationLink = await RegistrationLink.findOne({ token });
+    if (!registrationLink || registrationLink.used || registrationLink.expiryDate < new Date()) {
+      return res.status(400).json({ error: 'Invalid or expired registration link' });
+    }
+
+    const user = {
+      email,
+      fullname,
+      password,
+      usertype: registrationLink.role
+    };
+
+    await mongoose.connection.db.collection('users').insertOne(user);
+    registrationLink.used = true;
+    await registrationLink.save();
+
+    res.json({ success: true, message: 'User registered successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to register user' });
+  }
+});
+
 // Endpoint to fetch all electric fences
 app.get('/electricFences', (req, res) => {
   mongoose.connection.db.collection('electricFences').find({}).toArray((err, fences) => {
