@@ -30,6 +30,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Define in-memory schema for registration links
+const registrationLinkSchema = new mongoose.Schema({
+  token: { type: String, required: true, unique: true },
+  role: { type: String, required: true },
+  expiryDate: { type: Date, required: true },
+  used: { type: Boolean, default: false }
+});
+
+const RegistrationLink = mongoose.model('RegistrationLink', registrationLinkSchema);
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'login.html'));
 });
