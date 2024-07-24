@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('dropdownUserEmail').textContent = userData.email;
 
         // Control visibility based on user type
-        if (userData.usertype === 'viewer') {
+        if (userData.usertype === 'Viewer') {
             document.getElementById('sidebar-users-item').style.display = 'none';
             document.getElementById('sidebar-devices-item').style.display = 'none';
             document.getElementById('mobile-users-item').style.display = 'none';
