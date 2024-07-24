@@ -71,7 +71,10 @@ function myMapDevicesIndex() {
                 fenceCoordinates.push({ lat: fence.efLat, lng: fence.efLong });
             });
 
-            if (fenceCoordinates.length) {
+            // Check the contents of fenceCoordinates
+            console.log('Fence Coordinates:', fenceCoordinates);
+
+            if (fenceCoordinates.length > 2) { // Polygon needs at least 3 points
                 const electGeofence = new google.maps.Polygon({
                     paths: fenceCoordinates,
                     strokeColor: "#fd5959",
@@ -81,6 +84,8 @@ function myMapDevicesIndex() {
                     fillOpacity: 0.3
                 });
                 electGeofence.setMap(map);
+            } else {
+                console.warn('Not enough coordinates to create a polygon.');
             }
         } catch (error) {
             console.error('Error initializing markers:', error);
