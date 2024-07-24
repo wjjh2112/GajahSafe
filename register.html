@@ -60,33 +60,33 @@
                                 For additional registrations, please request a new link from the administrator.
                                 Contact admin@gajahsafe.ai for more information.<br>
                                 Your registration token is <br>
-                                <b id="registration-token"></p>
+                                <b id="registration-token"></b></p>
                         </div>
-                        
                     </div>
                     <div class="login-form">
-                        <form action="" method="post">
+                        <form id="registerForm" action="/register" method="post">
                             <div class="form-group">
                                 <label>Email Address</label>
-                                <input class="au-input au-input--full" type="email" name="email" placeholder="Email">
+                                <input class="au-input au-input--full" type="email" name="email" placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input class="au-input au-input--full" type="text" name="fullname" placeholder="Full Name">
+                                <input class="au-input au-input--full" type="text" name="fullname" placeholder="Full Name" required>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input class="au-input au-input--full" type="password" name="password" placeholder="Password">
+                                <input class="au-input au-input--full" type="password" name="password" placeholder="Password" required>
                                 <small class="form-text text-muted">Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character</small>
                             </div>
                             <div class="form-group">
                                 <label>Confirm Password</label>
-                                <input class="au-input au-input--full" type="password" name="confirmpassword" placeholder="Confirm Password">
+                                <input class="au-input au-input--full" type="password" name="confirmpassword" placeholder="Confirm Password" required>
                             </div>
+                            <input type="hidden" name="token" id="hiddenToken">
+                            <input type="hidden" name="role" id="hiddenRole">
                             <button class="au-btn au-btn--block m-b-20" type="submit">Register</button>
                         </form>
                     </div>
-                </div>
             </div>
         </div>    
     </div>
@@ -116,20 +116,18 @@
     <script src="js/main.js"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Function to retrieve token from URL
-        function getRegistrationToken() {
+            // Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.has('token') ? urlParams.get('token') : null;
-        }
+            const token = urlParams.get('token');
+            const role = urlParams.get('role');
+            const expiry = urlParams.get('expiry');
 
-        const registrationToken = getRegistrationToken();
-        if (registrationToken) {
-            document.getElementById('registration-token').textContent = registrationToken;
-        } else {
-            document.getElementById('registration-token').textContent = 'Invalid or expired token.';
-        }
-    });
+            // Display the token
+            document.getElementById('registration-token').textContent = token;
+
+            // Set hidden fields in the form
+            document.getElementById('hiddenToken').value = token;
+            document.getElementById('hiddenRole').value = role;
     </script>
 
 </body>
