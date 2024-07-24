@@ -106,21 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('/generateRegistrationLink', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ expiryDays, role: selectedRole.value })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.link) {
-                generatedLink.value = data.link;
-                generatedLinkArea.style.display = 'block';
-            } else {
-                alert('Failed to generate link.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        const role = selectedRole.value;
+        const link = generateLink(expiryDays, role);
+        generatedLink.value = link;
+        generatedLinkArea.style.display = 'block';
     });
 
     // Copy link to clipboard
