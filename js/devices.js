@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><p>${fence.efLocation}</p></td>
                     <td><p>${fence.efLat}</p></td>
                     <td><p>${fence.efLong}</p></td>
+                    <td><p>${fence.efStat}</p></td>
                     <td class="text-center">
                         <span class="more">
                             <i class="zmdi zmdi-edit editBtn"></i>
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><p>${camera.camLocation}</p></td>
                     <td><p>${camera.camLat}</p></td>
                     <td><p>${camera.camLong}</p></td>
+                    <td><p>${camera.camStat}</p></td>
                     <td class="text-center">
                         <span class="more">
                             <i class="zmdi zmdi-edit editBtn"></i>
