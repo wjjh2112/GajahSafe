@@ -54,9 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    // Modal and button references
+
+    // Modal functionality
     const modal = document.getElementById('addUserModal');
     const addUserBtn = document.getElementById('addUserBtn');
     const closeBtn = document.getElementById('closeAddUserModal');
@@ -77,10 +76,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function closeModalAndReset() {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto'; // Enable scrolling
+        // Reset form fields here
         expiryDaysInput.value = '';
         generatedLinkArea.style.display = 'none';
         generatedLink.value = '';
-        roleRadios.forEach(radio => radio.checked = false);
+        // Uncheck radio buttons
+        roleRadios.forEach(radio => {
+            radio.checked = false;
+        });
     }
 
     // Close the modal on close button click
@@ -88,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Close the modal if user clicks outside the modal content
     window.addEventListener('click', function(event) {
-        if (event.target === modal) {
+        if (event.target == modal) {
             closeModalAndReset();
         }
     });
@@ -104,25 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const role = selectedRole.value;
-
-        // Send request to generate link
-        fetch('/generateRegistrationLink', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ expiryDays, role })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.link) {
-                generatedLink.value = data.link;
-                generatedLinkArea.style.display = 'block';
-            } else {
-                alert('Failed to generate link.');
-            }
-        })
-        .catch(error => console.error('Error generating link:', error));
+        const link = generateLink(expiryDays, role);
+        generatedLink.value = link;
+        generatedLinkArea.style.display = 'block';
     });
 
     // Copy link to clipboard
@@ -131,4 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.execCommand('copy');
         alert('Link copied to clipboard.');
     });
+
+    // Function to generate the link
+    function generateLink(expiryDays, role) {
+        // Replace with your actual link generation logic
+        return `https://example.com/register?expiry=${expiryDays}&role=${role}`;
+    }
 });

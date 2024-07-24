@@ -64,68 +64,6 @@ app.get('/users', (req, res) => {
   });
 });
 
-// Store for registration tokens (temporary storage, ideally use a more permanent solution)
-const tokenStore = {};
-
-// Endpoint to generate registration link
-app.post('/generateRegistrationLink', (req, res) => {
-  const { expiryDays, role } = req.body;
-
-  if (!expiryDays || !role) {
-      return res.status(400).json({ error: 'Expiry days and role are required.' });
-  }
-
-  // Generate a unique token for the link
-  const token = crypto.randomBytes(32).toString('hex');
-  
-  // Calculate expiry date
-  const expiryDate = moment().add(expiryDays, 'days').toDate();
-
-  // Store token, role, and expiry date
-  tokenStore[token] = { role, expiryDate };
-
-  // Generate the link
-  const link = `http://13.229.129.54/register.html?token=${token}&role=${role}&expiry=${expiryDate.toISOString()}`;
-
-  res.json({ link });
-});
-
-// Endpoint to handle user registration
-app.post('/register', (req, res) => {
-  const { email, fullname, password, confirmpassword, token, role } = req.body;
-
-  if (password !== confirmpassword) {
-    return res.status(400).json({ error: 'Passwords do not match' });
-  }
-
-  const storedToken = tokenStore[token];
-
-  if (!storedToken || moment().isAfter(storedToken.expiryDate)) {
-    return res.status(400).json({ error: 'Invalid or expired token' });
-  }
-
-  // Create a new user
-  const newUser = {
-    user_id: `U${Math.floor(Math.random() * 1000)}`, // Generate a unique user ID
-    fullname,
-    email,
-    password, // In a real-world scenario, use hashed passwords
-    usertype: role
-  };
-
-  // Save user to the database
-  mongoose.connection.db.collection('users').insertOne(newUser, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to register user' });
-    }
-
-    // Remove the used token from the store
-    delete tokenStore[token];
-
-    res.status(200).json({ success: true, message: 'User registered successfully' });
-  });
-});
-
 // Endpoint to fetch all electric fences
 app.get('/electricFences', (req, res) => {
   mongoose.connection.db.collection('electricFences').find({}).toArray((err, fences) => {
