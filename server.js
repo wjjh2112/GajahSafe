@@ -38,29 +38,85 @@ app.post('/login', (req, res) => {
   const { email, password } = req.body;
   // Find user in database
   mongoose.connection.db.collection('users').findOne({ email, password }, (err, user) => {
-      if (err) {
-          return res.status(500).json({ error: 'Internal server error' });
-      }
-      if (!user) {
-          return res.status(401).json({ error: 'Invalid email or password' });
-      }
-      // Return user data including usertype as JSON
-      res.json({
-          name: user.fullname,
-          email: user.email,
-          avatar: 'images/icon/avatar-01.jpg', // Example static avatar path
-          usertype: user.usertype // Include usertype
-      });
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+    // Return user data including usertype as JSON
+    res.json({
+      name: user.fullname,
+      email: user.email,
+      avatar: 'images/icon/avatar-01.jpg', // Example static avatar path
+      usertype: user.usertype // Include usertype
+    });
   });
 });
 
 // Endpoint to fetch all users
 app.get('/users', (req, res) => {
   mongoose.connection.db.collection('users').find({}).toArray((err, users) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json(users);
+  });
+});
+
+// Endpoint to generate a registration link
+app.post('/generateLink', (req, res) => {
+  const { token, expiryDays, role } = req.body;
+  const expiryDate = new Date();
+  expiryDate.setDate(expiryDate.getDate() + parseInt(expiryDays));
+
+  mongoose.connection.db.collection('registrationLinks').insertOne({
+    token,
+    role,
+    expiryDate,
+    used: false
+  }, (err, result) => {
+    if (err) {
+      res.json({ success: false, message: 'Error generating link.' });
+    } else {
+      res.json({ success: true });
+    }
+  });
+});
+
+// Endpoint to register a new user
+app.post('/registerUser', (req, res) => {
+  const { email, fullname, password, token } = req.body;
+
+  mongoose.connection.db.collection('registrationLinks').findOne({ token }, (err, link) => {
+    if (err || !link) {
+      res.json({ success: false, message: 'Invalid or expired registration link.' });
+      return;
+    }
+
+    if (link.used || new Date() > link.expiryDate) {
+      res.json({ success: false, message: 'Registration link has expired or already been used.' });
+      return;
+    }
+
+    mongoose.connection.db.collection('users').insertOne({
+      email,
+      fullname,
+      password,
+      usertype: link.role
+    }, (err, result) => {
       if (err) {
-          return res.status(500).json({ error: 'Internal server error' });
+        res.json({ success: false, message: 'Error registering user.' });
+      } else {
+        mongoose.connection.db.collection('registrationLinks').updateOne({ token }, { $set: { used: true } }, (err, updateResult) => {
+          if (err) {
+            res.json({ success: false, message: 'Error updating registration link status.' });
+          } else {
+            res.json({ success: true });
+          }
+        });
       }
-      res.json(users);
+    });
   });
 });
 

@@ -121,7 +121,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to generate the link
     function generateLink(expiryDays, role) {
-        // Replace with your actual link generation logic
-        return `https://example.com/register?expiry=${expiryDays}&role=${role}`;
+        const token = generateToken(); // Generate a unique token for the link
+        // Save the token, expiry days, and role to the server
+        fetch('/generateLink', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token, expiryDays, role })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const baseUrl = window.location.origin;
+                return `${baseUrl}/register.html?token=${token}`;
+            } else {
+                alert('Failed to generate link.');
+                return '';
+            }
+        })
+        .catch(error => {
+            console.error('Error generating link:', error);
+            alert('Error generating link.');
+            return '';
+        });
+    }
+
+    // Function to generate a unique token
+    function generateToken() {
+        return Math.random().toString(36).substr(2, 9); // Simple token generation (you may want to use a more secure method)
     }
 });
