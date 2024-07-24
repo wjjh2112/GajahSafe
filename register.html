@@ -115,46 +115,46 @@
     <script src="js/main.js"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const token = params.get('token');
-            if (token) {
-                document.getElementById('registration-token').textContent = token;
+document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        if (token) {
+            document.getElementById('registration-token').textContent = token;
 
-                const form = document.getElementById('registrationForm');
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
+            const form = document.getElementById('registrationForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
 
-                    const email = form.email.value;
-                    const fullname = form.fullname.value;
-                    const password = form.password.value;
-                    const confirmpassword = form.confirmpassword.value;
+                const email = form.email.value;
+                const fullname = form.fullname.value;
+                const password = form.password.value;
+                const confirmpassword = form.confirmpassword.value;
 
-                    if (password !== confirmpassword) {
-                        alert('Passwords do not match.');
-                        return;
+                if (password !== confirmpassword) {
+                    alert('Passwords do not match.');
+                    return;
+                }
+
+                fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, email, fullname, password })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Registration successful!');
+                        window.location.href = '/login'; // Redirect to login or another page
+                    } else {
+                        alert(data.error || 'Registration failed.');
                     }
-
-                    fetch('/register', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token, email, fullname, password })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Registration successful!');
-                            window.location.href = '/login'; // Redirect to login or another page
-                        } else {
-                            alert(data.error || 'Registration failed.');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-                });
-            } else {
-                alert('Invalid registration link.');
-            }
-        });
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        } else {
+            alert('Invalid registration link.');
+        }
+    });
     </script>
 
 </body>
