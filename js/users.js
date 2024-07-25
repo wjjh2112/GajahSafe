@@ -26,14 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </td>
                 <td><p>${user.usertype}</p></td>
-                <td class="text-center">
-                    <span class="more">
-                        <i class="zmdi zmdi-edit editUserBtn" data-id="${user.user_id}"></i>
-                    </span>
-                    <span class="more">
-                        <i class="zmdi zmdi-delete deleteUserBtn" data-id="${user.user_id}"></i>
-                    </span>
-                </td>
+                <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
             `;
 
             userTableBody.appendChild(row);
@@ -62,158 +55,105 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Add User Modal and Form
-    const addUserModal = document.getElementById('addUserModal');
-    const closeAddUserModalBtn = document.getElementById('closeAddUserModal');
-    const addUserForm = document.getElementById('addUserForm');
-    
-    // Show add user modal
-    document.getElementById('showAddUserModalBtn').addEventListener('click', function() {
-        addUserModal.style.display = 'block';
+    // Modal functionality
+    const modal = document.getElementById('addUserModal');
+    const addUserBtn = document.getElementById('addUserBtn');
+    const closeBtn = document.getElementById('closeAddUserModal');
+    const generateLinkBtn = document.getElementById('generateLinkBtn');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const generatedLinkArea = document.getElementById('generatedLinkArea');
+    const generatedLink = document.getElementById('generatedLink');
+    const expiryDaysInput = document.getElementById('expiryDays');
+    const roleRadios = document.getElementsByName('role');
+
+    // Show the modal
+    addUserBtn.addEventListener('click', function() {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Disable scrolling
     });
 
-    // Submit add user form
-    addUserForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const fullname = document.getElementById('newUserFullname').value;
-        const email = document.getElementById('newUserEmail').value;
-        const role = document.querySelector('input[name="newUserRole"]:checked').value;
-
-        fetch('/addUser', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fullname, email, role })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('User added successfully.');
-                location.reload(); // Refresh the page to update the table
-            } else {
-                alert('Failed to add user.');
-            }
+    // Close the modal and reset form
+    function closeModalAndReset() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Enable scrolling
+        // Reset form fields here
+        expiryDaysInput.value = '';
+        generatedLinkArea.style.display = 'none';
+        generatedLink.value = '';
+        // Uncheck radio buttons
+        roleRadios.forEach(radio => {
+            radio.checked = false;
         });
-        addUserModal.style.display = 'none';
+    }
+
+    // Close the modal on close button click
+    closeBtn.addEventListener('click', closeModalAndReset);
+
+    // Close the modal if user clicks outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target == modal) {
+            closeModalAndReset();
+        }
     });
 
-    // Close add user modal
-    closeAddUserModalBtn.addEventListener('click', function() {
-        addUserModal.style.display = 'none';
+    // Generate link button click
+    generateLinkBtn.addEventListener('click', function() {
+        const expiryDays = expiryDaysInput.value;
+        const selectedRole = document.querySelector('input[name="role"]:checked');
+    
+        if (!expiryDays || !selectedRole) {
+            alert('Please fill in all fields.');
+            return;
+        }
+    
+        const role = selectedRole.value;
+        
+        // Use async/await to handle the promise
+        (async function() {
+            try {
+                const link = await generateLink(expiryDays, role); // Await the promise
+                generatedLink.value = link;
+                generatedLinkArea.style.display = 'block';
+            } catch (error) {
+                alert('Failed to generate link.');
+            }
+        })();
     });
 
-    window.onclick = function(event) {
-        if (event.target == addUserModal) {
-            addUserModal.style.display = 'none';
+    // Copy link to clipboard
+    copyLinkBtn.addEventListener('click', function() {
+        generatedLink.select();
+        document.execCommand('copy');
+        alert('Link copied to clipboard.');
+    });
+
+    // Function to generate the link
+    async function generateLink(expiryDays, role) {
+        const token = generateToken(); // Generate a unique token for the link
+    
+        try {
+            const response = await fetch('/generateLink', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token, expiryDays, role })
+            });
+            const data = await response.json();
+            if (data.success) {
+                const baseUrl = window.location.origin;
+                return `${baseUrl}/register.html?token=${token}`;
+            } else {
+                throw new Error('Failed to generate link.');
+            }
+        } catch (error) {
+            console.error('Error generating link:', error);
+            throw error;
         }
     }
 
-    // Modal functionality for delete and edit user
-    const deleteUserModal = document.getElementById('deleteUserConfirmationModal');
-    const editUserModal = document.getElementById('editUserModal');
-    const closeDeleteModalBtn = document.getElementById('closeDeleteUserConfirmationModal');
-    const closeEditModalBtn = document.getElementById('closeEditUserModal');
-    const confirmDeleteUserBtn = document.getElementById('confirmDeleteUserBtn');
-    const cancelDeleteUserBtn = document.getElementById('cancelDeleteUserBtn');
-
-    let currentUserIdToDelete = null;
-    let currentUserIdToEdit = null;
-
-    // Show delete confirmation modal
-    userTableBody.addEventListener('click', function(event) {
-        if (event.target.classList.contains('deleteUserBtn')) {
-            currentUserIdToDelete = event.target.getAttribute('data-id');
-            fetch(`/users/${currentUserIdToDelete}`)
-                .then(response => response.json())
-                .then(user => {
-                    document.getElementById('confirmUserFullname').textContent = user.fullname;
-                    document.getElementById('confirmUserEmail').textContent = user.email;
-                    deleteUserModal.style.display = 'block';
-                });
-        }
-    });
-
-    // Show edit user modal
-    userTableBody.addEventListener('click', function(event) {
-        if (event.target.classList.contains('editUserBtn')) {
-            currentUserIdToEdit = event.target.getAttribute('data-id');
-            fetch(`/users/${currentUserIdToEdit}`)
-                .then(response => response.json())
-                .then(user => {
-                    document.getElementById('userID').textContent = `User ID: ${user.user_id}`;
-                    document.getElementById('user-fullname').value = user.fullname;
-                    document.querySelector(`input[name="role"][value="${user.usertype}"]`).checked = true;
-                    editUserModal.style.display = 'block';
-                });
-        }
-    });
-
-    // Confirm delete user
-    confirmDeleteUserBtn.addEventListener('click', function() {
-        fetch('/deleteUser', {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: currentUserIdToDelete })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('User deleted successfully.');
-                location.reload(); // Refresh the page to update the table
-            } else {
-                alert('Failed to delete user.');
-            }
-        });
-        deleteUserModal.style.display = 'none';
-    });
-
-    // Cancel delete user
-    cancelDeleteUserBtn.addEventListener('click', function() {
-        deleteUserModal.style.display = 'none';
-    });
-
-    // Submit edit user form
-    editUserForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const fullname = document.getElementById('user-fullname').value;
-        const role = document.querySelector('input[name="role"]:checked').value;
-
-        fetch('/updateUser', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: currentUserIdToEdit, fullname, role })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('User updated successfully.');
-                location.reload(); // Refresh the page to update the table
-            } else {
-                alert('Failed to update user.');
-            }
-        });
-        editUserModal.style.display = 'none';
-    });
-
-    // Close modals
-    closeDeleteModalBtn.addEventListener('click', function() {
-        deleteUserModal.style.display = 'none';
-    });
-
-    closeEditModalBtn.addEventListener('click', function() {
-        editUserModal.style.display = 'none';
-    });
-
-    window.onclick = function(event) {
-        if (event.target == deleteUserModal) {
-            deleteUserModal.style.display = 'none';
-        }
-        if (event.target == editUserModal) {
-            editUserModal.style.display = 'none';
-        }
-        if (event.target == addUserModal) {
-            addUserModal.style.display = 'none';
-        }
+    // Function to generate a unique token
+    function generateToken() {
+        return Math.random().toString(36).substr(2, 9); // Simple token generation (you may want to use a more secure method)
     }
 });
