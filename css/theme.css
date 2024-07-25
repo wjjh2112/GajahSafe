@@ -1092,11 +1092,12 @@ input[type="file"] {
     text-decoration: none;
 }
 
-#confirmDeleteDevBtn {
+#confirmDeleteDevBtn, #confirmDeleteUserBtn {
     background-color: red;
     color: white;
 }
-#cancelDeleteDevBtn {
+
+#cancelDeleteDevBtn, #cancelDeleteUserBtn {
     background-color: gray;
     color: white;
 }
