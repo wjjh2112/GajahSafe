@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Create a link to the login page
                 const loginLink = document.createElement('a');
-                loginLink.href = 'http://13.229.129.54/login.html';
+                loginLink.href = 'http://gajahsafe.com/login.html';
                 loginLink.textContent = 'here';
                 loginLink.style.textDecoration = 'underline';
                 loginLink.style.color = '#ff182b';
