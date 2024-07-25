@@ -81,6 +81,7 @@
     "userID": "ID",
     "role": "Peranan",
     "status": "Status",
+    "userFullname": "Nama Penuh",
 
     "newDevice": "Peranti Baharu",
     "editDevice": "Edit Peranti",
