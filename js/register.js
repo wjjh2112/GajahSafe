@@ -19,10 +19,21 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         const formData = new FormData(registerForm);
+        const password = formData.get('password');
+        const confirmpassword = formData.get('confirmpassword');
+
+        // Check if passwords match
+        if (password !== confirmpassword) {
+            registrationStatus.textContent = 'Passwords do not match.';
+            registrationStatus.style.color = 'red';
+            return;
+        }
+
         const data = {
             email: formData.get('email'),
             fullname: formData.get('fullname'),
-            password: formData.get('password'),
+            password: password,
+            confirmpassword: confirmpassword,
             token: token
         };
 
