@@ -1,3 +1,7 @@
+document.getElementById('addDeviceBtn').addEventListener('click', function() {
+    window.location.href = 'addDevice.html';
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch electric fences data from the backend
     fetch('/electricFences')
