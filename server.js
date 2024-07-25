@@ -94,37 +94,49 @@ function generateUserId() {
 app.post('/registerUser', (req, res) => {
   const { email, fullname, password, token } = req.body;
 
-  mongoose.connection.db.collection('registrationLinks').findOne({ token }, (err, link) => {
-    if (err || !link) {
-      res.json({ success: false, message: 'Invalid or expired registration link.' });
+  mongoose.connection.db.collection('users').findOne({ email }, (err, existingUser) => {
+    if (err) {
+      res.json({ success: false, message: 'Error checking existing email.' });
       return;
     }
 
-    if (link.used || new Date() > link.expiryDate) {
-      res.json({ success: false, message: 'Registration link has expired or already been used.' });
+    if (existingUser) {
+      res.json({ success: false, message: 'Email already registered.' });
       return;
     }
 
-    const newUser = {
-      user_id: generateUserId(),
-      email,
-      fullname,
-      password,
-      usertype: link.role,
-    };
-
-    mongoose.connection.db.collection('users').insertOne(newUser, (err, result) => {
-      if (err) {
-        res.json({ success: false, message: 'Error registering user.' });
-      } else {
-        mongoose.connection.db.collection('registrationLinks').updateOne({ token }, { $set: { used: true } }, (err, updateResult) => {
-          if (err) {
-            res.json({ success: false, message: 'Error updating registration link status.' });
-          } else {
-            res.json({ success: true });
-          }
-        });
+    mongoose.connection.db.collection('registrationLinks').findOne({ token }, (err, link) => {
+      if (err || !link) {
+        res.json({ success: false, message: 'Invalid or expired registration link.' });
+        return;
       }
+
+      if (link.used || new Date() > link.expiryDate) {
+        res.json({ success: false, message: 'Registration link has expired or already been used.' });
+        return;
+      }
+
+      const newUser = {
+        user_id: generateUserId(),
+        email,
+        fullname,
+        password,
+        usertype: link.role
+      };
+
+      mongoose.connection.db.collection('users').insertOne(newUser, (err, result) => {
+        if (err) {
+          res.json({ success: false, message: 'Error registering user.' });
+        } else {
+          mongoose.connection.db.collection('registrationLinks').updateOne({ token }, { $set: { used: true } }, (err, updateResult) => {
+            if (err) {
+              res.json({ success: false, message: 'Error updating registration link status.' });
+            } else {
+              res.json({ success: true });
+            }
+          });
+        }
+      });
     });
   });
 });
