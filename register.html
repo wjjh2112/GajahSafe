@@ -113,7 +113,7 @@
     <script src="js/main.js"></script>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         const registrationTokenElement = document.getElementById('registration-token');
@@ -156,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Create a link to the login page
                     const loginLink = document.createElement('a');
-                    loginLink.href = '/login.html';
+                    loginLink.href = 'http://13.229.129.54/login.html';
                     loginLink.textContent = 'here';
                     loginLink.style.textDecoration = 'underline';
                     loginLink.style.color = '#ff182b';
 
-                    redirectLogin.textContent = 'Login to GajahSafe with your new account ';
+                    redirectLogin.innerHTML = 'Login to GajahSafe with your new account ';
                     redirectLogin.appendChild(loginLink);
-                    redirectLogin.textContent += '.';
+                    redirectLogin.innerHTML += '.';
 
                     registerForm.reset();
                 } else {
