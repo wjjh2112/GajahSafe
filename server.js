@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
@@ -84,6 +85,11 @@ app.post('/generateLink', (req, res) => {
   });
 });
 
+// Function to generate a unique user ID
+function generateUserId() {
+  return 'U' + uuidv4();
+}
+
 // Endpoint to register a new user
 app.post('/registerUser', (req, res) => {
   const { email, fullname, password, token } = req.body;
@@ -99,12 +105,15 @@ app.post('/registerUser', (req, res) => {
       return;
     }
 
-    mongoose.connection.db.collection('users').insertOne({
+    const newUser = {
+      user_id: generateUserId(),
       email,
       fullname,
       password,
-      usertype: link.role
-    }, (err, result) => {
+      usertype: link.role,
+    };
+
+    mongoose.connection.db.collection('users').insertOne(newUser, (err, result) => {
       if (err) {
         res.json({ success: false, message: 'Error registering user.' });
       } else {
