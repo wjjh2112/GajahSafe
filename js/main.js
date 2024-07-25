@@ -1,26 +1,3 @@
-function loadHTML(id, url) {
-  fetch(url)
-      .then(response => response.text())
-      .then(data => {
-          document.getElementById(id).innerHTML = data;
-      });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadHTML('header-mobile-container', 'header-mobile.html');
-  loadHTML('menu-sidebar-container', 'menu-sidebar.html');
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const path = window.location.pathname;
-  const menuItems = document.querySelectorAll('.navbar__list li a, .navbar-mobile__list li a');
-  menuItems.forEach(item => {
-      if (item.getAttribute('href') === path) {
-          item.parentElement.classList.add('active');
-      }
-  });
-});
-
 (function ($) {
     // USE STRICT
     "use strict";
