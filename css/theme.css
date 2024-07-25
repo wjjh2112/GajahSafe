@@ -1092,10 +1092,6 @@ input[type="file"] {
     text-decoration: none;
 }
 
-#confirmDeleteBtn, #cancelDeleteBtn {
-    margin: 10px;
-    padding: 10px;
-}
 #confirmDeleteBtn {
     background-color: red;
     color: white;
