@@ -32,19 +32,16 @@ function myMapDevicesIndex() {
     function addMarker(markerProps) {
         var marker = new google.maps.Marker({
             position: markerProps.position,
-            icon: {
-                ...markerProps.icon,
-                scaledSize: iconSize,
-                opacity: markerProps.status === 'inactive' ? 0.5 : 1.0
-            },
-            map: map
+            icon: markerProps.icon,
+            map: map,
+            opacity: markerProps.status === 'Active' ? 1 : 0.5
         });
 
         google.maps.event.addListener(marker, 'click', function () {
-            var contentString = '<div>' +
-                '<p><strong>Name:</strong> ' + markerProps.name + '</p>' +
+            var contentString = '<div class="info-content">' +
                 '<p><strong>ID:</strong> ' + markerProps.id + '</p>' +
-                '<p><strong>Location:</strong> (' + markerProps.position.lat() + ', ' + markerProps.position.lng() + ')</p>' +
+                '<p><strong>Name:</strong> ' + markerProps.name + '</p>' +
+                '<p><strong>Location:</strong> ' + markerProps.position.lat() + ', ' + markerProps.position.lng() + '</p>' +
                 '<p><strong>Status:</strong> ' + markerProps.status + '</p>' +
                 '</div>';
 
@@ -53,17 +50,14 @@ function myMapDevicesIndex() {
         });
 
         google.maps.event.addListener(marker, 'mouseover', function () {
-            var hoverWindow = new google.maps.InfoWindow({
-                content: markerProps.id
+            var hoverLabel = new google.maps.InfoWindow({
+                content: '<div class="hover-label">' + markerProps.id + '</div>',
+                disableAutoPan: true
             });
-            hoverWindow.open(map, marker);
-            marker.hoverWindow = hoverWindow;
-        });
-
-        google.maps.event.addListener(marker, 'mouseout', function () {
-            if (marker.hoverWindow) {
-                marker.hoverWindow.close();
-            }
+            hoverLabel.open(map, marker);
+            google.maps.event.addListener(marker, 'mouseout', function () {
+                hoverLabel.close();
+            });
         });
     }
 
@@ -72,11 +66,11 @@ function myMapDevicesIndex() {
             const cameras = await fetchDeviceData('/cameras');
             cameras.forEach(camera => {
                 addMarker({
-                    name: camera.cam_name,
                     id: camera.cam_id,
+                    name: camera.camName,
                     position: new google.maps.LatLng(camera.camLat, camera.camLong),
                     icon: cameraIcon,
-                    status: camera.cam_status
+                    status: camera.camStat
                 });
             });
 
@@ -85,17 +79,14 @@ function myMapDevicesIndex() {
 
             electricFences.forEach(fence => {
                 addMarker({
-                    name: fence.ef_name,
                     id: fence.ef_id,
+                    name: fence.efName,
                     position: new google.maps.LatLng(fence.efLat, fence.efLong),
                     icon: electFenceIcon,
-                    status: fence.ef_status
+                    status: fence.efStat
                 });
                 fenceCoordinates.push({ lat: fence.efLat, lng: fence.efLong });
             });
-
-            // Check the contents of fenceCoordinates
-            console.log('Fence Coordinates:', fenceCoordinates);
 
             if (fenceCoordinates.length > 2) { // Polygon needs at least 3 points
                 const electGeofence = new google.maps.Polygon({
