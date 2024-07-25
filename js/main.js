@@ -1,3 +1,4 @@
+// JavaScript to load HTML content
 function loadHTML(id, url) {
   fetch(url)
       .then(response => response.text())
@@ -13,13 +14,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
-  const menuItems = document.querySelectorAll('.navbar__list li a, .navbar-mobile__list li a');
-  menuItems.forEach(item => {
+
+  // Header mobile
+  const mobileItems = document.querySelectorAll('.navbar-mobile__list li a');
+  mobileItems.forEach(item => {
       if (item.getAttribute('href') === path) {
-          item.parentElement.classList.add('active');
+          item.parentElement.classList.add('has-sub');
+      }
+  });
+
+  // Menu sidebar
+  const sidebarItems = document.querySelectorAll('.navbar__list li a');
+  sidebarItems.forEach(item => {
+      if (item.getAttribute('href') === path) {
+          item.parentElement.classList.add('active', 'has-sub');
       }
   });
 });
+
 
 (function ($) {
     // USE STRICT
