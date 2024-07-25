@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     } else {
         // Redirect to login page if user data is not found
-        window.location.href = 'login.html';
+        window.location.href = '/Login';
     }
 
     // Logout functionality
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionStorage.removeItem('userData');
 
             // Redirect to login page
-            window.location.href = 'login.html';
+            window.location.href = '/Login';
         });
     }
 });

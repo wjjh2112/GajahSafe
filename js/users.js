@@ -252,8 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to generate the link
     async function generateLink(expiryDays, role) {
-        const token = generateToken(); // Generate a unique token for the link
-    
+        const token = generateToken();
+        
         try {
             const response = await fetch('/generateLink', {
                 method: 'POST',
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (data.success) {
                 const baseUrl = window.location.origin;
-                return `${baseUrl}/register.html?token=${token}`;
+                return `${baseUrl}/Register?token=${token}`;
             } else {
                 throw new Error('Failed to generate link.');
             }
