@@ -35,140 +35,141 @@
 
 </head>
 
-
-<div class="page-wrapper">
-    <!-- HEADER MOBILE-->
-    <header class="header-mobile d-block d-lg-none">
-        <div class="header-mobile__bar">
-            <div class="container-fluid">
-                <div class="header-mobile-inner">
-                    <a class="logo" href="index.html">
-                        <img src="images/icon/GajahSafeLogo1.png" alt="GajahSafe" />
-                    </a>
-                    <button class="hamburger hamburger--slider" type="button">
-                        <span class="hamburger-box">
-                            <span class="hamburger-inner"></span>
-                        </span>
-                    </button>
+<body>
+    <div class="page-wrapper">
+        <!-- HEADER MOBILE-->
+        <header class="header-mobile d-block d-lg-none">
+            <div class="header-mobile__bar">
+                <div class="container-fluid">
+                    <div class="header-mobile-inner">
+                        <a class="logo" href="/Dashboard">
+                            <img src="images/icon/GajahSafeLogo1.png" alt="GajahSafe" />
+                        </a>
+                        <button class="hamburger hamburger--slider" type="button">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="navbar-mobile">
-            <div class="container-fluid">
-                <ul class="navbar-mobile__list list-unstyled">
-                    <li>
-                        <a href="index.html">
-                            <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard"></span></a>
-                    </li>
-                    <li>
-                        <a href="history.html">
-                            <i class="fas fa-archive"></i><span data-i18n="history"></span></a>
-                    </li>
-                    <li>
-                        <a href="statistics.html">
-                            <i class="fas fa-chart-bar"></i><span data-i18n="statistics"></span></a>
-                    </li>
-                    <li>
-                        <a href="reports.html">
-                            <i class="fas fa-table"></i><span data-i18n="reports"></span></a>
-                    </li>
-                    <li>
-                        <a href="users.html">
-                            <i class="far fa-users"></i><span data-i18n="users"></span></a>
-                    </li>
-                    <li>
-                        <a href="devices.html">
-                            <i class="fas fa-wrench"></i><span data-i18n="devices"></span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
-    <!-- END HEADER MOBILE-->
-
-    <!-- MENU SIDEBAR-->
-    <aside class="menu-sidebar d-none d-lg-block">
-        <div class="logo">
-            <a href="#">
-                <img src="images/icon/GajahSafeLogo1.png" alt="GajahSafe" />
-            </a>
-        </div>
-        <div class="menu-sidebar__content js-scrollbar1">
-            <nav class="navbar-sidebar">
-                <ul class="list-unstyled navbar__list">
-                    <li>
-                        <a href="index.html">
-                            <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard"></span></a>
-                    </li>
-                    <li>
-                        <a href="history.html">
-                            <i class="fas fa-archive"></i><span data-i18n="history"></span></a>
-                    </li>
-                    <li>
-                        <a href="statistics.html">
-                            <i class="fas fa-chart-bar"></i><span data-i18n="statistics"></span></a>
-                    </li>
-                    <li>
-                        <a href="reports.html">
-                            <i class="fas fa-table"></i><span data-i18n="reports"></span></a>
-                    </li>
-                    <li>
-                        <a href="users.html">
-                            <i class="far fa-users"></i><span data-i18n="users"></span></a>
-                    </li>
-                    <li>
-                        <a href="devices.html">
-                            <i class="fas fa-wrench"></i><span data-i18n="devices"></span></a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-    <!-- END MENU SIDEBAR-->
-
-    <!-- PAGE CONTAINER-->
-    <div class="page-container">
-        <!-- HEADER DESKTOP-->
-        <header class="header-desktop">
-            <div class="section__content section__content--p30">
+            <div class="navbar-mobile">
                 <div class="container-fluid">
-                    <div class="header-wrap justify-content-end">
-                        <div class="header-button">
-                            <div class="account-wrap">
-                                <div class="account-item clearfix js-item-menu">
-                                    <div class="image">
-                                        <img id="avatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
-                                    </div>
-                                    <div class="content">
-                                        <a class="js-acc-btn" href="#" id="userName"></a>
-                                    </div>
-                                    <div class="account-dropdown js-dropdown">
-                                        <div class="info clearfix">
-                                            <div class="image">
-                                                <img id="dropdownAvatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
-                                            </div>
-                                            <div class="content">
-                                                <h5 class="name" id="dropdownUserName"></h5>
-                                                <span class="email" id="dropdownUserEmail"></span>
-                                            </div>
+                    <ul class="navbar-mobile__list list-unstyled">
+                        <li>
+                            <a href="/Dashboard">
+                                <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard"></span></a>
+                        </li>
+                        <li>
+                            <a href="/History">
+                                <i class="fas fa-archive"></i><span data-i18n="history"></span></a>
+                        </li>
+                        <li>
+                            <a href="/Statistics">
+                                <i class="fas fa-chart-bar"></i><span data-i18n="statistics"></span></a>
+                        </li>
+                        <li>
+                            <a href="/Reports">
+                                <i class="fas fa-table"></i><span data-i18n="reports"></span></a>
+                        </li>
+                        <li id="mobile-users-item">
+                            <a href="/Users">
+                                <i class="far fa-users"></i><span data-i18n="users"></span></a>
+                        </li>
+                        <li id="mobile-devices-item">
+                            <a href="/Devices">
+                                <i class="fas fa-wrench"></i><span data-i18n="devices"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <!-- END HEADER MOBILE-->
+
+        <!-- MENU SIDEBAR-->
+        <aside class="menu-sidebar d-none d-lg-block">
+            <div class="logo">
+                <a href="#">
+                    <img src="images/icon/GajahSafeLogo1.png" alt="GajahSafe" />
+                </a>
+            </div>
+            <div class="menu-sidebar__content js-scrollbar1">
+                <nav class="navbar-sidebar">
+                    <ul class="list-unstyled navbar__list">
+                        <li>
+                            <a href="/Dashboard">
+                                <i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard"></span></a>
+                        </li>
+                        <li>
+                            <a href="/History">
+                                <i class="fas fa-archive"></i><span data-i18n="history"></span></a>
+                        </li>
+                        <li>
+                            <a href="/Statistics">
+                                <i class="fas fa-chart-bar"></i><span data-i18n="statistics"></span></a>
+                        </li>
+                        <li>
+                            <a href="/Reports">
+                                <i class="fas fa-table"></i><span data-i18n="reports"></span></a>
+                        </li>
+                        <li id="sidebar-users-item">
+                            <a href="/Users">
+                                <i class="far fa-users"></i><span data-i18n="users"></span></a>
+                        </li>
+                        <li id="sidebar-devices-item">
+                            <a href="/Devices">
+                                <i class="fas fa-wrench"></i><span data-i18n="devices"></span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <!-- END MENU SIDEBAR-->
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <header class="header-desktop">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="header-wrap justify-content-end">
+                            <div class="header-button">
+                                <div class="account-wrap">
+                                    <div class="account-item clearfix js-item-menu">
+                                        <div class="image">
+                                            <img id="avatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
                                         </div>
-                                        <div class="account-dropdown__body">
-                                            <div class="account-dropdown__item">
-                                                <a href="#">
-                                                    <i class="zmdi zmdi-account"></i><span data-i18n="account"></span></a>
-                                            </div>
-                                            <div class="account-dropdown__item">
-                                                <a href="#">
-                                                    <i class="zmdi zmdi-settings"></i><span data-i18n="settings"></span></a>
-                                            </div>
-                                            <div class="account-dropdown__item">
-                                                <a href="#" id="languageSwitchBtn">
-                                                    <i class="zmdi zmdi-globe"></i><span data-i18n="language"></span></a>
-                                            </div>
+                                        <div class="content">
+                                            <a class="js-acc-btn" href="#" id="userName"></a>
                                         </div>
-                                        <div class="account-dropdown__footer">
-                                            <a href="#" id="logoutBtn">
-                                                <i class="zmdi zmdi-power"></i><span data-i18n="logout"></span></a>
+                                        <div class="account-dropdown js-dropdown">
+                                            <div class="info clearfix">
+                                                <div class="image">
+                                                    <img id="dropdownAvatarImg" src="images/icon/avatar-01.jpg" alt="Avatar" />
+                                                </div>
+                                                <div class="content">
+                                                    <h5 class="name" id="dropdownUserName"></h5>
+                                                    <span class="email" id="dropdownUserEmail"></span>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__body">
+                                                <div class="account-dropdown__item">
+                                                    <a href="#">
+                                                        <i class="zmdi zmdi-account"></i><span data-i18n="account"></span></a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="#">
+                                                        <i class="zmdi zmdi-settings"></i><span data-i18n="settings"></span></a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="#" id="languageSwitchBtn">
+                                                        <i class="zmdi zmdi-globe"></i><span data-i18n="language"></span></a>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__footer">
+                                                <a href="#" id="logoutBtn">
+                                                    <i class="zmdi zmdi-power"></i><span data-i18n="logout"></span></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -176,9 +177,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        <!-- HEADER DESKTOP-->
+            </header>
+            <!-- HEADER DESKTOP-->
 
             <!-- MAIN CONTENT-->
             <div class="main-content">
