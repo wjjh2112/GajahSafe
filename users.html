@@ -239,7 +239,81 @@
                                 </form>
                             </div>
                         </div>
-                        <!-- END USER POP UP -->
+                        <!-- END ADD USER POP UP -->
+
+                        <!-- DELETE USER POP UP -->
+                        <div id="deleteUserConfirmationModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeDeleteUserConfirmationModal">&times;</span>
+                                <h4><span data-i18n="deleteUserConfirmation"></span></h4><br>
+                                <form>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label class="form-label"><span data-i18n="userFullname"></span>: </label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <p> <strong id="confirmUserFullname"></strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label class="form-label"><span data-i18n="userEmail"></span>: </label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <p> <strong id="confirmUserEmail"></strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="au-card-footer form-footer">
+                                        <button id="confirmDeleteUserBtn" class="au-btn"><span data-i18n="delete"></span></button>
+                                        &nbsp;&nbsp;
+                                        <button id="cancelDeleteUserBtn" class="au-btn"><span data-i18n="cancel"></span></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END DELETE DEVICE POP UP -->
+
+                        <!-- EDIT DEVICE POP UP -->
+                        <div id="editUserModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeEditUserModal">&times;</span>
+                                <h3><span data-i18n="editUser"></span></h3><br>
+                                <!-- Device ID (display only) -->
+                                <h5 id="userID">(User ID)</h5>&nbsp;
+                                <form id="editUserForm">
+                                    <!-- User Fullname (editable) -->
+                                    <div class="row form-group">
+                                        <div class="col col-md-3">
+                                            <label for="user-fullname" class="form-label"><span data-i18n="userFullname"></span></label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="user-fullname" name="user-fullname" class="form-control">
+                                        </div>
+                                    </div>
+                                    <!-- User Type (editable) -->
+                                    <div class="form-group button-radio-group">
+                                        <label><span data-i18n="role"></span></label>
+                                        <div style="justify-content: end;">
+                                            <label for="adminRole" class="button-radio-label">
+                                                <input type="radio" name="role" id="adminRole" value="Admin" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="admin"></span>
+                                            </label>
+                                            <label for="viewerRole" class="button-radio-label">
+                                                <input type="radio" name="role" id="viewerRole" value="Viewer" class="form-radio-input">
+                                                <span class="button-radio-button" data-i18n="viewer"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!-- Submit Button -->
+                                    <div class="au-card-footer form-footer">
+                                        <button type="submit" class="au-btn">
+                                            <span data-i18n="update"></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END EDIT DEVICE POP UP -->
 
                         <div class="row" style="justify-content: end; margin: 10px;">
                             <button id="addUserBtn" class="au-btn au-btn-icon">

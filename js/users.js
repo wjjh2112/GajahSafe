@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const userTableBody = document.getElementById('userTableBody');
+    let currentEditUserId = null;
 
     // Fetch users from the server
     fetch('/users')
@@ -26,7 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </td>
                 <td><p>${user.usertype}</p></td>
-                <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                <td class="text-center">
+                    <span class="more">
+                        <i class="zmdi zmdi-edit editUserBtn" data-id="${user.user_id}"></i>
+                    </span>
+                    <span class="more">
+                        <i class="zmdi zmdi-delete deleteUserBtn" data-id="${user.user_id}"></i>
+                    </span>
+                </td>
             `;
 
             userTableBody.appendChild(row);
@@ -55,16 +63,143 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Modal functionality
-    const modal = document.getElementById('addUserModal');
-    const addUserBtn = document.getElementById('addUserBtn');
-    const closeBtn = document.getElementById('closeAddUserModal');
-    const generateLinkBtn = document.getElementById('generateLinkBtn');
-    const copyLinkBtn = document.getElementById('copyLinkBtn');
-    const generatedLinkArea = document.getElementById('generatedLinkArea');
-    const generatedLink = document.getElementById('generatedLink');
-    const expiryDaysInput = document.getElementById('expiryDays');
-    const roleRadios = document.getElementsByName('role');
+    // Edit user functionality
+    userTableBody.addEventListener('click', function(event) {
+        if (event.target.classList.contains('editUserBtn')) {
+            const userId = event.target.getAttribute('data-id');
+            currentEditUserId = userId;
+
+            // Fetch user details
+            fetch(`/users/${userId}`)
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('userID').textContent = `User ID: ${user.user_id}`;
+                    document.getElementById('user-fullname').value = user.fullname;
+
+                    if (user.usertype === 'Admin') {
+                        document.getElementById('adminRole').checked = true;
+                    } else if (user.usertype === 'Viewer') {
+                        document.getElementById('viewerRole').checked = true;
+                    }
+
+                    document.getElementById('editUserModal').style.display = 'block';
+                    document.body.style.overflow = 'hidden'; // Disable scrolling
+                })
+                .catch(error => console.error('Error fetching user details:', error));
+        }
+    });
+
+    // Handle edit user form submission
+    document.getElementById('editUserForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const fullname = document.getElementById('user-fullname').value;
+        const role = document.querySelector('input[name="role"]:checked').value;
+
+        fetch('/updateUser', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: currentEditUserId,
+                fullname,
+                role
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('User updated successfully');
+                // Reload the user table
+                fetch('/users')
+                    .then(response => response.json())
+                    .then(users => populateTable(users))
+                    .catch(error => console.error('Error fetching users:', error));
+                closeModalAndReset();
+            } else {
+                alert('Failed to update user');
+            }
+        })
+        .catch(error => console.error('Error updating user:', error));
+    });
+
+    // Delete user functionality
+    userTableBody.addEventListener('click', function(event) {
+        if (event.target.classList.contains('deleteUserBtn')) {
+            const userId = event.target.getAttribute('data-id');
+
+            // Fetch user details for confirmation
+            fetch(`/users/${userId}`)
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('confirmUserFullname').textContent = user.fullname;
+                    document.getElementById('confirmUserEmail').textContent = user.email;
+                    document.getElementById('deleteUserConfirmationModal').style.display = 'block';
+                    document.body.style.overflow = 'hidden'; // Disable scrolling
+
+                    // Set up confirm delete button
+                    document.getElementById('confirmDeleteUserBtn').onclick = function() {
+                        fetch('/deleteUser', {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: userId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('User deleted successfully');
+                                // Reload the user table
+                                fetch('/users')
+                                    .then(response => response.json())
+                                    .then(users => populateTable(users))
+                                    .catch(error => console.error('Error fetching users:', error));
+                                closeModalAndReset();
+                            } else {
+                                alert('Failed to delete user');
+                            }
+                        })
+                        .catch(error => console.error('Error deleting user:', error));
+                    };
+                })
+                .catch(error => console.error('Error fetching user details for deletion:', error));
+        }
+    });
+
+    function closeModalAndReset() {
+        editModal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Enable scrolling
+        // Reset form fields here
+        document.getElementById('user-fullname').value = '';
+        document.querySelector('input[name="role"]:checked').checked = false;
+        currentEditUserId = null;
+    }
+
+    // Close the modal on close button click
+    closeEditModalBtn.addEventListener('click', closeModalAndReset);
+
+    // Close the modal if user clicks outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target == editModal) {
+            closeModalAndReset();
+        }
+    });
+
+    // Close the delete confirmation modal
+    closeDeleteModalBtn.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Enable scrolling
+    });
+
+    // Close the delete confirmation modal if user clicks outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target == deleteModal) {
+            deleteModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Enable scrolling
+        }
+    });
 
     // Show the modal
     addUserBtn.addEventListener('click', function() {
