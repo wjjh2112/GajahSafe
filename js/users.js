@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         users.forEach(user => {
             const row = document.createElement('tr');
+            row.setAttribute('data-id', user.user_id);
 
             row.innerHTML = `
                 <td><p>${user.user_id}</p></td>
@@ -26,7 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </td>
                 <td><p>${user.usertype}</p></td>
-                <td class="text-center"><span class="more"><i class="zmdi zmdi-more"></i></span></td>
+                <td class="text-center">
+                    <span class="more">
+                        <i class="zmdi zmdi-edit editUserBtn"></i>
+                    </span>
+                    <span class="more">
+                        <i class="zmdi zmdi-delete deleteUserBtn"></i>
+                    </span>
+                </td>
             `;
 
             userTableBody.appendChild(row);
@@ -35,27 +43,142 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize filtering
         filterUsers($('#userRoleFilter').val());
 
-        // Handle change in user role filter
-        $('#userRoleFilter').change(function() {
-            var role = $(this).val();
-            filterUsers(role);
-        });
-
-        // Function to filter users based on role
-        function filterUsers(role) {
-            $('#userTableBody tr').each(function() {
-                var userRole = $(this).find('td:nth-child(3) p').text().trim().toLowerCase(); // Adjusted to match the correct column
-
-                if (role === 'all' || userRole === role.toLowerCase()) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
+        // Attach event listeners for edit and delete buttons
+        attachEventListeners();
     }
 
-    // Modal functionality
+    // Handle change in user role filter
+    $('#userRoleFilter').change(function() {
+        var role = $(this).val();
+        filterUsers(role);
+    });
+
+    // Function to filter users based on role
+    function filterUsers(role) {
+        $('#userTableBody tr').each(function() {
+            var userRole = $(this).find('td:nth-child(3) p').text().trim().toLowerCase();
+
+            if (role === 'all' || userRole === role.toLowerCase()) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    // Function to attach event listeners for edit and delete buttons
+    function attachEventListeners() {
+        // Edit user button click event
+        document.querySelectorAll('.editUserBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = btn.closest('tr');
+                const userId = row.getAttribute('data-id');
+                const userFullname = row.querySelector('td:nth-child(2) h4').textContent;
+                const userEmail = row.querySelector('td:nth-child(2) span a').textContent;
+                const userType = row.querySelector('td:nth-child(3) p').textContent;
+
+                // Populate edit modal
+                document.getElementById('userID').textContent = userId;
+                document.getElementById('user-fullname').value = userFullname;
+                document.getElementById(userType.toLowerCase() + 'Role').checked = true;
+
+                // Show edit modal
+                document.getElementById('editUserModal').style.display = 'block';
+            });
+        });
+
+        // Delete user button click event
+        document.querySelectorAll('.deleteUserBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = btn.closest('tr');
+                const userId = row.getAttribute('data-id');
+                const userFullname = row.querySelector('td:nth-child(2) h4').textContent;
+                const userEmail = row.querySelector('td:nth-child(2) span a').textContent;
+
+                // Populate delete confirmation modal
+                document.getElementById('confirmUserFullname').textContent = userFullname;
+                document.getElementById('confirmUserEmail').textContent = userEmail;
+
+                // Show delete confirmation modal
+                document.getElementById('deleteUserConfirmationModal').style.display = 'block';
+
+                // Set up confirm delete button
+                document.getElementById('confirmDeleteUserBtn').onclick = function() {
+                    deleteUser(userId);
+                };
+            });
+        });
+    }
+
+    // Function to delete user
+    function deleteUser(userId) {
+        fetch('/deleteUser', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector(`tr[data-id="${userId}"]`).remove();
+                document.getElementById('deleteUserConfirmationModal').style.display = 'none';
+            } else {
+                alert('Failed to delete user');
+            }
+        })
+        .catch(error => console.error('Error deleting user:', error));
+    }
+
+    // Edit user form submission
+    document.getElementById('editUserForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const userId = document.getElementById('userID').textContent;
+        const fullname = document.getElementById('user-fullname').value;
+        const role = document.querySelector('input[name="role"]:checked').value;
+
+        fetch('/updateUser', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: userId,
+                fullname: fullname,
+                usertype: role
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('editUserModal').style.display = 'none';
+                // Refresh the user list
+                fetch('/users')
+                    .then(response => response.json())
+                    .then(users => populateTable(users))
+                    .catch(error => console.error('Error fetching updated users:', error));
+            } else {
+                alert('Failed to update user');
+            }
+        })
+        .catch(error => console.error('Error updating user:', error));
+    });
+
+    // Close modals when clicking outside or on close button
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    };
+
+    document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.onclick = function() {
+            this.closest('.modal').style.display = 'none';
+        };
+    });
+
+    // Existing code for add user modal and link generation
     const modal = document.getElementById('addUserModal');
     const addUserBtn = document.getElementById('addUserBtn');
     const closeBtn = document.getElementById('closeAddUserModal');
