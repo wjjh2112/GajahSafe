@@ -210,12 +210,12 @@
                         <div id="deleteConfirmationModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" id="closeDeleteConfirmationModal">&times;</span>
-                                <h4>Confirm to delete the following device?</h4>
-                                <p>Device Name:<strong id="confirmDeviceName"></strong></p>
-                                <p>Device ID: <strong id="confirmDeviceId"></strong></p>
-                                <div class="row">
-                                    <button id="confirmDeleteBtn" class="au-btn">Delete</button>
-                                    <button id="cancelDeleteBtn" class="au-btn">Cancel</button>
+                                <h4><span data-i18n="deleteConfirmation"></span></h4>
+                                <p><span data-i18n="deviceName"></span>:<strong id="confirmDeviceName"></strong></p>
+                                <p><span data-i18n="deviceID"></span>: <strong id="confirmDeviceId"></strong></p>
+                                <div class="au-card-footer form-footer">
+                                    <button id="confirmDeleteBtn" class="au-btn"><span data-i18n="delete"></span></button>
+                                    <button id="cancelDeleteBtn" class="au-btn"><span data-i18n="cancel"></span></button>
                                 </div>
                             </div>
                         </div>
