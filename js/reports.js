@@ -1,3 +1,7 @@
+document.getElementById('addReportBtn').addEventListener('click', function() {
+    window.location.href = '/Add-New-Report';
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
     const monthlyChartCtx = document.getElementById('monthly-chart').getContext('2d');

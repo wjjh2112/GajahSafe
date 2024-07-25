@@ -1,5 +1,5 @@
 document.getElementById('addDeviceBtn').addEventListener('click', function() {
-    window.location.href = 'addDevice.html';
+    window.location.href = '/Add-New-Device';
 });
 
 document.addEventListener('DOMContentLoaded', () => {
