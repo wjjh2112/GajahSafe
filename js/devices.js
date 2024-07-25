@@ -110,9 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Delete button clicked');
                 const deviceRow = btn.closest('tr');
                 const deviceId = deviceRow.getAttribute('data-id');
+                const deviceName = deviceRow.querySelector('td:nth-child(2) h4').textContent;
                 const deviceType = deviceRow.closest('tbody').id === 'electricFenceTableBody' ? 'Electric Fence' : 'Camera';
 
-                if (confirm(`Confirm to delete ${deviceId}`)) {
+                // Show custom confirmation modal
+                document.getElementById('confirmDeviceName').textContent = deviceName;
+                document.getElementById('confirmDeviceId').textContent = deviceId;
+                const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
+                deleteConfirmationModal.style.display = 'block';
+
+                // Confirm deletion
+                document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
                     fetch(`/deleteDevice`, {
                         method: 'DELETE',
                         headers: {
@@ -126,9 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             alert('Failed to delete device');
                         }
+                        deleteConfirmationModal.style.display = 'none';
                     })
-                    .catch(error => console.error('Error deleting device:', error));
-                }
+                    .catch(error => {
+                        console.error('Error deleting device:', error);
+                        deleteConfirmationModal.style.display = 'none';
+                    });
+                });
+
+                // Cancel deletion
+                document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
+                    deleteConfirmationModal.style.display = 'none';
+                });
+
+                // Close the modal
+                document.getElementById('closeDeleteConfirmationModal').addEventListener('click', function() {
+                    deleteConfirmationModal.style.display = 'none';
+                });
             });
         });
     }

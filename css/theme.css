@@ -1092,6 +1092,19 @@ input[type="file"] {
     text-decoration: none;
 }
 
+#confirmDeleteBtn, #cancelDeleteBtn {
+    margin: 10px;
+    padding: 10px;
+}
+#confirmDeleteBtn {
+    background-color: red;
+    color: white;
+}
+#cancelDeleteBtn {
+    background-color: gray;
+    color: white;
+}
+
 .input-group {
     position: relative;
     display: flex;
