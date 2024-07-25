@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><p>${fence.efStat}</p></td>
                     <td class="text-center">
                         <span class="more">
-                            <i class="zmdi zmdi-edit editBtn"></i>
+                            <i class="zmdi zmdi-edit editDevBtn"></i>
                         </span>
                         <span class="more">
-                            <i class="zmdi zmdi-delete deleteBtn"></i>
+                            <i class="zmdi zmdi-delete deleteDevBtn"></i>
                         </span>
                     </td>
                 `;
@@ -59,10 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><p>${camera.camStat}</p></td>
                     <td class="text-center">
                         <span class="more">
-                            <i class="zmdi zmdi-edit editBtn"></i>
+                            <i class="zmdi zmdi-edit editDevBtn"></i>
                         </span>
                         <span class="more">
-                            <i class="zmdi zmdi-delete deleteBtn"></i>
+                            <i class="zmdi zmdi-delete deleteDevBtn"></i>
                         </span>
                     </td>
                 `;
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function attachEventListeners() {
         console.log('Attaching event listeners');
         // Add click event listeners to all edit buttons
-        document.querySelectorAll('.editBtn').forEach(btn => {
+        document.querySelectorAll('.editDevBtn').forEach(btn => {
             btn.addEventListener('click', function() {
                 console.log('Edit button clicked');
                 const row = btn.closest('tr');
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Add click event listeners to all delete buttons
-        document.querySelectorAll('.deleteBtn').forEach(btn => {
+        document.querySelectorAll('.deleteDevBtn').forEach(btn => {
             btn.addEventListener('click', function() {
                 console.log('Delete button clicked');
                 const deviceRow = btn.closest('tr');
@@ -116,11 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Show custom confirmation modal
                 document.getElementById('confirmDeviceName').textContent = deviceName;
                 document.getElementById('confirmDeviceId').textContent = deviceId;
-                const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
-                deleteConfirmationModal.style.display = 'block';
+                const deleteDevConfirmationModal = document.getElementById('deleteDevConfirmationModal');
+                deleteDevConfirmationModal.style.display = 'block';
 
                 // Confirm deletion
-                document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                document.getElementById('confirmDeleteDevBtn').addEventListener('click', function() {
                     fetch(`/deleteDevice`, {
                         method: 'DELETE',
                         headers: {
@@ -134,22 +134,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             alert('Failed to delete device');
                         }
-                        deleteConfirmationModal.style.display = 'none';
+                        deleteDevConfirmationModal.style.display = 'none';
                     })
                     .catch(error => {
                         console.error('Error deleting device:', error);
-                        deleteConfirmationModal.style.display = 'none';
+                        deleteDevConfirmationModal.style.display = 'none';
                     });
                 });
 
                 // Cancel deletion
-                document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
-                    deleteConfirmationModal.style.display = 'none';
+                document.getElementById('cancelDeleteDevBtn').addEventListener('click', function() {
+                    deleteDevConfirmationModal.style.display = 'none';
                 });
 
                 // Close the modal
-                document.getElementById('closeDeleteConfirmationModal').addEventListener('click', function() {
-                    deleteConfirmationModal.style.display = 'none';
+                document.getElementById('closeDeleteDevConfirmationModal').addEventListener('click', function() {
+                    deleteDevConfirmationModal.style.display = 'none';
                 });
             });
         });
