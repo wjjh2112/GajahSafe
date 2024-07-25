@@ -32,19 +32,38 @@ function myMapDevicesIndex() {
     function addMarker(markerProps) {
         var marker = new google.maps.Marker({
             position: markerProps.position,
-            icon: markerProps.icon,
+            icon: {
+                ...markerProps.icon,
+                scaledSize: iconSize,
+                opacity: markerProps.status === 'inactive' ? 0.5 : 1.0
+            },
             map: map
         });
 
         google.maps.event.addListener(marker, 'click', function () {
             var contentString = '<div>' +
+                '<p><strong>Name:</strong> ' + markerProps.name + '</p>' +
                 '<p><strong>ID:</strong> ' + markerProps.id + '</p>' +
-                '<p><strong>Latitude:</strong> ' + markerProps.position.lat() + '</p>' +
-                '<p><strong>Longitude:</strong> ' + markerProps.position.lng() + '</p>' +
+                '<p><strong>Location:</strong> (' + markerProps.position.lat() + ', ' + markerProps.position.lng() + ')</p>' +
+                '<p><strong>Status:</strong> ' + markerProps.status + '</p>' +
                 '</div>';
 
             infoWindow.setContent(contentString);
             infoWindow.open(map, marker);
+        });
+
+        google.maps.event.addListener(marker, 'mouseover', function () {
+            var hoverWindow = new google.maps.InfoWindow({
+                content: markerProps.id
+            });
+            hoverWindow.open(map, marker);
+            marker.hoverWindow = hoverWindow;
+        });
+
+        google.maps.event.addListener(marker, 'mouseout', function () {
+            if (marker.hoverWindow) {
+                marker.hoverWindow.close();
+            }
         });
     }
 
@@ -53,9 +72,11 @@ function myMapDevicesIndex() {
             const cameras = await fetchDeviceData('/cameras');
             cameras.forEach(camera => {
                 addMarker({
+                    name: camera.cam_name,
                     id: camera.cam_id,
                     position: new google.maps.LatLng(camera.camLat, camera.camLong),
-                    icon: cameraIcon
+                    icon: cameraIcon,
+                    status: camera.cam_status
                 });
             });
 
@@ -64,9 +85,11 @@ function myMapDevicesIndex() {
 
             electricFences.forEach(fence => {
                 addMarker({
+                    name: fence.ef_name,
                     id: fence.ef_id,
                     position: new google.maps.LatLng(fence.efLat, fence.efLong),
-                    icon: electFenceIcon
+                    icon: electFenceIcon,
+                    status: fence.ef_status
                 });
                 fenceCoordinates.push({ lat: fence.efLat, lng: fence.efLong });
             });
