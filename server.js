@@ -365,8 +365,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
+
+      // Generate a unique report ID
+      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
       const report = new Report({
-          reportID: req.body.reportID, // Generate or assign as needed
+        reportID: reportID, // Generate or assign as needed
           reportLocation: req.body.reportLocation,
           reportDamages: {
               fence: {
@@ -377,11 +380,26 @@ app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
                   damaged: req.body.vehicleDamaged === 'on',
                   value: Number(req.body.vehicleValue) || 0
               },
-              // Add other damages similarly
+              assets: {
+                damaged: req.body.assetsDamaged === 'on',
+                value: Number(req.body.assetsValue) || 0
+              },
+              paddock: {
+                  damaged: req.body.paddockDamaged === 'on',
+                  value: Number(req.body.paddockValue) || 0
+              },
+              pipe: {
+                damaged: req.body.pipeDamaged === 'on',
+                value: Number(req.body.pipeValue) || 0
+              },
+              casualties: {
+                  damaged: req.body.casualtiesDamaged === 'on',
+                  value: Number(req.body.casualtiesValue) || 0
+              },
               other: {
-                  damaged: req.body.otherCheck === 'on',
+                  damaged: req.body.otherDamaged === 'on',
                   damagedName: req.body.otherName || '',
-                  value: Number(req.body.otherDamage) || 0
+                  value: Number(req.body.otherValue) || 0
               }
           },
           reportEFDamage: req.body.reportEFDamage,
