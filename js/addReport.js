@@ -108,7 +108,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const reportData = {};
       
       for (let [key, value] of formData.entries()) {
-        reportData[key] = value;
+        if (key.endsWith('Check')) {
+          // For checkboxes, we send whether they're checked or not
+          reportData[key] = form.elements[key].checked.toString();
+        } else {
+          reportData[key] = value;
+        }
       }
       
       // Handle file uploads

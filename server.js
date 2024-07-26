@@ -321,43 +321,43 @@ app.post('/addReport', (req, res) => {
   
   const newReport = {
     reportID: reportID,
-    reportLocation: reportData.location,
+    reportLocation: reportData.location || '',
     reportDamages: {
       fence: {
-        damaged: reportData.fenceCheck === 'on',
+        damaged: reportData.fenceCheck === 'true',
         value: parseInt(reportData.fenceDamage) || 0
       },
       vehicle: {
-        damaged: reportData.vehicleCheck === 'on',
+        damaged: reportData.vehicleCheck === 'true',
         value: parseInt(reportData.vehicleDamage) || 0
       },
       assets: {
-        damaged: reportData.assetsCheck === 'on',
+        damaged: reportData.assetsCheck === 'true',
         value: parseInt(reportData.assetsDamage) || 0
       },
       paddock: {
-        damaged: reportData.paddockCheck === 'on',
+        damaged: reportData.paddockCheck === 'true',
         value: parseInt(reportData.paddockDamage) || 0
       },
       pipe: {
-        damaged: reportData.pipeCheck === 'on',
+        damaged: reportData.pipeCheck === 'true',
         value: parseInt(reportData.pipeDamage) || 0
       },
       casualties: {
-        damaged: reportData.casualtiesCheck === 'on',
+        damaged: reportData.casualtiesCheck === 'true',
         value: parseInt(reportData.casualtiesDamage) || 0
       },
       other: {
-        damaged: reportData.otherCheck === 'on',
+        damaged: reportData.otherCheck === 'true',
         damagedName: reportData.otherName || "",
         value: parseInt(reportData.otherDamage) || 0
       }
     },
-    reportEFDamage: reportData.EFdamage,
-    reportCAMDamage: reportData.AIdamage,
+    reportEFDamage: reportData.EFdamage || 'undamaged',
+    reportCAMDamage: reportData.AIdamage || 'undamaged',
     reportDateTime: new Date(reportData['datetime-input']),
     reportImages: reportData.images || [],
-    reportingOfficer: reportData.reportingOfficer
+    reportingOfficer: reportData.reportingOfficer || ''
   };
 
   mongoose.connection.db.collection('reports').insertOne(newReport, (err, result) => {
