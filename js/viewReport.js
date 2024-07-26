@@ -65,3 +65,12 @@ function displayImages(images) {
         fileList.appendChild(li);
     });
 }
+
+
+//     const fileList = document.getElementById('file-list');
+//     report.reportImages.forEach(image => {
+//         const li = document.createElement('li');
+//         li.textContent = image;
+//         fileList.appendChild(li);
+//     });
+// }
