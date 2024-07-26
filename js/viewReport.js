@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const params = new URLSearchParams(window.location.search);
-    const reportId = params.get('id');
+    const reportId = params.get('reportID');
 
     if (reportId) {
         fetch(`/reports/${reportId}`)
