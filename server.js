@@ -298,7 +298,7 @@ app.get('/reports', (req, res) => {
 });
 
 // Route to fetch a specific report by its ID
-app.get('/report/:id', (req, res) => {
+app.get('/reports/:id', (req, res) => {
   const reportId = req.params.id;
 
   mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
