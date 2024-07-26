@@ -205,14 +205,14 @@
                                         <h3 class="title-2"><span data-i18n="addNewReport"></span></h3><br>
                                     </div>
                                     <div class="card-body card-block">
-                                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                        <form id="addReportForm" action="/submit-report" method="post" enctype="multipart/form-data" class="form-horizontal">
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label for="location" class="form-label"><span data-i18n="location"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <select name="location" class="js-select2" id="location">
-                                                        <option selected="selected">Select Location</option>
+                                                    <select name="reportLocation" class="js-select2" id="location" required>
+                                                        <option value="" disabled selected>Select Location</option>
                                                         <option value="Dk Ternak">Dk Ternak</option>
                                                         <option value="Johor">Johor</option>
                                                         <option value="Pahang">Pahang</option>
@@ -227,60 +227,60 @@
                                                 <div class="col col-md-9">
                                                         <div class="checkbox">
                                                             <label for="fenceCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="fenceCheck" name="fenceCheck" class="form-check-input">
+                                                                <input type="checkbox" id="fenceCheck" name="fenceDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="fence"></span>
                                                             </label>
-                                                            <input type="text" id="fenceDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="number" id="fenceDamage" name="fenceValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                         <div class="checkbox">
                                                             <label for="vehicleCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="vehicleCheck" name="vehicleCheck" class="form-check-input">
+                                                                <input type="checkbox" id="vehicleCheck" name="vehicleDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="vehicle"></span>
                                                             </label>
-                                                            <input type="text" id="vehicleDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="number" id="vehicleDamage" name="vehicleValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                         <div class="checkbox">
                                                             <label for="assetsCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="assetsCheck" name="assetsCheck" class="form-check-input">
+                                                                <input type="checkbox" id="assetsCheck" name="assetsDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="assets"></span>
                                                             </label>
-                                                            <input type="text" id="assetsDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="number" id="assetsDamage" name="assetsValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                         <div class="checkbox">
                                                             <label for="paddockCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="paddockCheck" name="paddockCheck" class="form-check-input">
+                                                                <input type="checkbox" id="paddockCheck" name="paddockDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="paddock"></span>
                                                             </label>
-                                                            <input type="text" id="paddockDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="number" id="paddockDamage" name="paddockValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                         <div class="checkbox">
                                                             <label for="pipeCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="pipeCheck" name="pipeCheck" class="form-check-input">
+                                                                <input type="checkbox" id="pipeCheck" name="pipeDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="pipe"></span>
                                                             </label>
-                                                            <input type="text" id="pipeDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="number" id="pipeDamage" name="pipeValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                         <div class="checkbox">
                                                             <label for="casualtiesCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="casualtiesCheck" name="casualtiesCheck" class="form-check-input">
+                                                                <input type="checkbox" id="casualtiesCheck" name="casualtiesDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="casualties"></span>
                                                             </label>
-                                                            <input type="text" id="casualtiesDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="number" id="casualtiesDamage" name="casualtiesValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                         <div class="checkbox">
                                                             <label for="otherCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="otherCheck" name="otherCheck" class="form-check-input">
+                                                                <input type="checkbox" id="otherCheck" name="otherDamaged" class="form-check-input">
                                                                 <span class="custom-checkbox"></span>
                                                                 <span data-i18n="other"></span>
                                                             </label>
-                                                            <input type="text" id="otherName" class="damage-input" placeholder="Enter name" style="display: none;">
-                                                            <input type="text" id="otherDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
+                                                            <input type="text" id="otherName" name="otherName" class="damage-input" placeholder="Enter name" style="display: none;">
+                                                            <input type="number" id="otherDamage" name="otherValue" class="damage-input" placeholder="Enter damage value" style="display: none;">
                                                         </div>
                                                 </div>
                                             </div>
@@ -292,11 +292,11 @@
                                                 <div class="col col-md-2">
                                                     <div class="button-radio-group">
                                                         <label for="EFUndamaged" class="button-radio-label">
-                                                            <input type="radio" id="EFUndamaged" name="EFdamage" value="undamaged" class="form-radio-input">
+                                                            <input type="radio" id="EFUndamaged" name="reportEFDamage" value="undamaged" class="form-radio-input">
                                                             <span class="button-radio-button" data-i18n="undamaged"></span>
                                                         </label>
                                                         <label for="EFDamaged" class="button-radio-label">
-                                                            <input type="radio" id="EFDamaged" name="EFdamage" value="damaged" class="form-radio-input">
+                                                            <input type="radio" id="EFDamaged" name="reportEFDamage" value="damaged" class="form-radio-input">
                                                             <span class="button-radio-button" data-i18n="damaged"></span>
                                                         </label>
                                                     </div>
@@ -309,12 +309,12 @@
                                                 </div>
                                                 <div class="col col-md-2">
                                                     <div class="button-radio-group">
-                                                        <label for="AIUndamaged" class="button-radio-label">
-                                                            <input type="radio" id="AIUndamaged" name="AIdamage" value="undamaged" class="form-radio-input">
+                                                        <label for="CAMUndamaged" class="button-radio-label">
+                                                            <input type="radio" id="CAMUndamaged" name="reportCAMDamage" value="undamaged" class="form-radio-input">
                                                             <span class="button-radio-button" data-i18n="undamaged"></span>
                                                         </label>
-                                                        <label for="AIDamaged" class="button-radio-label">
-                                                            <input type="radio" id="AIDamaged" name="AIdamage" value="damaged" class="form-radio-input">
+                                                        <label for="CAMDamaged" class="button-radio-label">
+                                                            <input type="radio" id="CAMDamaged" name="reportCAMDamage" value="damaged" class="form-radio-input">
                                                             <span class="button-radio-button" data-i18n="damaged"></span>
                                                         </label>
                                                     </div>
@@ -326,7 +326,7 @@
                                                     <label for="datetime-input" class="form-label"><span data-i18n="datetime"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <input class="form-text" type="text" id="datetime-input" name="datetime-input" placeholder="" readonly>
+                                                    <input class="form-text" type="datetime-local" id="datetime-input" name="reportDateTime" required>
                                                 </div>
                                             </div>
                                             
@@ -343,17 +343,17 @@
                                                                 </label>
                                                             </li>
                                                         </ul>
-                                                        <input type="file" id="file-upload" multiple>
+                                                        <input type="file" id="file-upload" name="reportImages[]" multiple>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
-                                                    <label for="text-input" class=" form-label"><span data-i18n="reportingOfficer"></span></label>
+                                                    <label for="reportingOfficer" class="form-label"><span data-i18n="reportingOfficer"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <input class="form-text" type="text" id="reportingOfficer" name="text-input">
+                                                    <input class="form-text" type="text" id="reportingOfficer" name="reportingOfficer" required>
                                                 </div>
                                             </div>
                                             <div class="au-card-footer form-footer">

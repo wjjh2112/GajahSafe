@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -310,6 +311,92 @@ app.get('/reports/:id', (req, res) => {
       }
       res.json(report);
   });
+});
+
+// Define the schema and model
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+      fence: {
+          damaged: Boolean,
+          value: Number
+      },
+      vehicle: {
+          damaged: Boolean,
+          value: Number
+      },
+      assets: {
+          damaged: Boolean,
+          value: Number
+      },
+      paddock: {
+          damaged: Boolean,
+          value: Number
+      },
+      pipe: {
+          damaged: Boolean,
+          value: Number
+      },
+      casualties: {
+          damaged: Boolean,
+          value: Number
+      },
+      other: {
+          damaged: Boolean,
+          damagedName: String,
+          value: Number
+      }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
+});
+
+const Report = mongoose.model('Report', reportSchema);
+
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
+  try {
+      const report = new Report({
+          reportID: req.body.reportID, // Generate or assign as needed
+          reportLocation: req.body.reportLocation,
+          reportDamages: {
+              fence: {
+                  damaged: req.body.fenceDamaged === 'on',
+                  value: Number(req.body.fenceValue) || 0
+              },
+              vehicle: {
+                  damaged: req.body.vehicleDamaged === 'on',
+                  value: Number(req.body.vehicleValue) || 0
+              },
+              // Add other damages similarly
+              other: {
+                  damaged: req.body.otherCheck === 'on',
+                  damagedName: req.body.otherName || '',
+                  value: Number(req.body.otherDamage) || 0
+              }
+          },
+          reportEFDamage: req.body.reportEFDamage,
+          reportCAMDamage: req.body.reportCAMDamage,
+          reportDateTime: new Date(req.body.reportDateTime),
+          reportImages: req.files.map(file => file.filename),
+          reportingOfficer: req.body.reportingOfficer
+      });
+
+      await report.save();
+      res.json({ success: true });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error saving report' });
+  }
 });
 
 // Start the server

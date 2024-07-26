@@ -97,3 +97,29 @@ function updateFileInput() {
     fileArray.forEach(file => dt.items.add(file));
     document.getElementById('file-upload').files = dt.files;
 }
+
+document.getElementById('addReportForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    // Handle form data submission
+    fetch('/submit-report', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Report submitted successfully!');
+            // Optionally, reset the form or redirect
+            this.reset();
+        } else {
+            alert('Error submitting report');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting report');
+    });
+});
