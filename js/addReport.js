@@ -99,27 +99,67 @@ function updateFileInput() {
 }
 
 document.getElementById('addReportForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    let isValid = true;
+    let errorMessage = "";
 
-    const formData = new FormData(this);
-
-    // Handle form data submission
-    fetch('/submit-report', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Report submitted successfully!');
-            // Optionally, reset the form or redirect
-            this.reset();
-        } else {
-            alert('Error submitting report');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            const relatedInputs = checkbox.getAttribute('data-related-inputs');
+            if (relatedInputs) {
+                relatedInputs.split(',').forEach(inputId => {
+                    const relatedInput = document.getElementById(inputId.trim());
+                    if (!relatedInput.value) {
+                        isValid = false;
+                        errorMessage += `Please enter a value for ${inputId}.\n`;
+                        relatedInput.focus();
+                    }
+                });
+            }
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error submitting report');
+    });
+
+    if (!isValid) {
+        event.preventDefault();
+        alert(errorMessage);
+    } else {
+        const formData = new FormData(this);
+
+        fetch('/submit-report', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Report submitted successfully!');
+                this.reset();
+            } else {
+                alert('Error submitting report');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error submitting report');
+        });
+    }
+});
+
+// Show/Hide related input based on checkbox state
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const relatedInputs = this.getAttribute('data-related-inputs');
+        if (relatedInputs) {
+            relatedInputs.split(',').forEach(inputId => {
+                const relatedInput = document.getElementById(inputId.trim());
+                if (this.checked) {
+                    relatedInput.style.display = 'block';
+                } else {
+                    relatedInput.style.display = 'none';
+                    relatedInput.value = ''; // Clear the input value
+                }
+            });
+        }
     });
 });
+
