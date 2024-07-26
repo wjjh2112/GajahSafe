@@ -46,7 +46,7 @@ const fileArray = [];
         function updateFileList() {
             const fileListUl = document.getElementById('file-list');
             fileListUl.innerHTML = '';
-
+        
             if (fileArray.length === 0) {
                 const placeholderLi = document.createElement('li');
                 placeholderLi.id = 'placeholder-li';
@@ -59,25 +59,32 @@ const fileArray = [];
             } else {
                 fileArray.forEach((file, index) => {
                     const li = document.createElement('li');
-
+        
                     const img = document.createElement('img');
                     img.src = URL.createObjectURL(file);
                     img.onload = function() {
                         URL.revokeObjectURL(this.src);
                     };
-
+        
+                    // Create a link element
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(file);
+                    link.target = '_blank'; // This makes the link open in a new tab
+                    link.appendChild(img);
+        
                     const removeButton = document.createElement('button');
                     removeButton.textContent = 'X';
-                    removeButton.addEventListener('click', function() {
+                    removeButton.addEventListener('click', function(e) {
+                        e.preventDefault(); // Prevent the link from opening
                         fileArray.splice(index, 1);
                         updateFileList();
                     });
-
-                    li.appendChild(img);
+        
+                    li.appendChild(link);
                     li.appendChild(removeButton);
                     fileListUl.appendChild(li);
                 });
-
+        
                 // Append the Add Images button at the end
                 const addButtonLi = document.createElement('li');
                 addButtonLi.id = 'add-button-li';
@@ -88,9 +95,9 @@ const fileArray = [];
                 addButtonLi.appendChild(addButton);
                 fileListUl.appendChild(addButtonLi);
             }
-
-    updateFileInput();
-}
+        
+            updateFileInput();
+        }
 
 function updateFileInput() {
     const dt = new DataTransfer();
