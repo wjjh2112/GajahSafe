@@ -312,6 +312,70 @@ app.get('/reports/:id', (req, res) => {
   });
 });
 
+// Multer configuration for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
+
+// Schema for Report
+const reportSchema = new mongoose.Schema({
+  location: String,
+  damages: {
+    fence: String,
+    vehicle: String,
+    assets: String,
+    paddock: String,
+    pipe: String,
+    casualties: String,
+    other: {
+      name: String,
+      damage: String
+    }
+  },
+  EFdamage: String,
+  AIdamage: String,
+  datetime: String,
+  images: [String],
+  reportingOfficer: String
+});
+
+const Report = mongoose.model('Report', reportSchema);
+
+// Endpoint to handle report submission
+app.post('/submitReport', upload.array('images'), (req, res) => {
+  const { location, EFdamage, AIdamage, datetime, reportingOfficer } = req.body;
+  const damages = {
+    fence: req.body.fenceCheck ? req.body.fenceDamage : null,
+    vehicle: req.body.vehicleCheck ? req.body.vehicleDamage : null,
+    assets: req.body.assetsCheck ? req.body.assetsDamage : null,
+    paddock: req.body.paddockCheck ? req.body.paddockDamage : null,
+    pipe: req.body.pipeCheck ? req.body.pipeDamage : null,
+    casualties: req.body.casualtiesCheck ? req.body.casualtiesDamage : null,
+    other: req.body.otherCheck ? { name: req.body.otherName, damage: req.body.otherDamage } : null
+  };
+  const images = req.files.map(file => file.path);
+
+  const newReport = new Report({
+    location,
+    damages,
+    EFdamage,
+    AIdamage,
+    datetime,
+    images,
+    reportingOfficer
+  });
+
+  newReport.save()
+    .then(() => res.json({ success: true }))
+    .catch(err => res.json({ success: false, message: err.message }));
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
