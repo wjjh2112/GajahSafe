@@ -46,14 +46,16 @@ function displayDamages(damages) {
 }
 
 function displayRadioButtons(prefix, value) {
-    const undamagedRadio = document.getElementById(`${prefix}Undamaged`);
-    const damagedRadio = document.getElementById(`${prefix}Damaged`);
-    
-    if (value === 'undamaged') {
-        undamagedRadio.checked = true;
-    } else {
-        damagedRadio.checked = true;
-    }
+    const radioButtons = document.querySelectorAll(`input[name="${prefix}damage"]`);
+    radioButtons.forEach(radio => {
+        const label = radio.closest('label');
+        if (radio.value === value) {
+            radio.checked = true;
+            label.style.display = 'block';
+        } else {
+            label.style.display = 'none';
+        }
+    });
 }
 
 function displayImages(images) {
@@ -65,12 +67,3 @@ function displayImages(images) {
         fileList.appendChild(li);
     });
 }
-
-
-//     const fileList = document.getElementById('file-list');
-//     report.reportImages.forEach(image => {
-//         const li = document.createElement('li');
-//         li.textContent = image;
-//         fileList.appendChild(li);
-//     });
-// }
