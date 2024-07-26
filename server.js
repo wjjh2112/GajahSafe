@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const upload = multer({ dest: 'uploads/' });
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
@@ -16,6 +19,28 @@ mongoose.connect('mongodb://admin:!NanaWaji060524!@13.229.129.54:27017/dummydb',
 }).catch(err => {
   console.error('Failed to connect to MongoDB', err);
 });
+
+// Define a schema for reports
+const reportSchema = {
+  location: String,
+  damages: {
+    fence: String,
+    vehicle: String,
+    assets: String,
+    paddock: String,
+    pipe: String,
+    casualties: String,
+    other: {
+      name: String,
+      damage: String
+    }
+  },
+  electricFence: String,
+  camera: String,
+  datetime: Date,
+  files: [String], // Array of file paths
+  reportingOfficer: String
+};
 
 // Middleware
 app.use(express.json());
@@ -309,6 +334,55 @@ app.get('/reports/:id', (req, res) => {
           return res.status(404).json({ error: 'Report not found' });
       }
       res.json(report);
+  });
+});
+
+// Endpoint to add a new report
+app.post('/addReport', upload.array('files', 12), (req, res) => {
+  const {
+    location,
+    fenceCheck,
+    vehicleCheck,
+    assetsCheck,
+    paddockCheck,
+    pipeCheck,
+    casualtiesCheck,
+    otherCheck,
+    EFdamage,
+    AIdamage,
+    datetimeInput,
+    reportingOfficer
+  } = req.body;
+
+  const damages = {
+    fence: fenceCheck ? req.body.fenceDamage : null,
+    vehicle: vehicleCheck ? req.body.vehicleDamage : null,
+    assets: assetsCheck ? req.body.assetsDamage : null,
+    paddock: paddockCheck ? req.body.paddockDamage : null,
+    pipe: pipeCheck ? req.body.pipeDamage : null,
+    casualties: casualtiesCheck ? req.body.casualtiesDamage : null,
+    other: {
+      name: otherCheck ? req.body.otherName : null,
+      damage: otherCheck ? req.body.otherDamage : null
+    }
+  };
+
+  const report = {
+    location,
+    damages,
+    electricFence: EFdamage,
+    camera: AIdamage,
+    datetime: new Date(datetimeInput),
+    files: req.files ? req.files.map(file => file.path) : [],
+    reportingOfficer
+  };
+
+  mongoose.connection.db.collection('reports').insertOne(report, (err, result) => {
+    if (err) {
+      res.status(500).json({ success: false, message: 'Error saving report.' });
+    } else {
+      res.json({ success: true, message: 'Report added successfully.' });
+    }
   });
 });
 
