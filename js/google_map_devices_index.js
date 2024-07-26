@@ -34,15 +34,34 @@ function myMapDevicesIndex() {
             position: markerProps.position,
             icon: markerProps.icon,
             map: map,
-            opacity: markerProps.status === 'Active' ? 1 : 0.5
+            opacity: markerProps.status === 'Active' ? 0.95 : 0.7
         });
 
         google.maps.event.addListener(marker, 'click', function () {
-            var contentString = '<div class="info-content">' +
-                '<p><strong>ID:</strong> ' + markerProps.id + '</p>' +
-                '<p><strong>Name:</strong> ' + markerProps.name + '</p>' +
-                '<p><strong>Location:</strong> ' + markerProps.position.lat() + ', ' + markerProps.position.lng() + '</p>' +
-                '<p><strong>Status:</strong> ' + markerProps.status + '</p>' +
+            var contentString = 
+                '<div class="row">' +
+                    '<div class="col">' + 
+                        '<div class="au-card">' +
+                            '<p><strong>ID:</strong> ' + markerProps.id + '</p>' +
+                        '</div>' +
+                    '</div>'
+                    '<div class="col">' + 
+                        '<div class="au-card">' +
+                            '<p><strong>Name:</strong> ' + markerProps.name + '</p>' +
+                        '</div>' +
+                    '</div>'
+                '</div>' +
+                '<div class="row">' +
+                    '<div class="col">' + 
+                        '<div class="au-card">' +
+                            '<p><strong>' + markerProps.position.lat() + ', ' + markerProps.position.lng() + '</strong></p>' +
+                        '</div>' +
+                    '</div>'
+                    '<div class="col">' + 
+                        '<div class="au-card">' +
+                            '<p><strong>Status:</strong> ' + markerProps.status + '</p>' +
+                        '</div>' +
+                    '</div>'
                 '</div>';
 
             infoWindow.setContent(contentString);
