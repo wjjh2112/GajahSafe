@@ -312,74 +312,82 @@ app.get('/reports/:id', (req, res) => {
   });
 });
 
-// Report Schema
-const reportSchema = new mongoose.Schema({
-  reportID: String,
-  reportLocation: String,
-  reportDamages: {
-    fence: {
-      damaged: Boolean,
-      value: Number
-    },
-    vehicle: {
-      damaged: Boolean,
-      value: Number
-    },
-    assets: {
-      damaged: Boolean,
-      value: Number
-    },
-    paddock: {
-      damaged: Boolean,
-      value: Number
-    },
-    pipe: {
-      damaged: Boolean,
-      value: Number
-    },
-    casualties: {
-      damaged: Boolean,
-      value: Number
-    },
-    other: {
-      damaged: Boolean,
-      damagedName: String,
-      value: Number
-    }
-  },
-  reportEFDamage: String,
-  reportCAMDamage: String,
-  reportDateTime: Date,
-  reportImages: [String],
-  reportingOfficer: String
-});
-
-const Report = mongoose.model('Report', reportSchema);
-
+// Endpoint to handle report form submission
 app.post('/addReport', (req, res) => {
-  const { reportLocation, reportDamages, reportEFDamage, reportCAMDamage, reportDateTime, reportImages, reportingOfficer } = req.body;
+  const {
+    location,
+    EFdamage,
+    AIdamage,
+    datetimeInput,
+    reportingOfficer,
+    fenceCheck,
+    fenceDamage,
+    vehicleCheck,
+    vehicleDamage,
+    assetsCheck,
+    assetsDamage,
+    paddockCheck,
+    paddockDamage,
+    pipeCheck,
+    pipeDamage,
+    casualtiesCheck,
+    casualtiesDamage,
+    otherCheck,
+    otherName,
+    otherDamage
+  } = req.body;
 
-  // Generate a unique report ID
-  const reportID = `REP${Date.now()}`;
+  const report = {
+    reportID: uuidv4(), // Generate a unique report ID
+    reportLocation: location,
+    reportDamages: {
+      fence: {
+        damaged: fenceCheck ? true : false,
+        value: fenceDamage ? parseInt(fenceDamage, 10) : 0
+      },
+      vehicle: {
+        damaged: vehicleCheck ? true : false,
+        value: vehicleDamage ? parseInt(vehicleDamage, 10) : 0
+      },
+      assets: {
+        damaged: assetsCheck ? true : false,
+        value: assetsDamage ? parseInt(assetsDamage, 10) : 0
+      },
+      paddock: {
+        damaged: paddockCheck ? true : false,
+        value: paddockDamage ? parseInt(paddockDamage, 10) : 0
+      },
+      pipe: {
+        damaged: pipeCheck ? true : false,
+        value: pipeDamage ? parseInt(pipeDamage, 10) : 0
+      },
+      casualties: {
+        damaged: casualtiesCheck ? true : false,
+        value: casualtiesDamage ? parseInt(casualtiesDamage, 10) : 0
+      },
+      other: {
+        damaged: otherCheck ? true : false,
+        damagedName: otherName || "",
+        value: otherDamage ? parseInt(otherDamage, 10) : 0
+      }
+    },
+    reportEFDamage: EFdamage,
+    reportCAMDamage: AIdamage,
+    reportDateTime: new Date(datetimeInput),
+    reportImages: [], // Handle file uploads separately
+    reportingOfficer: reportingOfficer
+  };
 
-  const newReport = new Report({
-    reportID,
-    reportLocation,
-    reportDamages,
-    reportEFDamage,
-    reportCAMDamage,
-    reportDateTime: new Date(reportDateTime),
-    reportImages,
-    reportingOfficer
-  });
-
-  newReport.save((err, report) => {
+  // Save report to MongoDB
+  mongoose.connection.db.collection('reports').insertOne(report, (err, result) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to save report' });
+      console.error('Failed to save report', err);
+      return res.status(500).json({ error: 'Internal server error' });
     }
-    res.status(201).json({ message: 'Report added successfully', report });
+    res.redirect('/'); // Redirect to a success page or back to form
   });
 });
+
 
 
 // Start the server
