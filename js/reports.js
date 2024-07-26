@@ -73,38 +73,6 @@ function addViewEventListeners() {
     });
 }
 
-function viewReportDetails(reportId) {
-    fetch(`/reports/${reportId}`)
-        .then(response => response.json())
-        .then(report => {
-            const modal = document.getElementById('viewReportModal');
-            const modalContent = modal.querySelector('.modal-content');
-            modalContent.innerHTML = `
-                <span class="close" id="closeViewReportModal">&times;</span>
-                <h4>Report Details</h4>
-                <p>Location: ${report.reportLocation}</p>
-                <p>Date: ${new Date(report.reportDateTime).toLocaleString()}</p>
-                <p>Electric Fence: ${report.reportEFDamage}</p>
-                <p>Camera: ${report.reportCAMDamage}</p>
-                <p>Reporting Officer: ${report.reportingOfficer}</p>
-                <h5>Damages:</h5>
-                <ul>
-                    ${Object.entries(report.reportDamages).map(([key, value]) => 
-                        `<li>${key}: ${value.damaged ? `Damaged (Value: $${value.value})` : 'Not Damaged'}</li>`
-                    ).join('')}
-                </ul>
-                <h5>Images:</h5>
-                <div>${report.reportImages.map(img => `<img src="${img}" alt="Report Image" style="max-width: 100px; margin: 5px;">`).join('')}</div>
-            `;
-            modal.style.display = 'block';
-
-            document.getElementById('closeViewReportModal').onclick = function() {
-                modal.style.display = 'none';
-            }
-        })
-        .catch(error => console.error('Error:', error));
-}
-
 function filterReports() {
     const location = $('#locationFilter').val();
     const dateRange = $('#dateRangePicker').val();
@@ -115,7 +83,6 @@ function filterReports() {
     }
 
     const rows = document.querySelectorAll('#reportsTableBody tr');
-    let visibleRows = 0;
 
     rows.forEach(row => {
         const rowLocation = row.cells[0].textContent;
@@ -130,12 +97,6 @@ function filterReports() {
             row.style.display = 'none';
         }
     });
-
-    // Display "No records found" if no visible rows
-    if (visibleRows === 0) {
-        const tableBody = document.getElementById('reportsTableBody');
-        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
-    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

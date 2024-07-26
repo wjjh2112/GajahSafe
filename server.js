@@ -297,15 +297,18 @@ app.get('/reports', (req, res) => {
   });
 });
 
-app.get('/reports/:id', (req, res) => {
-  mongoose.connection.db.collection('reports').findOne({ reportID: req.params.id }, (err, report) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-    if (!report) {
-      return res.status(404).json({ error: 'Report not found' });
-    }
-    res.json(report);
+// Route to fetch a specific report by its ID
+app.get('/report/:id', (req, res) => {
+  const reportId = req.params.id;
+
+  mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
+      if (err) {
+          return res.status(500).json({ error: 'Internal server error' });
+      }
+      if (!report) {
+          return res.status(404).json({ error: 'Report not found' });
+      }
+      res.json(report);
   });
 });
 
