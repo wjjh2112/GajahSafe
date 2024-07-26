@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
-const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -29,11 +28,11 @@ app.use(express.static(path.join(__dirname)));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/Dashboard'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '/Login'));
+  res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 app.post('/login', (req, res) => {
