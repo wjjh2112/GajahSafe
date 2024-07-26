@@ -105,6 +105,18 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
 
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
+            // Handle single related input
+            const relatedInputId = checkbox.getAttribute('data-related-input');
+            if (relatedInputId) {
+                const relatedInput = document.getElementById(relatedInputId);
+                if (!relatedInput.value) {
+                    isValid = false;
+                    errorMessage += `Please enter a value for ${relatedInputId}.\n`;
+                    relatedInput.focus();
+                }
+            }
+
+            // Handle multiple related inputs
             const relatedInputs = checkbox.getAttribute('data-related-inputs');
             if (relatedInputs) {
                 relatedInputs.split(',').forEach(inputId => {
