@@ -206,6 +206,7 @@
                                     </div>
                                     <div class="card-body card-block">
                                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                            <!-- Location -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label for="location" class="form-label"><span data-i18n="location"></span></label>
@@ -214,6 +215,8 @@
                                                     <input class="form-text" type="text" id="reportLocation" name="location" readonly>
                                                 </div>
                                             </div>
+                                        
+                                            <!-- Damages -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label class="form-label"><span data-i18n="damages"></span></label>
@@ -278,7 +281,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+                                        
+                                            <!-- Electric Fence -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label class="form-label"><span data-i18n="electric fence"></span></label>
@@ -296,7 +300,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+                                        
+                                            <!-- Camera -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label class="form-label"><span data-i18n="camera"></span></label>
@@ -314,38 +319,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                            
+                                        
+                                            <!-- Datetime -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label for="datetime-input" class="form-label"><span data-i18n="datetime"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <input class="form-text" type="text" id="datetime-input" name="datetime-input" placeholder="" readonly>
+                                                    <input class="form-text" type="text" id="datetime-input" name="datetime-input" readonly>
                                                 </div>
                                             </div>
-                                            
+                                        
+                                            <!-- Reporting Officer -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
-                                                    <label for="file-upload" class="form-label"><span data-i18n="images"></span></label>
-                                                </div>
-                                                <div class="col-12 col-md-9">
-                                                    <div class="file-upload-container">
-                                                        <ul id="file-list" class="file-list">
-                                                            <!-- Image list will be appended here -->
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                            
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label for="reportingOfficer" class="form-label"><span data-i18n="reportingOfficer"></span></label>
+                                                    <label for="reportingOfficer" class="form-label"><span data-i18n="reporting officer"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
                                                     <input class="form-text" type="text" id="reportingOfficer" name="reportingOfficer" readonly>
                                                 </div>
                                             </div>
-                                        </form>
+                                        
+                                            <!-- Images -->
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">
+                                                    <label class="form-label"><span data-i18n="images"></span></label>
+                                                </div>
+                                                <div class="col col-md-9">
+                                                    <ul id="file-list"></ul>
+                                                </div>
+                                            </div>
+                                        </form>                                        
                                     </div>
                                 </div>
                             </div>
