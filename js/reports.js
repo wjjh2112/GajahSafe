@@ -5,15 +5,33 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/Add-New-Report';
     });
 
+    // Initialize date range picker
+    $('#dateRangePicker').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('#dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+        filterReports();
+    });
+
+    $('#dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        filterReports();
+    });
+
     $('#locationFilter').change(filterReports);
-    $('#dateRangePicker').on('apply.daterangepicker', filterReports);
-    $('#dateRangePicker').on('cancel.daterangepicker', filterReports);
 });
 
 function fetchReports() {
     fetch('/reports')
         .then(response => response.json())
         .then(reports => {
+            // Sort reports from newest to oldest
+            reports.sort((a, b) => new Date(b.reportDateTime) - new Date(a.reportDateTime));
             displayReports(reports);
         })
         .catch(error => console.error('Error:', error));
@@ -22,6 +40,11 @@ function fetchReports() {
 function displayReports(reports) {
     const tableBody = document.getElementById('reportsTableBody');
     tableBody.innerHTML = '';
+
+    if (reports.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
+        return;
+    }
 
     reports.forEach(report => {
         const row = `
@@ -92,6 +115,8 @@ function filterReports() {
     }
 
     const rows = document.querySelectorAll('#reportsTableBody tr');
+    let visibleRows = 0;
+
     rows.forEach(row => {
         const rowLocation = row.cells[0].textContent;
         const rowDate = new Date(row.cells[3].textContent);
@@ -100,10 +125,17 @@ function filterReports() {
 
         if (locationMatch && dateMatch) {
             row.style.display = '';
+            visibleRows++;
         } else {
             row.style.display = 'none';
         }
     });
+
+    // Display "No records found" if no visible rows
+    if (visibleRows === 0) {
+        const tableBody = document.getElementById('reportsTableBody');
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -497,6 +529,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     }
-
-
-
