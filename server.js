@@ -312,62 +312,6 @@ app.get('/reports/:id', (req, res) => {
   });
 });
 
-// Add this near the other app.post endpoints
-app.post('/addReport', (req, res) => {
-  const reportData = req.body;
-  
-  // Generate a unique report ID
-  const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  
-  const newReport = {
-    reportID: reportID,
-    reportLocation: reportData.location,
-    reportDamages: {
-      fence: {
-        damaged: reportData.fenceCheck === 'on',
-        value: parseInt(reportData.fenceDamage) || 0
-      },
-      vehicle: {
-        damaged: reportData.vehicleCheck === 'on',
-        value: parseInt(reportData.vehicleDamage) || 0
-      },
-      assets: {
-        damaged: reportData.assetsCheck === 'on',
-        value: parseInt(reportData.assetsDamage) || 0
-      },
-      paddock: {
-        damaged: reportData.paddockCheck === 'on',
-        value: parseInt(reportData.paddockDamage) || 0
-      },
-      pipe: {
-        damaged: reportData.pipeCheck === 'on',
-        value: parseInt(reportData.pipeDamage) || 0
-      },
-      casualties: {
-        damaged: reportData.casualtiesCheck === 'on',
-        value: parseInt(reportData.casualtiesDamage) || 0
-      },
-      other: {
-        damaged: reportData.otherCheck === 'on',
-        damagedName: reportData.otherName || "",
-        value: parseInt(reportData.otherDamage) || 0
-      }
-    },
-    reportEFDamage: reportData.EFdamage,
-    reportCAMDamage: reportData.AIdamage,
-    reportDateTime: new Date(reportData['datetime-input']),
-    reportImages: reportData.images || [],
-    reportingOfficer: reportData.reportingOfficer
-  };
-
-  mongoose.connection.db.collection('reports').insertOne(newReport, (err, result) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: 'Error adding report to database.' });
-    }
-    res.status(200).json({ success: true, message: 'Report added successfully', reportID: reportID });
-  });
-});
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
