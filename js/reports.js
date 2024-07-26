@@ -73,6 +73,10 @@ function addViewEventListeners() {
     });
 }
 
+function viewReportDetails(reportId) {
+    window.location.href = `/View-Report?reportID=${reportId}`;
+}
+
 function filterReports() {
     const location = $('#locationFilter').val();
     const dateRange = $('#dateRangePicker').val();
