@@ -40,28 +40,22 @@ function myMapDevicesIndex() {
         google.maps.event.addListener(marker, 'click', function () {
             var contentString = 
                 '<div class="row">' +
-                    '<div class="col">' + 
-                        '<div class="au-card">' +
-                            '<p><strong>ID:</strong> ' + markerProps.id + '</p>' +
-                        '</div>' +
-                    '</div>'
-                    '<div class="col">' + 
-                        '<div class="au-card">' +
-                            '<p><strong>Name:</strong> ' + markerProps.name + '</p>' +
-                        '</div>' +
-                    '</div>'
+                    '<h4> ' + markerProps.id + '</h4>' +
+                    '<h5> ' + markerProps.name + '</h5>' +
                 '</div>' +
                 '<div class="row">' +
                     '<div class="col">' + 
                         '<div class="au-card">' +
-                            '<p><strong>' + markerProps.position.lat() + ', ' + markerProps.position.lng() + '</strong></p>' +
+                            '<p>Location</p>' + 
+                            '<h3 style="color: #fd5959;">' + markerProps.position.lat() + ', ' + markerProps.position.lng() + '</h3>' +
                         '</div>' +
-                    '</div>'
+                    '</div>' +
                     '<div class="col">' + 
                         '<div class="au-card">' +
-                            '<p><strong>Status:</strong> ' + markerProps.status + '</p>' +
+                            '<p>Status</p>' +
+                            '<h3 style="color: #fd5959;">'+ markerProps.status + '</h3>' +
                         '</div>' +
-                    '</div>'
+                    '</div>' +
                 '</div>';
 
             infoWindow.setContent(contentString);
