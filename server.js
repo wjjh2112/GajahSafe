@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -310,6 +311,115 @@ app.get('/reports/:id', (req, res) => {
       }
       res.json(report);
   });
+});
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, uuidv4() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage: storage });
+
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+    fence: {
+      damaged: Boolean,
+      value: Number
+    },
+    vehicle: {
+      damaged: Boolean,
+      value: Number
+    },
+    assets: {
+      damaged: Boolean,
+      value: Number
+    },
+    paddock: {
+      damaged: Boolean,
+      value: Number
+    },
+    pipe: {
+      damaged: Boolean,
+      value: Number
+    },
+    casualties: {
+      damaged: Boolean,
+      value: Number
+    },
+    other: {
+      damaged: Boolean,
+      damagedName: String,
+      value: Number
+    }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
+});
+
+const Report = mongoose.model('Report', reportSchema);
+
+app.post('/addReport', upload.array('file-upload', 10), async (req, res) => {
+  try {
+    const { location, fenceCheck, fenceDamage, vehicleCheck, vehicleDamage, assetsCheck, assetsDamage, paddockCheck, paddockDamage, pipeCheck, pipeDamage, casualtiesCheck, casualtiesDamage, otherCheck, otherName, otherDamage, EFdamage, AIdamage, datetimeInput, reportingOfficer } = req.body;
+
+    const damages = {
+      fence: {
+        damaged: fenceCheck === 'on',
+        value: fenceCheck === 'on' ? parseFloat(fenceDamage) : 0
+      },
+      vehicle: {
+        damaged: vehicleCheck === 'on',
+        value: vehicleCheck === 'on' ? parseFloat(vehicleDamage) : 0
+      },
+      assets: {
+        damaged: assetsCheck === 'on',
+        value: assetsCheck === 'on' ? parseFloat(assetsDamage) : 0
+      },
+      paddock: {
+        damaged: paddockCheck === 'on',
+        value: paddockCheck === 'on' ? parseFloat(paddockDamage) : 0
+      },
+      pipe: {
+        damaged: pipeCheck === 'on',
+        value: pipeCheck === 'on' ? parseFloat(pipeDamage) : 0
+      },
+      casualties: {
+        damaged: casualtiesCheck === 'on',
+        value: casualtiesCheck === 'on' ? parseFloat(casualtiesDamage) : 0
+      },
+      other: {
+        damaged: otherCheck === 'on',
+        damagedName: otherCheck === 'on' ? otherName : '',
+        value: otherCheck === 'on' ? parseFloat(otherDamage) : 0
+      }
+    };
+
+    const reportImages = req.files.map(file => file.filename);
+
+    const newReport = new Report({
+      reportID: uuidv4(),
+      reportLocation: location,
+      reportDamages: damages,
+      reportEFDamage: EFdamage,
+      reportCAMDamage: AIdamage,
+      reportDateTime: new Date(datetimeInput),
+      reportImages: reportImages,
+      reportingOfficer: reportingOfficer
+    });
+
+    await newReport.save();
+    res.status(201).send('Report added successfully');
+  } catch (err) {
+    res.status(500).send('Failed to add report');
+  }
 });
 
 // Start the server

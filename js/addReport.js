@@ -1,4 +1,3 @@
-// Damage Checkbox JS 
 document.addEventListener("DOMContentLoaded", function() {
     var checkboxes = document.querySelectorAll('.form-check-input');
 
@@ -20,75 +19,63 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-
-// Date & Time JS
 document.addEventListener("DOMContentLoaded", function() {
     var dateTimeInput = document.getElementById('datetime-input');
     var currentDateTime = new Date();
-    var formattedDateTime = currentDateTime.toLocaleString(); // Formats the date and time according to the user's locale
-
+    var formattedDateTime = currentDateTime.toLocaleString();
     dateTimeInput.value = formattedDateTime;
 });
 
-
-// Upload Images File JS
 const fileArray = [];
 
-    document.getElementById('file-upload').addEventListener('change', handleFileSelect);
+document.getElementById('file-upload').addEventListener('change', handleFileSelect);
 
-        function handleFileSelect(event) {
-            const newFiles = Array.from(event.target.files);
-            fileArray.push(...newFiles);
+function handleFileSelect(event) {
+    const newFiles = Array.from(event.target.files);
+    fileArray.push(...newFiles);
+    updateFileList();
+}
 
-            updateFileList();
-        }
+function updateFileList() {
+    const fileListUl = document.getElementById('file-list');
+    fileListUl.innerHTML = '';
 
-        function updateFileList() {
-            const fileListUl = document.getElementById('file-list');
-            fileListUl.innerHTML = '';
-
-            if (fileArray.length === 0) {
-                const placeholderLi = document.createElement('li');
-                placeholderLi.id = 'placeholder-li';
-                const placeholderLabel = document.createElement('label');
-                placeholderLabel.setAttribute('for', 'file-upload');
-                placeholderLabel.className = 'add-images-placeholder';
-                placeholderLabel.innerHTML = '<span>Click to add images</span>';
-                placeholderLi.appendChild(placeholderLabel);
-                fileListUl.appendChild(placeholderLi);
-            } else {
-                fileArray.forEach((file, index) => {
-                    const li = document.createElement('li');
-
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(file);
-                    img.onload = function() {
-                        URL.revokeObjectURL(this.src);
-                    };
-
-                    const removeButton = document.createElement('button');
-                    removeButton.textContent = 'X';
-                    removeButton.addEventListener('click', function() {
-                        fileArray.splice(index, 1);
-                        updateFileList();
-                    });
-
-                    li.appendChild(img);
-                    li.appendChild(removeButton);
-                    fileListUl.appendChild(li);
-                });
-
-    // Append the Add Images button at the end
-                const addButtonLi = document.createElement('li');
-                addButtonLi.id = 'add-button-li';
-                const addButton = document.createElement('label');
-                addButton.setAttribute('for', 'file-upload');
-                addButton.className = 'add-images-label';
-                addButton.innerHTML = '<span>+</span> Add';
-                addButtonLi.appendChild(addButton);
-                fileListUl.appendChild(addButtonLi);
+    if (fileArray.length === 0) {
+        const placeholderLi = document.createElement('li');
+        placeholderLi.id = 'placeholder-li';
+        const placeholderLabel = document.createElement('label');
+        placeholderLabel.setAttribute('for', 'file-upload');
+        placeholderLabel.className = 'add-images-placeholder';
+        placeholderLabel.innerHTML = '<span>Click to add images</span>';
+        placeholderLi.appendChild(placeholderLabel);
+        fileListUl.appendChild(placeholderLi);
+    } else {
+        fileArray.forEach((file, index) => {
+            const li = document.createElement('li');
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.onload = function() {
+                URL.revokeObjectURL(this.src);
+            };
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'X';
+            removeButton.addEventListener('click', function() {
+                fileArray.splice(index, 1);
+                updateFileList();
+            });
+            li.appendChild(img);
+            li.appendChild(removeButton);
+            fileListUl.appendChild(li);
+        });
+        const addButtonLi = document.createElement('li');
+        addButtonLi.id = 'add-button-li';
+        const addButton = document.createElement('label');
+        addButton.setAttribute('for', 'file-upload');
+        addButton.className = 'add-images-label';
+        addButton.innerHTML = '<span>+</span> Add';
+        addButtonLi.appendChild(addButton);
+        fileListUl.appendChild(addButtonLi);
     }
-
     updateFileInput();
 }
 

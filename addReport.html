@@ -205,7 +205,7 @@
                                         <h3 class="title-2"><span data-i18n="addNewReport"></span></h3><br>
                                     </div>
                                     <div class="card-body card-block">
-                                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                        <form action="/addReport" method="post" enctype="multipart/form-data" class="form-horizontal">
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label for="location" class="form-label"><span data-i18n="location"></span></label>
@@ -220,140 +220,58 @@
                                                     <div class="dropDownSelect2"></div>
                                                 </div>
                                             </div>
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label class="form-label"><span data-i18n="damages"></span></label>
-                                                </div>
-                                                <div class="col col-md-9">
-                                                        <div class="checkbox">
-                                                            <label for="fenceCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="fenceCheck" name="fenceCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="fence"></span>
-                                                            </label>
-                                                            <input type="text" id="fenceDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label for="vehicleCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="vehicleCheck" name="vehicleCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="vehicle"></span>
-                                                            </label>
-                                                            <input type="text" id="vehicleDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label for="assetsCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="assetsCheck" name="assetsCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="assets"></span>
-                                                            </label>
-                                                            <input type="text" id="assetsDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label for="paddockCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="paddockCheck" name="paddockCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="paddock"></span>
-                                                            </label>
-                                                            <input type="text" id="paddockDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label for="pipeCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="pipeCheck" name="pipeCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="pipe"></span>
-                                                            </label>
-                                                            <input type="text" id="pipeDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label for="casualtiesCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="casualtiesCheck" name="casualtiesCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="casualties"></span>
-                                                            </label>
-                                                            <input type="text" id="casualtiesDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label for="otherCheck" class="checkbox-button">
-                                                                <input type="checkbox" id="otherCheck" name="otherCheck" class="form-check-input">
-                                                                <span class="custom-checkbox"></span>
-                                                                <span data-i18n="other"></span>
-                                                            </label>
-                                                            <input type="text" id="otherName" class="damage-input" placeholder="Enter name" style="display: none;">
-                                                            <input type="text" id="otherDamage" class="damage-input" placeholder="Enter damage value" style="display: none;">
-                                                        </div>
-                                                </div>
-                                            </div>
                                             
+                                            <!-- Damage Section -->
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
-                                                    <label class="form-label"><span data-i18n="electric fence"></span></label>
-                                                </div>
-                                                <div class="col col-md-2">
-                                                    <div class="button-radio-group">
-                                                        <label for="EFUndamaged" class="button-radio-label">
-                                                            <input type="radio" id="EFUndamaged" name="EFdamage" value="undamaged" class="form-radio-input">
-                                                            <span class="button-radio-button" data-i18n="undamaged"></span>
-                                                        </label>
-                                                        <label for="EFDamaged" class="button-radio-label">
-                                                            <input type="radio" id="EFDamaged" name="EFdamage" value="damaged" class="form-radio-input">
-                                                            <span class="button-radio-button" data-i18n="damaged"></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label class="form-label"><span data-i18n="camera"></span></label>
-                                                </div>
-                                                <div class="col col-md-2">
-                                                    <div class="button-radio-group">
-                                                        <label for="AIUndamaged" class="button-radio-label">
-                                                            <input type="radio" id="AIUndamaged" name="AIdamage" value="undamaged" class="form-radio-input">
-                                                            <span class="button-radio-button" data-i18n="undamaged"></span>
-                                                        </label>
-                                                        <label for="AIDamaged" class="button-radio-label">
-                                                            <input type="radio" id="AIDamaged" name="AIdamage" value="damaged" class="form-radio-input">
-                                                            <span class="button-radio-button" data-i18n="damaged"></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row form-group">
-                                                <div class="col col-md-3">
-                                                    <label for="datetime-input" class="form-label"><span data-i18n="datetime"></span></label>
+                                                    <label class="form-check-label" for="fenceCheck">Fence Damage</label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <input class="form-text" type="text" id="datetime-input" name="datetime-input" placeholder="" readonly>
+                                                    <input type="checkbox" id="fenceCheck" name="fenceCheck" class="form-check-input">
+                                                    <input type="number" id="fenceDamage" name="fenceDamage" class="damage-input" style="display:none;" placeholder="Fence Damage Value">
                                                 </div>
                                             </div>
+                                            <!-- Repeat similar blocks for vehicle, assets, paddock, pipe, casualties, and other damages -->
                                             
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">
+                                                    <label for="EFdamage" class="form-label"><span data-i18n="EFdamage"></span></label>
+                                                </div>
+                                                <div class="col-12 col-md-9">
+                                                    <input type="text" id="EFdamage" name="EFdamage" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">
+                                                    <label for="AIdamage" class="form-label"><span data-i18n="AIdamage"></span></label>
+                                                </div>
+                                                <div class="col-12 col-md-9">
+                                                    <input type="text" id="AIdamage" name="AIdamage" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">
+                                                    <label for="datetimeInput" class="form-label"><span data-i18n="datetime"></span></label>
+                                                </div>
+                                                <div class="col-12 col-md-9">
+                                                    <input type="text" id="datetime-input" name="datetimeInput" class="form-control" readonly>
+                                                </div>
+                                            </div>
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
                                                     <label for="file-upload" class="form-label"><span data-i18n="images"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <div class="file-upload-container">
-                                                        <ul id="file-list" class="file-list">
-                                                            <li id="placeholder-li">
-                                                                <label for="file-upload" class="add-images-placeholder">
-                                                                    <span><i class="fas fa-upload"></i>&nbsp;</span>
-                                                                </label>
-                                                            </li>
-                                                        </ul>
-                                                        <input type="file" id="file-upload" multiple>
-                                                    </div>
+                                                    <input type="file" id="file-upload" name="file-upload" class="form-control" multiple>
+                                                    <ul id="file-list"></ul>
                                                 </div>
                                             </div>
-
                                             <div class="row form-group">
                                                 <div class="col col-md-3">
-                                                    <label for="text-input" class=" form-label"><span data-i18n="reportingOfficer"></span></label>
+                                                    <label for="reportingOfficer" class="form-label"><span data-i18n="reportingOfficer"></span></label>
                                                 </div>
                                                 <div class="col-12 col-md-9">
-                                                    <input class="form-text" type="text" id="reportingOfficer" name="text-input">
+                                                    <input type="text" id="reportingOfficer" name="reportingOfficer" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="au-card-footer form-footer">
