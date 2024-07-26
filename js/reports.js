@@ -68,13 +68,9 @@ function addViewEventListeners() {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const reportId = this.getAttribute('data-report-id');
-            viewReportDetails(reportId);
+            window.location.href = `/View-Report?reportID=${reportId}`;
         });
     });
-}
-
-function viewReportDetails(reportId) {
-    window.location.href = `/View-Report?reportID=${reportId}`;
 }
 
 function filterReports() {
