@@ -156,22 +156,3 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
         });
     }
 });
-
-// Show/Hide related input based on checkbox state
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const relatedInputs = this.getAttribute('data-related-inputs');
-        if (relatedInputs) {
-            relatedInputs.split(',').forEach(inputId => {
-                const relatedInput = document.getElementById(inputId.trim());
-                if (this.checked) {
-                    relatedInput.style.display = 'block';
-                } else {
-                    relatedInput.style.display = 'none';
-                    relatedInput.value = ''; // Clear the input value
-                }
-            });
-        }
-    });
-});
-
