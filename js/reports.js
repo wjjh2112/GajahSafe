@@ -1,6 +1,110 @@
-document.getElementById('addReportBtn').addEventListener('click', function() {
-    window.location.href = '/Add-New-Report';
+document.addEventListener('DOMContentLoaded', function() {
+    fetchReports();
+
+    document.getElementById('addReportBtn').addEventListener('click', function() {
+        window.location.href = '/Add-New-Report';
+    });
+
+    $('#locationFilter').change(filterReports);
+    $('#dateRangePicker').on('apply.daterangepicker', filterReports);
+    $('#dateRangePicker').on('cancel.daterangepicker', filterReports);
 });
+
+function fetchReports() {
+    fetch('/reports')
+        .then(response => response.json())
+        .then(reports => {
+            displayReports(reports);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function displayReports(reports) {
+    const tableBody = document.getElementById('reportsTableBody');
+    tableBody.innerHTML = '';
+
+    reports.forEach(report => {
+        const row = `
+            <tr>
+                <td>${report.reportLocation}</td>
+                <td>${report.reportEFDamage === 'damaged' ? 'Yes' : 'No'}</td>
+                <td>${report.reportCAMDamage === 'damaged' ? 'Yes' : 'No'}</td>
+                <td>${new Date(report.reportDateTime).toLocaleDateString()}</td>
+                <td>${report.reportingOfficer}</td>
+                <td><a href="#" class="view-report-btn" data-report-id="${report.reportID}">View</a></td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+
+    addViewEventListeners();
+}
+
+function addViewEventListeners() {
+    document.querySelectorAll('.view-report-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const reportId = this.getAttribute('data-report-id');
+            viewReportDetails(reportId);
+        });
+    });
+}
+
+function viewReportDetails(reportId) {
+    fetch(`/reports/${reportId}`)
+        .then(response => response.json())
+        .then(report => {
+            const modal = document.getElementById('viewReportModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.innerHTML = `
+                <span class="close" id="closeViewReportModal">&times;</span>
+                <h4>Report Details</h4>
+                <p>Location: ${report.reportLocation}</p>
+                <p>Date: ${new Date(report.reportDateTime).toLocaleString()}</p>
+                <p>Electric Fence: ${report.reportEFDamage}</p>
+                <p>Camera: ${report.reportCAMDamage}</p>
+                <p>Reporting Officer: ${report.reportingOfficer}</p>
+                <h5>Damages:</h5>
+                <ul>
+                    ${Object.entries(report.reportDamages).map(([key, value]) => 
+                        `<li>${key}: ${value.damaged ? `Damaged (Value: $${value.value})` : 'Not Damaged'}</li>`
+                    ).join('')}
+                </ul>
+                <h5>Images:</h5>
+                <div>${report.reportImages.map(img => `<img src="${img}" alt="Report Image" style="max-width: 100px; margin: 5px;">`).join('')}</div>
+            `;
+            modal.style.display = 'block';
+
+            document.getElementById('closeViewReportModal').onclick = function() {
+                modal.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function filterReports() {
+    const location = $('#locationFilter').val();
+    const dateRange = $('#dateRangePicker').val();
+    let startDate, endDate;
+
+    if (dateRange) {
+        [startDate, endDate] = dateRange.split(' - ').map(date => new Date(date));
+    }
+
+    const rows = document.querySelectorAll('#reportsTableBody tr');
+    rows.forEach(row => {
+        const rowLocation = row.cells[0].textContent;
+        const rowDate = new Date(row.cells[3].textContent);
+        const locationMatch = location === 'Location' || rowLocation === location;
+        const dateMatch = !dateRange || (rowDate >= startDate && rowDate <= endDate);
+
+        if (locationMatch && dateMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
@@ -396,111 +500,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-$(function() {
-    // Initialize Date Range Picker
-    $('#dateRangePicker').daterangepicker({
-        opens: 'left',
-        locale: {
-            format: 'DD/MM/YYYY',
-            separator: ' - ',
-            applyLabel: 'Apply',
-            cancelLabel: 'Cancel',
-            fromLabel: 'From',
-            toLabel: 'To',
-            customRangeLabel: 'Custom',
-            weekLabel: 'W',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            firstDay: 1
-        },
-        autoUpdateInput: false
-    });
-
-    // Handle Apply button click on Date Range Picker
-    $('#dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-        filterTable();
-    });
-
-    // Handle Cancel button click on Date Range Picker
-    $('#dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-        filterTable();
-    });
-
-    // Handle location filter change
-    $('#locationFilter').change(function() {
-        filterTable();
-    });
-
-    // Store the original rows
-    var originalRows = Array.from(document.querySelectorAll('.table-earning tbody tr'));
-
-    // Function to filter table by location and date range
-    function filterTable() {
-        var selectedLocation = $('#locationFilter').val();
-        var dateRange = $('#dateRangePicker').val();
-        var table = document.querySelector('.table-earning tbody');
-        
-        // Clear the table before re-adding filtered rows
-        table.innerHTML = '';
-
-        var startDate = null;
-        var endDate = null;
-
-        if (dateRange) {
-            var dates = dateRange.split(' - ');
-            startDate = moment(dates[0], 'DD/MM/YYYY');
-            endDate = moment(dates[1], 'DD/MM/YYYY');
-        }
-
-        var rowsShown = 0;
-
-        originalRows.forEach(function(row) {
-            var locationCell = row.querySelector('td:first-child');
-            var dateCell = row.querySelector('td:nth-child(4)');
-            if (!locationCell || !dateCell) return; // Skip if cells are not found
-
-            var locationText = locationCell.textContent.trim();
-            var dateText = dateCell.textContent.trim();
-            var rowDate = moment(dateText, 'DD/MM/YYYY', true); // Parse date with strict mode
-
-            var locationMatch = (selectedLocation === 'Location' || selectedLocation === locationText);
-            var dateMatch = (!startDate || !endDate || rowDate.isBetween(startDate, endDate, null, '[]'));
-
-            if (locationMatch && dateMatch) {
-                row.style.display = '';
-                table.appendChild(row); // Add the row to the table
-                rowsShown++;
-            }
-        });
-
-        // Show "No records found" message if no rows are visible after filtering
-        if (rowsShown === 0) {
-            if (!document.querySelector('.no-records')) {
-                var noRecordsRow = document.createElement('tr');
-                noRecordsRow.classList.add('no-records');
-                noRecordsRow.innerHTML = '<td colspan="6" style="text-align: center;">No records found</td>';
-                table.appendChild(noRecordsRow);
-            }
-        } else {
-            var noRecordsElement = document.querySelector('.no-records');
-            if (noRecordsElement) {
-                noRecordsElement.remove();
-            }
-        }
-    }
-
-    // Initial call to sort and display the table
-    function sortAndFilterTable() {
-        originalRows.sort(function(a, b) {
-            var dateA = moment(a.querySelector('td:nth-child(4)').textContent.trim(), 'DD/MM/YYYY');
-            var dateB = moment(b.querySelector('td:nth-child(4)').textContent.trim(), 'DD/MM/YYYY');
-            return dateB - dateA; // descending order
-        });
-        filterTable();
-    }
-
-    // Initialize the table on page load
-    sortAndFilterTable();
-});

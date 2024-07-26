@@ -287,6 +287,28 @@ app.delete('/deleteDevice', (req, res) => {
   });
 });
 
+// Endpoint to fetch all reports
+app.get('/reports', (req, res) => {
+  mongoose.connection.db.collection('reports').find({}).toArray((err, reports) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.json(reports);
+  });
+});
+
+app.get('/reports/:id', (req, res) => {
+  mongoose.connection.db.collection('reports').findOne({ reportID: req.params.id }, (err, report) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!report) {
+      return res.status(404).json({ error: 'Report not found' });
+    }
+    res.json(report);
+  });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
