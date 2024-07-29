@@ -80,7 +80,7 @@ const fileArray = [];
                         updateFileList();
                     });
         
-                    li.appendChild(img);
+                    li.appendChild(link);
                     li.appendChild(removeButton);
                     fileListUl.appendChild(li);
                 });
