@@ -348,7 +348,7 @@ const Report = conn.model('Report', reportSchema);
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
     const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    const imageIds = req.files.map(file => file.id.toString());
+    const imageIds = req.files.map(file => file.filename);
 
     const report = new Report({
       reportID: reportID,
