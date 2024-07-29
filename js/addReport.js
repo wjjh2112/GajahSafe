@@ -78,7 +78,7 @@ const fileArray = [];
                     fileListUl.appendChild(li);
                 });
 
-                // Append the Add Images button at the end
+    // Append the Add Images button at the end
                 const addButtonLi = document.createElement('li');
                 addButtonLi.id = 'add-button-li';
                 const addButton = document.createElement('label');
@@ -87,7 +87,7 @@ const fileArray = [];
                 addButton.innerHTML = '<span>+</span> Add';
                 addButtonLi.appendChild(addButton);
                 fileListUl.appendChild(addButtonLi);
-            }
+    }
 
     updateFileInput();
 }
@@ -99,8 +99,6 @@ function updateFileInput() {
 }
 
 document.getElementById('addReportForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     let isValid = true;
     let errorMessage = "";
@@ -134,6 +132,7 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
     });
 
     if (!isValid) {
+        event.preventDefault();
         alert(errorMessage);
     } else {
         const formData = new FormData(this);
@@ -148,43 +147,12 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
                 alert('Report submitted successfully!');
                 this.reset();
             } else {
-                alert('Error submitting report: ' + data.message);
+                alert('Error submitting report');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error submitting report: ' + error.message);
+            alert('Error submitting report');
         });
     }
-});
-
-// Show/Hide related input based on checkbox state
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        // Handle single related input
-        const relatedInputId = this.getAttribute('data-related-input');
-        if (relatedInputId) {
-            const relatedInput = document.getElementById(relatedInputId);
-            if (this.checked) {
-                relatedInput.style.display = 'block';
-            } else {
-                relatedInput.style.display = 'none';
-                relatedInput.value = ''; // Clear the input value
-            }
-        }
-
-        // Handle multiple related inputs
-        const relatedInputs = this.getAttribute('data-related-inputs');
-        if (relatedInputs) {
-            relatedInputs.split(',').forEach(inputId => {
-                const relatedInput = document.getElementById(inputId.trim());
-                if (this.checked) {
-                    relatedInput.style.display = 'block';
-                } else {
-                    relatedInput.style.display = 'none';
-                    relatedInput.value = ''; // Clear the input value
-                }
-            });
-        }
-    });
 });
