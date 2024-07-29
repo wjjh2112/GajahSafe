@@ -4,8 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const Grid = require('gridfs-stream');
-const methodOverride = require('method-override');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -25,7 +23,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
 
 // Serve static files (from root directory)
 app.use(express.static(path.join(__dirname)));
@@ -316,95 +313,108 @@ app.get('/reports/:id', (req, res) => {
   });
 });
 
-// Init gfs
-let gfs;
-
-conn.once('open', () => {
-  // Init stream
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection('uploads');
+// Define the schema and model
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+      fence: {
+          damaged: Boolean,
+          value: Number
+      },
+      vehicle: {
+          damaged: Boolean,
+          value: Number
+      },
+      assets: {
+          damaged: Boolean,
+          value: Number
+      },
+      paddock: {
+          damaged: Boolean,
+          value: Number
+      },
+      pipe: {
+          damaged: Boolean,
+          value: Number
+      },
+      casualties: {
+          damaged: Boolean,
+          value: Number
+      },
+      other: {
+          damaged: Boolean,
+          damagedName: String,
+          value: Number
+      }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
 });
 
-// Create storage engine
-const storage = new GridFsStorage({
-  url: mongoURI,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      const filename = uuidv4() + path.extname(file.originalname);
-      const fileInfo = {
-        filename: filename,
-        bucketName: 'uploads'
-      };
-      resolve(fileInfo);
-    });
-  }
-});
+const Report = mongoose.model('Report', reportSchema);
 
-const upload = multer({ storage });
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
 
-// Handle file uploads in the form
-app.post('/submit-report', upload.array('reportImages'), async (req, res) => {
-  const {
-    reportLocation,
-    fenceDamaged, fenceValue,
-    vehicleDamaged, vehicleValue,
-    assetsDamaged, assetsValue,
-    paddockDamaged, paddockValue,
-    pipeDamaged, pipeValue,
-    casualtiesDamaged, casualtiesValue,
-    otherDamaged, otherName, otherValue,
-    reportEFDamage,
-    reportCAMDamage,
-    reportDateTime,
-    reportingOfficer
-  } = req.body;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  const images = req.files.map(file => file.filename);
-  const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-
-  const report = new Report({
-    reportID: reportID,
-    reportLocation,
-    damages: {
-      fence: { damaged: fenceDamaged, value: fenceValue },
-      vehicle: { damaged: vehicleDamaged, value: vehicleValue },
-      assets: { damaged: assetsDamaged, value: assetsValue },
-      paddock: { damaged: paddockDamaged, value: paddockValue },
-      pipe: { damaged: pipeDamaged, value: pipeValue },
-      casualties: { damaged: casualtiesDamaged, value: casualtiesValue },
-      other: { damaged: otherDamaged, name: otherName, value: otherValue }
-    },
-    electricFenceDamage: reportEFDamage,
-    cameraDamage: reportCAMDamage,
-    dateTime: reportDateTime,
-    reportingOfficer,
-    images
-  });
-
+app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
-    await report.save();
-    res.json({ success: true, message: 'Report submitted successfully!' });
+
+      // Generate a unique report ID
+      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const report = new Report({
+        reportID: reportID, // Generate or assign as needed
+          reportLocation: req.body.reportLocation,
+          reportDamages: {
+              fence: {
+                  damaged: req.body.fenceDamaged === 'on',
+                  value: Number(req.body.fenceValue) || 0
+              },
+              vehicle: {
+                  damaged: req.body.vehicleDamaged === 'on',
+                  value: Number(req.body.vehicleValue) || 0
+              },
+              assets: {
+                damaged: req.body.assetsDamaged === 'on',
+                value: Number(req.body.assetsValue) || 0
+              },
+              paddock: {
+                  damaged: req.body.paddockDamaged === 'on',
+                  value: Number(req.body.paddockValue) || 0
+              },
+              pipe: {
+                damaged: req.body.pipeDamaged === 'on',
+                value: Number(req.body.pipeValue) || 0
+              },
+              casualties: {
+                  damaged: req.body.casualtiesDamaged === 'on',
+                  value: Number(req.body.casualtiesValue) || 0
+              },
+              other: {
+                  damaged: req.body.otherDamaged === 'on',
+                  damagedName: req.body.otherName || '',
+                  value: Number(req.body.otherValue) || 0
+              }
+          },
+          reportEFDamage: req.body.reportEFDamage,
+          reportCAMDamage: req.body.reportCAMDamage,
+          reportDateTime: new Date(req.body.reportDateTime),
+          reportImages: req.files.map(file => file.filename),
+          reportingOfficer: req.body.reportingOfficer
+      });
+
+      await report.save();
+      res.json({ success: true });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error saving report' });
   }
-});
-
-// Serve uploaded images
-app.get('/image/:filename', (req, res) => {
-  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-    if (!file || file.length === 0) {
-      return res.status(404).json({ err: 'No file exists' });
-    }
-
-    // Check if image
-    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-      // Read output to browser
-      const readstream = gfs.createReadStream(file.filename);
-      readstream.pipe(res);
-    } else {
-      res.status(404).json({ err: 'Not an image' });
-    }
-  });
 });
 
 // Start the server
