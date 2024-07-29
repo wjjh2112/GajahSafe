@@ -154,6 +154,7 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
             if (data.success) {
                 alert('Report submitted successfully!');
                 this.reset();
+                updateFileList(); // Clear the file list
             } else {
                 alert('Error submitting report: ' + data.message);
             }
