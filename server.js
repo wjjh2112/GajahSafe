@@ -29,6 +29,29 @@ conn.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+// Create storage engine
+const storage = new GridFsStorage({
+  url: mongoURI,
+  options: { useUnifiedTopology: true },
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'uploads'
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+
+const upload = multer({ storage });
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,19 +60,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files (from root directory)
 app.use(express.static(path.join(__dirname)));
-
-// Set up multer storage with GridFS
-const storage = new GridFsStorage({
-  url: mongoURI,
-  file: (req, file) => {
-    return {
-      bucketName: 'uploads', // Set the name of the collection where files will be stored
-      filename: file.originalname,
-    };
-  },
-});
-
-const upload = multer({ storage });
 
 // Routes
 app.get('/', (req, res) => {
@@ -312,62 +322,105 @@ app.delete('/deleteDevice', (req, res) => {
   });
 });
 
-// Endpoint to fetch all reports
-app.get('/reports', (req, res) => {
-  mongoose.connection.db.collection('reports').find({}).toArray((err, reports) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+// Define the schema and model
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+    fence: { damaged: Boolean, value: Number },
+    vehicle: { damaged: Boolean, value: Number },
+    assets: { damaged: Boolean, value: Number },
+    paddock: { damaged: Boolean, value: Number },
+    pipe: { damaged: Boolean, value: Number },
+    casualties: { damaged: Boolean, value: Number },
+    other: { damaged: Boolean, damagedName: String, value: Number }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
+});
+
+const Report = conn.model('Report', reportSchema);
+
+// Submit report
+app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
+  try {
+    const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    const imageIds = req.files.map(file => file.filename);
+
+    const report = new Report({
+      reportID: reportID,
+      reportLocation: req.body.reportLocation,
+      reportDamages: {
+        fence: { damaged: req.body.fenceDamaged === 'on', value: Number(req.body.fenceValue) || 0 },
+        vehicle: { damaged: req.body.vehicleDamaged === 'on', value: Number(req.body.vehicleValue) || 0 },
+        assets: { damaged: req.body.assetsDamaged === 'on', value: Number(req.body.assetsValue) || 0 },
+        paddock: { damaged: req.body.paddockDamaged === 'on', value: Number(req.body.paddockValue) || 0 },
+        pipe: { damaged: req.body.pipeDamaged === 'on', value: Number(req.body.pipeValue) || 0 },
+        casualties: { damaged: req.body.casualtiesDamaged === 'on', value: Number(req.body.casualtiesValue) || 0 },
+        other: { 
+          damaged: req.body.otherDamaged === 'on', 
+          damagedName: req.body.otherName || '',
+          value: Number(req.body.otherValue) || 0 
+        }
+      },
+      reportEFDamage: req.body.reportEFDamage,
+      reportCAMDamage: req.body.reportCAMDamage,
+      reportDateTime: new Date(req.body.reportDateTime),
+      reportImages: imageIds,
+      reportingOfficer: req.body.reportingOfficer
+    });
+
+    await report.save();
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error saving report' });
+  }
+});
+
+// Get all reports
+app.get('/reports', async (req, res) => {
+  try {
+    const reports = await Report.find();
     res.json(reports);
-  });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-// Route to fetch a specific report by its ID
-app.get('/reports/:id', (req, res) => {
-  const reportId = req.params.id;
-
-  mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
-      if (err) {
-          return res.status(500).json({ error: 'Internal server error' });
-      }
-      if (!report) {
-          return res.status(404).json({ error: 'Report not found' });
-      }
-      res.json(report);
-  });
-});
-
-// Endpoint to handle report submissions including file uploads
-app.post('/submit-report', upload.array('reportImages[]'), (req, res) => {
-  const { reportLocation, fenceDamaged, fenceValue, vehicleDamaged, vehicleValue, assetsDamaged, assetsValue, paddockDamaged, paddockValue, pipeDamaged, pipeValue, casualtiesDamaged, casualtiesValue, otherDamaged, otherName, otherValue, reportEFDamage, reportCAMDamage, reportDateTime, reportingOfficer } = req.body;
-
-  const reportID = uuidv4(); // Generate a unique ID for the report
-
-  // Create a new report object
-  const newReport = {
-    reportID,
-    reportLocation,
-    reportDamages: {
-      fence: { damaged: fenceDamaged ? true : false, value: fenceValue ? Number(fenceValue) : null },
-      vehicle: { damaged: vehicleDamaged ? true : false, value: vehicleValue ? Number(vehicleValue) : null },
-      assets: { damaged: assetsDamaged ? true : false, value: assetsValue ? Number(assetsValue) : null },
-      paddock: { damaged: paddockDamaged ? true : false, value: paddockValue ? Number(paddockValue) : null },
-      pipe: { damaged: pipeDamaged ? true : false, value: pipeValue ? Number(pipeValue) : null },
-      casualties: { damaged: casualtiesDamaged ? true : false, value: casualtiesValue ? Number(casualtiesValue) : null },
-      other: { damaged: otherDamaged ? true : false, name: otherName, value: otherValue ? Number(otherValue) : null }
-    },
-    reportEFDamage,
-    reportCAMDamage,
-    reportDateTime,
-    reportingOfficer
-  };
-
-  // Save report details to MongoDB
-  mongoose.connection.db.collection('reports').insertOne(newReport, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal server error' });
+// Get a specific report
+app.get('/reports/:id', async (req, res) => {
+  try {
+    const report = await Report.findOne({ reportID: req.params.id });
+    if (!report) {
+      return res.status(404).json({ error: 'Report not found' });
     }
-    res.json({ success: true, message: 'Report submitted successfully!' });
+    res.json(report);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Serve images
+app.get('/image/:filename', (req, res) => {
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        err: 'No file exists'
+      });
+    }
+
+    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+      const readstream = gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+    } else {
+      res.status(404).json({
+        err: 'Not an image'
+      });
+    }
   });
 });
 
