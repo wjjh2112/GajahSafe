@@ -98,6 +98,8 @@ function updateFileInput() {
 }
 
 document.getElementById('addReportForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     let isValid = true;
     let errorMessage = "";
@@ -131,7 +133,6 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
     });
 
     if (!isValid) {
-        event.preventDefault();
         alert(errorMessage);
     } else {
         const formData = new FormData(this);
