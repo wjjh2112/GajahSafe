@@ -66,10 +66,9 @@ function updateFileList() {
             };
             img.style.cursor = 'pointer'; // Change cursor to pointer for better UX
 
-            // Add click event listener to open image in a new tab
+            // Add event listener to open image in a new tab
             img.addEventListener('click', function() {
-                const newWindow = window.open();
-                newWindow.document.write('<img src="' + this.src + '" style="width:100%;height:auto;"/>');
+                window.open(img.src, '_blank');
             });
 
             const removeButton = document.createElement('button');

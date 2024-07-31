@@ -72,10 +72,9 @@ function displayImages(images) {
         img.style.height = 'auto'; // Maintain aspect ratio
         img.style.cursor = 'pointer'; // Change cursor to pointer for better UX
 
-        // Add click event listener to open image in a new tab
+        // Add event listener to open image in a new tab when clicked
         img.addEventListener('click', function() {
-            const newWindow = window.open();
-            newWindow.document.write('<img src="' + this.src + '" style="width:100%;height:auto;"/>');
+            window.open(img.src, '_blank');
         });
 
         li.appendChild(img);
