@@ -64,17 +64,20 @@ function displayImages(images) {
 
     images.forEach(image => {
         const li = document.createElement('li');
+        const a = document.createElement('a');
         const img = document.createElement('img');
+
         img.src = image;
         img.alt = 'Report Image';
-        img.style.maxWidth = '100%';
-        img.style.height = 'auto';
-        img.onclick = function() {
-            window.open(this.src, '_blank');
-        };
+        img.style.maxWidth = '100%'; // Adjust as needed
+        img.style.height = 'auto'; // Maintain aspect ratio
 
-        li.appendChild(img);
+        a.href = image;
+        a.target = '_blank'; // This makes the link open in a new tab
+        a.rel = 'noopener noreferrer'; // This is a security best practice for links opening in new tabs
+
+        a.appendChild(img);
+        li.appendChild(a);
         fileList.appendChild(li);
     });
 }
-

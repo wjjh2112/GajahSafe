@@ -59,23 +59,28 @@ function updateFileList() {
         fileArray.forEach((file, index) => {
             const li = document.createElement('li');
 
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(file);
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file);
-            img.onclick = function() {
-                window.open(this.src, '_blank');
-            };
             img.onload = function() {
                 URL.revokeObjectURL(this.src);
             };
 
+            a.appendChild(img);
+
             const removeButton = document.createElement('button');
             removeButton.textContent = 'X';
-            removeButton.addEventListener('click', function() {
+            removeButton.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent the click from propagating to the anchor
                 fileArray.splice(index, 1);
                 updateFileList();
             });
 
-            li.appendChild(img);
+            li.appendChild(a);
             li.appendChild(removeButton);
             fileListUl.appendChild(li);
         });
