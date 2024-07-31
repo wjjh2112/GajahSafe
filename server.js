@@ -332,19 +332,18 @@ app.get('/reports', (req, res) => {
 });
 
 // Route to fetch a specific report by its ID
-app.get('/reports/:id', async (req, res) => {
-  try {
-    const report = await Report.findOne({ reportID: req.params.id }); // Fetch report by reportID
-    if (!report) {
-      return res.status(404).json({ success: false, message: 'Report not found' });
-    }
+app.get('/reports/:id', (req, res) => {
+  const reportId = req.params.id;
 
-    const images = await ReportImage.find({ reportID: req.params.id }); // Fetch images by reportID
-
-    res.json({ report, images });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Error retrieving report or images from database' });
-  }
+  mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
+      if (err) {
+          return res.status(500).json({ error: 'Internal server error' });
+      }
+      if (!report) {
+          return res.status(404).json({ error: 'Report not found' });
+      }
+      res.json(report);
+  });
 });
 
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
