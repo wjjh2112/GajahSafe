@@ -76,3 +76,27 @@ function displayImages(images) {
     });
 }
 
+function displayImages(images) {
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = ''; // Clear any existing content
+
+    images.forEach(image => {
+        const li = document.createElement('li');
+        const img = document.createElement('img');
+
+        img.src = image;
+        img.alt = 'Report Image';
+        img.style.maxWidth = '100%'; // Adjust as needed
+        img.style.height = 'auto'; // Maintain aspect ratio
+        img.style.cursor = 'pointer'; // Change cursor to pointer for better UX
+
+        // Add click event listener to open image in a new tab
+        img.addEventListener('click', function() {
+            const newWindow = window.open();
+            newWindow.document.write('<img src="' + this.src + '" style="width:100%;height:auto;"/>');
+        });
+
+        li.appendChild(img);
+        fileList.appendChild(li);
+    });
+}

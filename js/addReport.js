@@ -64,6 +64,13 @@ function updateFileList() {
             img.onload = function() {
                 URL.revokeObjectURL(this.src);
             };
+            img.style.cursor = 'pointer'; // Change cursor to pointer for better UX
+
+            // Add click event listener to open image in a new tab
+            img.addEventListener('click', function() {
+                const newWindow = window.open();
+                newWindow.document.write('<img src="' + this.src + '" style="width:100%;height:auto;"/>');
+            });
 
             const removeButton = document.createElement('button');
             removeButton.textContent = 'X';
