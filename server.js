@@ -18,67 +18,6 @@ mongoose.connect('mongodb://admin:!NanaWaji060524!@13.229.129.54:27017/dummydb',
   console.error('Failed to connect to MongoDB', err);
 });
 
-const imageSchema = new mongoose.Schema({
-  filename: String,
-  metadata: {
-      reportID: String,
-      uploadDate: { type: Date, default: Date.now }
-  },
-  data: Buffer // This is if you are storing the image data directly in MongoDB
-});
-
-const Image = mongoose.model('Image', imageSchema);
-module.exports = Image;
-
-// Define the schema and model
-const reportSchema = new mongoose.Schema({
-  reportID: String,
-  reportLocation: String,
-  reportDamages: {
-      fence: {
-          damaged: Boolean,
-          value: Number
-      },
-      vehicle: {
-          damaged: Boolean,
-          value: Number
-      },
-      assets: {
-          damaged: Boolean,
-          value: Number
-      },
-      paddock: {
-          damaged: Boolean,
-          value: Number
-      },
-      pipe: {
-          damaged: Boolean,
-          value: Number
-      },
-      casualties: {
-          damaged: Boolean,
-          value: Number
-      },
-      other: {
-          damaged: Boolean,
-          damagedName: String,
-          value: Number
-      }
-  },
-  reportEFDamage: String,
-  reportCAMDamage: String,
-  reportDateTime: Date,
-  reportImages: [String],
-  reportingOfficer: String
-});
-
-const Report = mongoose.model('Report', reportSchema);
-module.exports = Report;
-
-// Configure multer for file uploads
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -359,51 +298,124 @@ app.get('/reports', (req, res) => {
   });
 });
 
-app.get('/reports/:id', async (req, res) => {
-  try {
-      const report = await Report.findById(req.params.id);
-      const images = await Image.find({ _id: { $in: report.reportImages } });
+// Route to fetch a specific report by its ID
+app.get('/reports/:id', (req, res) => {
+  const reportId = req.params.id;
 
-      res.json({ report, images });
-  } catch (err) {
-      res.status(500).json({ success: false, message: 'Error retrieving report or images from database', error: err.message });
-  }
+  mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
+      if (err) {
+          return res.status(500).json({ error: 'Internal server error' });
+      }
+      if (!report) {
+          return res.status(404).json({ error: 'Report not found' });
+      }
+      res.json(report);
+  });
 });
 
-app.post('/submit-report', upload.array('reportImages', 10), async (req, res) => {
-  const { reportID, reportLocation, reportDamages, reportEFDamage, reportCAMDamage, reportDateTime, reportingOfficer } = req.body;
+// Define the schema and model
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+      fence: {
+          damaged: Boolean,
+          value: Number
+      },
+      vehicle: {
+          damaged: Boolean,
+          value: Number
+      },
+      assets: {
+          damaged: Boolean,
+          value: Number
+      },
+      paddock: {
+          damaged: Boolean,
+          value: Number
+      },
+      pipe: {
+          damaged: Boolean,
+          value: Number
+      },
+      casualties: {
+          damaged: Boolean,
+          value: Number
+      },
+      other: {
+          damaged: Boolean,
+          damagedName: String,
+          value: Number
+      }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
+});
 
+const Report = mongoose.model('Report', reportSchema);
+
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
-      // Save images to the Image collection
-      const imageDocs = req.files.map(file => ({
-          filename: file.originalname,
-          metadata: { reportID },
-          data: file.buffer // If using multer memory storage
-      }));
 
-      const savedImages = await Image.insertMany(imageDocs);
-      const reportImages = savedImages.map(img => img._id);
-
-      // Create report
+      // Generate a unique report ID
+      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
       const report = new Report({
-          reportID,
-          reportLocation,
-          reportDamages: JSON.parse(reportDamages),
-          reportEFDamage,
-          reportCAMDamage,
-          reportDateTime: new Date(reportDateTime),
-          reportImages,
-          reportingOfficer
+        reportID: reportID, // Generate or assign as needed
+          reportLocation: req.body.reportLocation,
+          reportDamages: {
+              fence: {
+                  damaged: req.body.fenceDamaged === 'on',
+                  value: Number(req.body.fenceValue) || 0
+              },
+              vehicle: {
+                  damaged: req.body.vehicleDamaged === 'on',
+                  value: Number(req.body.vehicleValue) || 0
+              },
+              assets: {
+                damaged: req.body.assetsDamaged === 'on',
+                value: Number(req.body.assetsValue) || 0
+              },
+              paddock: {
+                  damaged: req.body.paddockDamaged === 'on',
+                  value: Number(req.body.paddockValue) || 0
+              },
+              pipe: {
+                damaged: req.body.pipeDamaged === 'on',
+                value: Number(req.body.pipeValue) || 0
+              },
+              casualties: {
+                  damaged: req.body.casualtiesDamaged === 'on',
+                  value: Number(req.body.casualtiesValue) || 0
+              },
+              other: {
+                  damaged: req.body.otherDamaged === 'on',
+                  damagedName: req.body.otherName || '',
+                  value: Number(req.body.otherValue) || 0
+              }
+          },
+          reportEFDamage: req.body.reportEFDamage,
+          reportCAMDamage: req.body.reportCAMDamage,
+          reportDateTime: new Date(req.body.reportDateTime),
+          reportImages: req.files.map(file => file.filename),
+          reportingOfficer: req.body.reportingOfficer
       });
 
       await report.save();
       res.json({ success: true });
-  } catch (err) {
-      res.status(500).json({ success: false, message: 'Error saving report or images to database', error: err.message });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error saving report' });
   }
 });
-
-
 
 // Start the server
 app.listen(port, () => {
