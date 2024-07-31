@@ -24,6 +24,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Configure AWS SDK to use the credentials from the IAM role
+AWS.config.update({
+  region: 'ap-southeast-1' // e.g., 'us-west-2'
+});
+
+const s3 = new AWS.S3();
+
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
+
+// Function to upload file to S3
+const uploadFile = (filePath, fileName) => {
+  const fileContent = fs.readFileSync(filePath);
+
+  const params = {
+    Bucket: 'gajahsafe-report-images', // e.g., 'my-gajahsafe-bucket'
+    Key: fileName, // File name you want to save as in S3
+    Body: fileContent
+  };
+
+  return s3.upload(params).promise();
+};
+
 // Serve static files (from root directory)
 app.use(express.static(path.join(__dirname)));
 
@@ -357,63 +380,69 @@ const reportSchema = new mongoose.Schema({
 
 const Report = mongoose.model('Report', reportSchema);
 
-// Configure multer for file uploads
-const upload = multer({ dest: 'uploads/' });
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
+    const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    const currentDate = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
 
-      // Generate a unique report ID
-      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-      const report = new Report({
-        reportID: reportID, // Generate or assign as needed
-          reportLocation: req.body.reportLocation,
-          reportDamages: {
-              fence: {
-                  damaged: req.body.fenceDamaged === 'on',
-                  value: Number(req.body.fenceValue) || 0
-              },
-              vehicle: {
-                  damaged: req.body.vehicleDamaged === 'on',
-                  value: Number(req.body.vehicleValue) || 0
-              },
-              assets: {
-                damaged: req.body.assetsDamaged === 'on',
-                value: Number(req.body.assetsValue) || 0
-              },
-              paddock: {
-                  damaged: req.body.paddockDamaged === 'on',
-                  value: Number(req.body.paddockValue) || 0
-              },
-              pipe: {
-                damaged: req.body.pipeDamaged === 'on',
-                value: Number(req.body.pipeValue) || 0
-              },
-              casualties: {
-                  damaged: req.body.casualtiesDamaged === 'on',
-                  value: Number(req.body.casualtiesValue) || 0
-              },
-              other: {
-                  damaged: req.body.otherDamaged === 'on',
-                  damagedName: req.body.otherName || '',
-                  value: Number(req.body.otherValue) || 0
-              }
-          },
-          reportEFDamage: req.body.reportEFDamage,
-          reportCAMDamage: req.body.reportCAMDamage,
-          reportDateTime: new Date(req.body.reportDateTime),
-          reportImages: req.files.map(file => file.filename),
-          reportingOfficer: req.body.reportingOfficer
-      });
+    // Upload each file to S3 with the new file name format
+    const uploadPromises = req.files.map(file => {
+      const fileName = `${reportID}_${currentDate}_${file.originalname}`;
+      return uploadFile(file.path, fileName);
+    });
 
-      await report.save();
-      res.json({ success: true });
+    // Wait for all files to be uploaded
+    const uploadResults = await Promise.all(uploadPromises);
+
+    // Get the URLs of uploaded files
+    const fileUrls = uploadResults.map(result => result.Location);
+
+    const report = new Report({
+      reportID: reportID,
+      reportLocation: req.body.reportLocation,
+      reportDamages: {
+        fence: {
+          damaged: req.body.fenceDamaged === 'on',
+          value: Number(req.body.fenceValue) || 0
+        },
+        vehicle: {
+          damaged: req.body.vehicleDamaged === 'on',
+          value: Number(req.body.vehicleValue) || 0
+        },
+        assets: {
+          damaged: req.body.assetsDamaged === 'on',
+          value: Number(req.body.assetsValue) || 0
+        },
+        paddock: {
+          damaged: req.body.paddockDamaged === 'on',
+          value: Number(req.body.paddockValue) || 0
+        },
+        pipe: {
+          damaged: req.body.pipeDamaged === 'on',
+          value: Number(req.body.pipeValue) || 0
+        },
+        casualties: {
+          damaged: req.body.casualtiesDamaged === 'on',
+          value: Number(req.body.casualtiesValue) || 0
+        },
+        other: {
+          damaged: req.body.otherDamaged === 'on',
+          damagedName: req.body.otherName || '',
+          value: Number(req.body.otherValue) || 0
+        }
+      },
+      reportEFDamage: req.body.reportEFDamage,
+      reportCAMDamage: req.body.reportCAMDamage,
+      reportDateTime: new Date(req.body.reportDateTime),
+      reportImages: fileUrls, // Use S3 URLs
+      reportingOfficer: req.body.reportingOfficer
+    });
+
+    await report.save();
+    res.json({ success: true });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Error saving report' });
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error saving report' });
   }
 });
 
