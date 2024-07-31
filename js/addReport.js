@@ -60,8 +60,7 @@ function updateFileList() {
             const li = document.createElement('li');
 
             const img = document.createElement('img');
-            const fileURL = URL.createObjectURL(file);
-            img.src = fileURL;
+            img.src = URL.createObjectURL(file);
             img.onload = function() {
                 URL.revokeObjectURL(this.src);
             };
@@ -69,10 +68,8 @@ function updateFileList() {
 
             // Add click event listener to open image in a new tab
             img.addEventListener('click', function() {
-                const newWindow = window.open(fileURL, '_blank');
-                if (newWindow) {
-                    newWindow.focus();
-                }
+                const newWindow = window.open();
+                newWindow.document.write('<img src="' + this.src + '" style="width:100%;height:auto;"/>');
             });
 
             const removeButton = document.createElement('button');
@@ -100,7 +97,6 @@ function updateFileList() {
 
     updateFileInput();
 }
-
 
 function updateFileInput() {
     const dt = new DataTransfer();

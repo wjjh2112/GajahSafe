@@ -74,15 +74,12 @@ function displayImages(images) {
 
         // Add click event listener to open image in a new tab
         img.addEventListener('click', function() {
-            const newWindow = window.open(image, '_blank');
-            if (newWindow) {
-                newWindow.focus();
-            }
+            const newWindow = window.open();
+            newWindow.document.write('<img src="' + this.src + '" style="width:100%;height:auto;"/>');
         });
 
         li.appendChild(img);
         fileList.appendChild(li);
     });
 }
-
 
