@@ -4,6 +4,8 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const { GridFsStorage } = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -26,6 +28,61 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files (from root directory)
 app.use(express.static(path.join(__dirname)));
+
+// Initialize GridFS
+let gfs;
+mongoose.connection.once('open', () => {
+  gfs = Grid(mongoose.connection.db, mongoose.mongo);
+  gfs.collection('uploads');
+});
+
+// Create storage engine
+const storage = new GridFsStorage({
+  url: 'mongodb://admin:!NanaWaji060524!@13.229.129.54:27017/dummydb',
+  options: { useNewUrlParser: true, useUnifiedTopology: true },
+  file: (req, file) => {
+    return {
+      bucketName: 'uploads',
+      filename: 'file_' + Date.now() + path.extname(file.originalname),
+      metadata: { reportID: req.body.reportID }
+    };
+  }
+});
+const upload = multer({ storage });
+
+// Define Schemas and Models
+const imageSchema = new mongoose.Schema({
+  filename: String,
+  metadata: {
+    reportID: String,
+    uploadDate: { type: Date, default: Date.now }
+  },
+  data: Buffer
+});
+
+const Image = mongoose.model('Image', imageSchema);
+
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+    fence: { damaged: Boolean, value: Number },
+    vehicle: { damaged: Boolean, value: Number },
+    assets: { damaged: Boolean, value: Number },
+    paddock: { damaged: Boolean, value: Number },
+    pipe: { damaged: Boolean, value: Number },
+    casualties: { damaged: Boolean, value: Number },
+    other: { damaged: Boolean, damagedName: String, value: Number }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
+});
+
+const Report = mongoose.model('Report', reportSchema);
+
 
 // Routes
 app.get('/', (req, res) => {
@@ -313,63 +370,46 @@ app.get('/reports/:id', (req, res) => {
   });
 });
 
-// Define the schema and model
-const reportSchema = new mongoose.Schema({
-  reportID: String,
-  reportLocation: String,
-  reportDamages: {
-      fence: {
-          damaged: Boolean,
-          value: Number
-      },
-      vehicle: {
-          damaged: Boolean,
-          value: Number
-      },
-      assets: {
-          damaged: Boolean,
-          value: Number
-      },
-      paddock: {
-          damaged: Boolean,
-          value: Number
-      },
-      pipe: {
-          damaged: Boolean,
-          value: Number
-      },
-      casualties: {
-          damaged: Boolean,
-          value: Number
-      },
-      other: {
-          damaged: Boolean,
-          damagedName: String,
-          value: Number
-      }
-  },
-  reportEFDamage: String,
-  reportCAMDamage: String,
-  reportDateTime: Date,
-  reportImages: [String],
-  reportingOfficer: String
-});
-
-const Report = mongoose.model('Report', reportSchema);
-
-// Configure multer for file uploads
-const upload = multer({ dest: 'uploads/' });
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
+app.get('/reports/:id', async (req, res) => {
   try {
 
-      // Generate a unique report ID
-      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    const reportId = req.params.id;
+
+    mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        if (!report) {
+            return res.status(404).json({ error: 'Report not found' });
+        }
+        res.json(report);
+    });
+    
+      const report = await Report.findById(req.params.id);
+      const images = await Image.find({ _id: { $in: report.reportImages } });
+
+      res.json({ report, images });
+  } catch (err) {
+      res.status(500).json({ success: false, message: 'Error retrieving report or images from database' });
+  }
+});
+
+app.post('/submit-report', upload.array('reportImages', 10), async (req, res) => {
+  // Generate a unique report ID
+  const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+
+  // Save images to the Image collection
+  const imageDocs = req.files.map(file => {
+      return {
+          filename: file.originalname,
+          metadata: { reportID },
+          data: file.buffer // If using multer memory storage
+      };
+  });
+
+  try {
       const report = new Report({
-        reportID: reportID, // Generate or assign as needed
+        reportID: reportID,
           reportLocation: req.body.reportLocation,
           reportDamages: {
               fence: {
@@ -413,7 +453,7 @@ app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
       res.json({ success: true });
   } catch (error) {
       console.error(error);
-      res.status(500).json({ success: false, message: 'Error saving report' });
+      res.status(500).json({ success: false, message: 'Error saving report or images to database' });
   }
 });
 
