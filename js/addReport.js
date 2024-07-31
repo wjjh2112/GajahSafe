@@ -22,13 +22,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Date & Time JS
 document.addEventListener("DOMContentLoaded", function() {
-    var dateTimeInput = document.getElementById('datetime-input');
-    var currentDateTime = new Date();
-    var formattedDateTime = currentDateTime.toISOString().slice(0, 16); // Format the date and time for input[type="datetime-local"]
+    var dateInput = document.getElementById('date-input');
+    var currentDate = new Date();
+    var formattedDate = currentDate.toISOString().slice(0, 10); // Format the date for input[type="date"]
 
-    dateTimeInput.value = formattedDateTime;
-    dateTimeInput.readOnly = true; // Make the input read-only
+    dateInput.value = formattedDate;
+    dateInput.readOnly = true; // Make the input read-only
 });
+
 
 // Upload Images File JS
 const fileArray = [];

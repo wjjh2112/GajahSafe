@@ -404,7 +404,7 @@ app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
           },
           reportEFDamage: req.body.reportEFDamage,
           reportCAMDamage: req.body.reportCAMDamage,
-          reportDateTime: new Date(req.body.reportDateTime),
+          reportDateTime: reportDateTime,
           reportImages: req.files.map(file => file.filename),
           reportingOfficer: req.body.reportingOfficer
       });
