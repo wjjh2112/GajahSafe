@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const Grid = require('gridfs-stream');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -17,14 +16,6 @@ mongoose.connect('mongodb://admin:!NanaWaji060524!@13.229.129.54:27017/dummydb',
   console.log('Connected to MongoDB');
 }).catch(err => {
   console.error('Failed to connect to MongoDB', err);
-});
-
-// Initialize GridFS
-const conn = mongoose.connection;
-let gfs;
-conn.once('open', () => {
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection('images');
 });
 
 // Middleware
@@ -366,95 +357,63 @@ const reportSchema = new mongoose.Schema({
 
 const Report = mongoose.model('Report', reportSchema);
 
-// Endpoint to fetch image by ID
-app.get('/images/:filename', (req, res) => {
-  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-    if (!file || file.length === 0) {
-      return res.status(404).json({ error: 'No such file' });
-    }
-
-    // Read the file
-    const readstream = gfs.createReadStream(file.filename);
-    readstream.pipe(res);
-  });
-});
-
 // Configure multer for file uploads
-const upload = multer({ 
-  storage: multer.memoryStorage() 
-});
+const upload = multer({ dest: 'uploads/' });
 
-// Endpoint to submit a report with images
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
-    // Generate a unique report ID
-    const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
-    // Save images to GridFS
-    const imageIDs = [];
-    for (const file of req.files) {
-      const writeStream = gfs.createWriteStream({
-        filename: uuidv4() + path.extname(file.originalname),
-        contentType: file.mimetype
+      // Generate a unique report ID
+      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const report = new Report({
+        reportID: reportID, // Generate or assign as needed
+          reportLocation: req.body.reportLocation,
+          reportDamages: {
+              fence: {
+                  damaged: req.body.fenceDamaged === 'on',
+                  value: Number(req.body.fenceValue) || 0
+              },
+              vehicle: {
+                  damaged: req.body.vehicleDamaged === 'on',
+                  value: Number(req.body.vehicleValue) || 0
+              },
+              assets: {
+                damaged: req.body.assetsDamaged === 'on',
+                value: Number(req.body.assetsValue) || 0
+              },
+              paddock: {
+                  damaged: req.body.paddockDamaged === 'on',
+                  value: Number(req.body.paddockValue) || 0
+              },
+              pipe: {
+                damaged: req.body.pipeDamaged === 'on',
+                value: Number(req.body.pipeValue) || 0
+              },
+              casualties: {
+                  damaged: req.body.casualtiesDamaged === 'on',
+                  value: Number(req.body.casualtiesValue) || 0
+              },
+              other: {
+                  damaged: req.body.otherDamaged === 'on',
+                  damagedName: req.body.otherName || '',
+                  value: Number(req.body.otherValue) || 0
+              }
+          },
+          reportEFDamage: req.body.reportEFDamage,
+          reportCAMDamage: req.body.reportCAMDamage,
+          reportDateTime: new Date(req.body.reportDateTime),
+          reportImages: req.files.map(file => file.filename),
+          reportingOfficer: req.body.reportingOfficer
       });
-      writeStream.write(file.buffer);
-      writeStream.end();
 
-      writeStream.on('close', (uploadedFile) => {
-        imageIDs.push(uploadedFile.filename);
-      });
-    }
-
-    // Wait for all images to be uploaded
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Save report to MongoDB
-    const report = new Report({
-      reportID: reportID,
-      reportLocation: req.body.reportLocation,
-      reportDamages: {
-        fence: {
-          damaged: req.body.fenceDamaged === 'on',
-          value: Number(req.body.fenceValue) || 0
-        },
-        vehicle: {
-          damaged: req.body.vehicleDamaged === 'on',
-          value: Number(req.body.vehicleValue) || 0
-        },
-        assets: {
-          damaged: req.body.assetsDamaged === 'on',
-          value: Number(req.body.assetsValue) || 0
-        },
-        paddock: {
-          damaged: req.body.paddockDamaged === 'on',
-          value: Number(req.body.paddockValue) || 0
-        },
-        pipe: {
-          damaged: req.body.pipeDamaged === 'on',
-          value: Number(req.body.pipeValue) || 0
-        },
-        casualties: {
-          damaged: req.body.casualtiesDamaged === 'on',
-          value: Number(req.body.casualtiesValue) || 0
-        },
-        other: {
-          damaged: req.body.otherDamaged === 'on',
-          damagedName: req.body.otherName || '',
-          value: Number(req.body.otherValue) || 0
-        }
-      },
-      reportEFDamage: req.body.reportEFDamage,
-      reportCAMDamage: req.body.reportCAMDamage,
-      reportDateTime: new Date(req.body.reportDateTime),
-      reportImages: imageIDs,  // Array of image IDs
-      reportingOfficer: req.body.reportingOfficer
-    });
-
-    await report.save();
-    res.json({ success: true });
+      await report.save();
+      res.json({ success: true });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error saving report' });
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error saving report' });
   }
 });
 
