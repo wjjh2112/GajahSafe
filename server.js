@@ -324,11 +324,10 @@ app.get('/reports', (req, res) => {
 });
 
 
-// Endpoint to fetch a specific report by ID
-app.get('/reports/:id', (req, res) => {
-  const reportId = req.params.id;
+// Endpoint to get a specific report by ID
+app.get('/reports/:reportId', (req, res) => {
+  const reportId = req.params.reportId;
 
-  // Fetch the report from the database
   mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
     if (err) {
       return res.status(500).json({ error: 'Internal server error' });
@@ -336,9 +335,10 @@ app.get('/reports/:id', (req, res) => {
     if (!report) {
       return res.status(404).json({ error: 'Report not found' });
     }
-    res.json(reportWithImageUrls);
+    res.json(report);
   });
 });
+
 
 
 // Define the schema and model
