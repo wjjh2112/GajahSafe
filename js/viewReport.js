@@ -60,18 +60,17 @@ function displayRadioButtons(prefix, value) {
 
 function displayImages(images) {
     const fileList = document.getElementById('file-list');
-    fileList.innerHTML = '';
+    fileList.innerHTML = ''; // Clear any existing content
 
     images.forEach(image => {
         const li = document.createElement('li');
-        
-        // Create image element
         const img = document.createElement('img');
-        img.src = `https://gajahsafe-report-images.s3.ap-southeast-1.amazonaws.com/${image}`;
-        img.alt = image;
-        img.style.width = '150px'; // Adjust size as needed
-        img.style.height = 'auto';
-        
+
+        img.src = image;
+        img.alt = 'Report Image';
+        img.style.maxWidth = '100%'; // Adjust as needed
+        img.style.height = 'auto'; // Maintain aspect ratio
+
         li.appendChild(img);
         fileList.appendChild(li);
     });

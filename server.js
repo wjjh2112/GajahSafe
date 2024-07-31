@@ -336,13 +336,6 @@ app.get('/reports/:id', (req, res) => {
     if (!report) {
       return res.status(404).json({ error: 'Report not found' });
     }
-
-    // Assuming reportImages is an array of image filenames
-    const reportWithImageUrls = {
-      ...report,
-      reportImages: report.reportImages.map(image => `https://gajahsafe-report-images.s3.ap-southeast-1.amazonaws.com/${image}`)
-    };
-
     res.json(reportWithImageUrls);
   });
 });
