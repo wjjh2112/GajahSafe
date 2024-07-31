@@ -56,6 +56,7 @@
     "damaged": "Rosak",
     "images": "Imej",
     "addImagesPlaceholder": "Klik untuk menambah imej",
+    "fileTypeUploadValidation": "Jenis Fail: .JPEG, .JPG atau .PNG sahaja.",
     "reportingOfficer": "Pegawai Pelapor",
     "reportingOfficerPlaceholder": "Masukkan Pegawai Pelapor",
     "submit": "Hantar",
