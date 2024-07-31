@@ -323,20 +323,30 @@ app.get('/reports', (req, res) => {
   });
 });
 
-// Route to fetch a specific report by its ID
+
+// Endpoint to fetch a specific report by ID
 app.get('/reports/:id', (req, res) => {
   const reportId = req.params.id;
 
+  // Fetch the report from the database
   mongoose.connection.db.collection('reports').findOne({ reportID: reportId }, (err, report) => {
-      if (err) {
-          return res.status(500).json({ error: 'Internal server error' });
-      }
-      if (!report) {
-          return res.status(404).json({ error: 'Report not found' });
-      }
-      res.json(report);
+    if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!report) {
+      return res.status(404).json({ error: 'Report not found' });
+    }
+
+    // Assuming reportImages is an array of image filenames
+    const reportWithImageUrls = {
+      ...report,
+      reportImages: report.reportImages.map(image => `https://gajahsafe-report-images.s3.ap-southeast-1.amazonaws.com/${image}`)
+    };
+
+    res.json(reportWithImageUrls);
   });
 });
+
 
 // Define the schema and model
 const reportSchema = new mongoose.Schema({
