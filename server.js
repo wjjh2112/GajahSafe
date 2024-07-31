@@ -27,39 +27,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files (from root directory)
 app.use(express.static(path.join(__dirname)));
 
-// Define the Report schema and model
-const reportSchema = new mongoose.Schema({
-  reportID: String,
-  reportLocation: String,
-  reportDamages: {
-    fence: { damaged: Boolean, value: Number },
-    vehicle: { damaged: Boolean, value: Number },
-    assets: { damaged: Boolean, value: Number },
-    paddock: { damaged: Boolean, value: Number },
-    pipe: { damaged: Boolean, value: Number },
-    casualties: { damaged: Boolean, value: Number },
-    other: { damaged: Boolean, damagedName: String, value: Number }
-  },
-  reportEFDamage: String,
-  reportCAMDamage: String,
-  reportDateTime: Date,
-  reportingOfficer: String
-});
-
-const Report = mongoose.model('Report', reportSchema);
-
-// Define the ReportImage schema and model
-const reportImageSchema = new mongoose.Schema({
-  reportID: String,
-  filename: String,
-  filepath: String
-});
-
-const ReportImage = mongoose.model('ReportImage', reportImageSchema);
-
-// Configure multer for file uploads
-const upload = multer({ dest: 'uploads/' });
-
 // Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -346,48 +313,107 @@ app.get('/reports/:id', (req, res) => {
   });
 });
 
+// Define the schema and model
+const reportSchema = new mongoose.Schema({
+  reportID: String,
+  reportLocation: String,
+  reportDamages: {
+      fence: {
+          damaged: Boolean,
+          value: Number
+      },
+      vehicle: {
+          damaged: Boolean,
+          value: Number
+      },
+      assets: {
+          damaged: Boolean,
+          value: Number
+      },
+      paddock: {
+          damaged: Boolean,
+          value: Number
+      },
+      pipe: {
+          damaged: Boolean,
+          value: Number
+      },
+      casualties: {
+          damaged: Boolean,
+          value: Number
+      },
+      other: {
+          damaged: Boolean,
+          damagedName: String,
+          value: Number
+      }
+  },
+  reportEFDamage: String,
+  reportCAMDamage: String,
+  reportDateTime: Date,
+  reportImages: [String],
+  reportingOfficer: String
+});
+
+const Report = mongoose.model('Report', reportSchema);
+
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
-    // Generate a unique report ID
-    const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
-    // Save report details
-    const report = new Report({
-      reportID: reportID,
-      reportLocation: req.body.reportLocation,
-      reportDamages: {
-        fence: { damaged: req.body.fenceDamaged === 'on', value: Number(req.body.fenceValue) || 0 },
-        vehicle: { damaged: req.body.vehicleDamaged === 'on', value: Number(req.body.vehicleValue) || 0 },
-        assets: { damaged: req.body.assetsDamaged === 'on', value: Number(req.body.assetsValue) || 0 },
-        paddock: { damaged: req.body.paddockDamaged === 'on', value: Number(req.body.paddockValue) || 0 },
-        pipe: { damaged: req.body.pipeDamaged === 'on', value: Number(req.body.pipeValue) || 0 },
-        casualties: { damaged: req.body.casualtiesDamaged === 'on', value: Number(req.body.casualtiesValue) || 0 },
-        other: { damaged: req.body.otherDamaged === 'on', damagedName: req.body.otherName || '', value: Number(req.body.otherValue) || 0 }
-      },
-      reportEFDamage: req.body.reportEFDamage,
-      reportCAMDamage: req.body.reportCAMDamage,
-      reportDateTime: new Date(req.body.reportDateTime),
-      reportingOfficer: req.body.reportingOfficer
-    });
-
-    await report.save();
-
-    // Save image details
-    const imagePromises = req.files.map(async file => {
-      const reportImage = new ReportImage({
-        reportID: reportID,
-        filename: file.filename,
-        filepath: file.path
+      // Generate a unique report ID
+      const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const report = new Report({
+        reportID: reportID, // Generate or assign as needed
+          reportLocation: req.body.reportLocation,
+          reportDamages: {
+              fence: {
+                  damaged: req.body.fenceDamaged === 'on',
+                  value: Number(req.body.fenceValue) || 0
+              },
+              vehicle: {
+                  damaged: req.body.vehicleDamaged === 'on',
+                  value: Number(req.body.vehicleValue) || 0
+              },
+              assets: {
+                damaged: req.body.assetsDamaged === 'on',
+                value: Number(req.body.assetsValue) || 0
+              },
+              paddock: {
+                  damaged: req.body.paddockDamaged === 'on',
+                  value: Number(req.body.paddockValue) || 0
+              },
+              pipe: {
+                damaged: req.body.pipeDamaged === 'on',
+                value: Number(req.body.pipeValue) || 0
+              },
+              casualties: {
+                  damaged: req.body.casualtiesDamaged === 'on',
+                  value: Number(req.body.casualtiesValue) || 0
+              },
+              other: {
+                  damaged: req.body.otherDamaged === 'on',
+                  damagedName: req.body.otherName || '',
+                  value: Number(req.body.otherValue) || 0
+              }
+          },
+          reportEFDamage: req.body.reportEFDamage,
+          reportCAMDamage: req.body.reportCAMDamage,
+          reportDateTime: new Date(req.body.reportDateTime),
+          reportImages: req.files.map(file => file.filename),
+          reportingOfficer: req.body.reportingOfficer
       });
-      await reportImage.save();
-    });
 
-    await Promise.all(imagePromises);
-
-    res.json({ success: true });
+      await report.save();
+      res.json({ success: true });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error saving report' });
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error saving report' });
   }
 });
 
