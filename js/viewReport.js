@@ -67,14 +67,21 @@ function displayImages(images) {
         const a = document.createElement('a');
         const img = document.createElement('img');
 
+        // Assuming 'image' is a URL to the image file
         img.src = image;
         img.alt = 'Report Image';
-        img.style.maxWidth = '100%'; // Adjust as needed
-        img.style.height = 'auto'; // Maintain aspect ratio
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
 
         a.href = image;
-        a.target = '_blank'; // This makes the link open in a new tab
-        a.rel = 'noopener noreferrer'; // This is a security best practice for links opening in new tabs
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+
+        // Prevent default action and open image in new tab
+        a.onclick = function(e) {
+            e.preventDefault();
+            window.open(this.href, '_blank');
+        };
 
         a.appendChild(img);
         li.appendChild(a);
