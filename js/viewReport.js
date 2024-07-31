@@ -77,12 +77,6 @@ function displayImages(images) {
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
 
-        // Prevent default action and open image in new tab
-        a.onclick = function(e) {
-            e.preventDefault();
-            window.open(this.href, '_blank');
-        };
-
         a.appendChild(img);
         li.appendChild(a);
         fileList.appendChild(li);

@@ -43,7 +43,9 @@ const uploadFile = (filePath, fileName) => {
   const params = {
     Bucket: 'gajahsafe-report-images', // e.g., 'my-gajahsafe-bucket'
     Key: fileName, // File name you want to save as in S3
-    Body: fileContent
+    Body: fileContent,
+    ContentType: 'image/jpeg', // Set the correct MIME type for the image
+    ContentDisposition: 'inline' // This will instruct the browser to display the image inline
   };
 
   return s3.upload(params).promise();
@@ -338,8 +340,6 @@ app.get('/reports/:reportId', (req, res) => {
     res.json(report);
   });
 });
-
-
 
 // Define the schema and model
 const reportSchema = new mongoose.Schema({
