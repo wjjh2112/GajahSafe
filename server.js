@@ -43,9 +43,7 @@ const uploadFile = (filePath, fileName) => {
   const params = {
     Bucket: 'gajahsafe-report-images', // e.g., 'my-gajahsafe-bucket'
     Key: fileName, // File name you want to save as in S3
-    Body: fileContent,
-    ContentType: 'image/png', // Set the correct MIME type for the image
-    ContentDisposition: 'inline' // This will instruct the browser to display the image inline
+    Body: fileContent
   };
 
   return s3.upload(params).promise();
