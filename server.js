@@ -385,35 +385,33 @@ const upload = multer({
 });
 
 // Endpoint to submit a report with images
-// Endpoint to submit a report with images
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
     // Generate a unique report ID
     const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
     // Save images to GridFS
-    const imageIDs = [];
-    for (const file of req.files) {
-      const writeStream = gfs.createWriteStream({
-        filename: uuidv4() + path.extname(file.originalname),
-        contentType: file.mimetype
+    const imageUploadPromises = req.files.map(file => {
+      return new Promise((resolve, reject) => {
+        const writeStream = gfs.createWriteStream({
+          filename: uuidv4() + path.extname(file.originalname),
+          contentType: file.mimetype
+        });
+
+        writeStream.write(file.buffer);
+        writeStream.end();
+
+        writeStream.on('close', (uploadedFile) => {
+          resolve(uploadedFile.filename);
+        });
+
+        writeStream.on('error', (err) => {
+          reject(err);
+        });
       });
+    });
 
-      writeStream.on('error', (err) => {
-        console.error('Error uploading file to GridFS', err);
-        res.status(500).json({ success: false, message: 'Error uploading file' });
-      });
-
-      writeStream.on('close', (uploadedFile) => {
-        imageIDs.push(uploadedFile.filename);
-      });
-
-      writeStream.write(file.buffer);
-      writeStream.end();
-    }
-
-    // Wait for all images to be uploaded
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const imageIDs = await Promise.all(imageUploadPromises);
 
     // Save report to MongoDB
     const report = new Report({
@@ -460,11 +458,10 @@ app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
     await report.save();
     res.json({ success: true });
   } catch (error) {
-    console.error('Error saving report:', error);
+    console.error(error);
     res.status(500).json({ success: false, message: 'Error saving report' });
   }
 });
-
 
 // Start the server
 app.listen(port, () => {
