@@ -61,15 +61,12 @@ function updateFileList() {
 
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file);
+            img.onclick = function() {
+                window.open(this.src, '_blank');
+            };
             img.onload = function() {
                 URL.revokeObjectURL(this.src);
             };
-            img.style.cursor = 'pointer'; // Change cursor to pointer for better UX
-
-            // Add event listener to open image in a new tab
-            img.addEventListener('click', function() {
-                window.open(img.src, '_blank');
-            });
 
             const removeButton = document.createElement('button');
             removeButton.textContent = 'X';

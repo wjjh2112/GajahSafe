@@ -65,17 +65,13 @@ function displayImages(images) {
     images.forEach(image => {
         const li = document.createElement('li');
         const img = document.createElement('img');
-
         img.src = image;
         img.alt = 'Report Image';
-        img.style.maxWidth = '100%'; // Adjust as needed
-        img.style.height = 'auto'; // Maintain aspect ratio
-        img.style.cursor = 'pointer'; // Change cursor to pointer for better UX
-
-        // Add event listener to open image in a new tab when clicked
-        img.addEventListener('click', function() {
-            window.open(img.src, '_blank');
-        });
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+        img.onclick = function() {
+            window.open(this.src, '_blank');
+        };
 
         li.appendChild(img);
         fileList.appendChild(li);
