@@ -391,27 +391,22 @@ app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
     const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
 
     // Save images to GridFS
-    const imageUploadPromises = req.files.map(file => {
-      return new Promise((resolve, reject) => {
-        const writeStream = gfs.createWriteStream({
-          filename: uuidv4() + path.extname(file.originalname),
-          contentType: file.mimetype
-        });
-
-        writeStream.write(file.buffer);
-        writeStream.end();
-
-        writeStream.on('close', (uploadedFile) => {
-          resolve(uploadedFile.filename);
-        });
-
-        writeStream.on('error', (err) => {
-          reject(err);
-        });
+    const imageIDs = [];
+    for (const file of req.files) {
+      const writeStream = gfs.createWriteStream({
+        filename: uuidv4() + path.extname(file.originalname),
+        contentType: file.mimetype
       });
-    });
+      writeStream.write(file.buffer);
+      writeStream.end();
 
-    const imageIDs = await Promise.all(imageUploadPromises);
+      writeStream.on('close', (uploadedFile) => {
+        imageIDs.push(uploadedFile.filename);
+      });
+    }
+
+    // Wait for all images to be uploaded
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Save report to MongoDB
     const report = new Report({
