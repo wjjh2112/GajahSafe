@@ -147,12 +147,13 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
                 alert('Report submitted successfully!');
                 this.reset();
             } else {
-                alert('Error submitting report');
+                alert('Error submitting report: ' + (data.message || 'Unknown error'));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error submitting report');
+            alert('Error submitting report: ' + error.message);
         });
     }
 });
+
