@@ -145,7 +145,7 @@ document.getElementById('addReportForm').addEventListener('submit', function(eve
         .then(data => {
             if (data.success) {
                 alert('Report submitted successfully!');
-                this.reset();
+                window.location.href = '/Reports';
             } else {
                 alert('Error submitting report: ' + (data.message || 'Unknown error'));
             }
