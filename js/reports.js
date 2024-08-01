@@ -250,12 +250,72 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 labels: monthlyData.map(d => `${d.weekStart.toLocaleDateString()} - ${new Date(d.weekStart.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}`),
                 datasets: [{
-                    label: 'Total Reports',
-                    borderColor: 'rgba(0, 123, 255, 0.9)',
-                    borderWidth: 1,
-                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    label: 'Total of Reports',
+                    backgroundColor: 'transparent',
+                    borderColor: 'rgba(220,53,69,0.75)',
+                    borderWidth: 3,
+                    pointStyle: 'circle',
+                    pointRadius: 5,
+                    pointBorderColor: 'transparent',
+                    pointBackgroundColor: 'rgba(220,53,69,0.75)',
                     data: monthlyData.map(d => d.count)
                 }]
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    titleFontSize: 12,
+                    titleFontColor: '#000',
+                    bodyFontColor: '#000',
+                    backgroundColor: '#fff',
+                    titleFontFamily: 'Poppins',
+                    bodyFontFamily: 'Poppins',
+                    cornerRadius: 3,
+                    intersect: false,
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        usePointStyle: true,
+                        fontFamily: 'Poppins',
+                    },
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Date'
+                        },
+                        ticks: {
+                            fontFamily: "Poppins"
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value',
+                            fontFamily: "Poppins"
+                        },
+                        ticks: {
+                            fontFamily: "Poppins",
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            stepSize: 1,
+                        }
+                    }]
+                }
             }
         });
 
@@ -285,12 +345,72 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 labels: yearlyData.map(d => d.month),
                 datasets: [{
-                    label: 'Total Reports',
-                    borderColor: 'rgba(0, 123, 255, 0.9)',
-                    borderWidth: 1,
-                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    label: 'Total of Reports',
+                    backgroundColor: 'transparent',
+                    borderColor: 'rgba(220,53,69,0.75)',
+                    borderWidth: 3,
+                    pointStyle: 'circle',
+                    pointRadius: 5,
+                    pointBorderColor: 'transparent',
+                    pointBackgroundColor: 'rgba(220,53,69,0.75)',
                     data: yearlyData.map(d => d.count)
                 }]
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    titleFontSize: 12,
+                    titleFontColor: '#000',
+                    bodyFontColor: '#000',
+                    backgroundColor: '#fff',
+                    titleFontFamily: 'Poppins',
+                    bodyFontFamily: 'Poppins',
+                    cornerRadius: 3,
+                    intersect: false,
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        usePointStyle: true,
+                        fontFamily: 'Poppins',
+                    },
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Date'
+                        },
+                        ticks: {
+                            fontFamily: "Poppins"
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value',
+                            fontFamily: "Poppins"
+                        },
+                        ticks: {
+                            fontFamily: "Poppins",
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            stepSize: 1,
+                        }
+                    }]
+                }
             }
         });
 
