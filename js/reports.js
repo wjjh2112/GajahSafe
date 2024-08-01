@@ -229,16 +229,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
 
         const monthlyData = [];
-        for (let weekStart = new Date(monthStart); weekStart <= monthEnd; weekStart.setDate(weekStart.getDate() + 7)) {
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
+        let weekStart = new Date(monthStart);
+        let weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        while (weekStart <= monthEnd) {
+            if (weekEnd > monthEnd) {
+                weekEnd = new Date(monthEnd);
+            }
 
             const count = reports.filter(report => {
                 const reportDate = new Date(report.reportDateTime);
                 return reportDate >= weekStart && reportDate <= weekEnd;
             }).length;
 
-            monthlyData.push({ weekStart: new Date(weekStart), count });
+            monthlyData.push({ weekStart: new Date(weekStart), weekEnd: new Date(weekEnd), count });
+
+            weekStart.setDate(weekStart.getDate() + 7);
+            weekEnd.setDate(weekStart.getDate() + 6);
         }
 
         if (monthlyChart) {
