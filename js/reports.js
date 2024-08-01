@@ -226,21 +226,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayMonthlyChart(reports) {
         const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
-        const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
-
+        const nextMonthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    
         const monthlyData = [];
-        for (let weekStart = new Date(monthStart); weekStart <= monthEnd; weekStart.setDate(weekStart.getDate() + 7)) {
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
-
+        for (let date = new Date(monthStart); date < nextMonthStart; date.setDate(date.getDate() + 1)) {
+            const endDate = new Date(date);
+            endDate.setDate(endDate.getDate() + 6);
+            if (endDate >= nextMonthStart) {
+                endDate.setDate(nextMonthStart.getDate() - 1);
+            }
+    
             const count = reports.filter(report => {
                 const reportDate = new Date(report.reportDateTime);
-                return reportDate >= weekStart && reportDate <= weekEnd;
+                return reportDate >= date && reportDate <= endDate;
             }).length;
-
-            monthlyData.push({ weekStart: new Date(weekStart), count });
+    
+            monthlyData.push({ startDate: new Date(date), endDate: new Date(endDate), count });
+            date.setDate(endDate.getDate());
         }
-
+    
         if (monthlyChart) {
             monthlyChart.destroy();
         }
