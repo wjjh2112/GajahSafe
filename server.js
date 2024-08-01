@@ -43,7 +43,8 @@ const uploadFile = (filePath, fileName) => {
   const params = {
     Bucket: 'gajahsafe-report-images',
     Key: fileName,
-    Body: fileContent
+    Body: fileContent,
+    ContentDisposition: 'inline'
   };
 
   return s3.upload(params).promise()
