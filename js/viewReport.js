@@ -78,7 +78,15 @@ function displayImages(images) {
                 img.src = data.dataUrl;
                 img.addEventListener('click', () => {
                     const newWindow = window.open();
-                    newWindow.document.write(`<img src="${data.dataUrl}" style="max-width: 100%; height: auto;">`);
+                    if (newWindow) {
+                        newWindow.document.write('<html><body></body></html>'); // Initialize the document
+                        newWindow.document.close(); // Close the document to complete the writing
+                        newWindow.addEventListener('load', () => {
+                            newWindow.document.body.innerHTML = `<img src="${data.dataUrl}" style="max-width: 100%; height: auto;">`;
+                        });
+                    } else {
+                        console.error('Failed to open new window');
+                    }
                 });
             })
             .catch(error => console.error('Error:', error));
