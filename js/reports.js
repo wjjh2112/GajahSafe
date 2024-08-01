@@ -227,24 +227,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayMonthlyChart(reports) {
         const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
         const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
-    
+
         const monthlyData = [];
         for (let weekStart = new Date(monthStart); weekStart <= monthEnd; weekStart.setDate(weekStart.getDate() + 7)) {
             const weekEnd = new Date(weekStart);
-            weekEnd.setDate(Math.min(weekStart.getDate() + 6, monthEnd.getDate()));
-    
+            weekEnd.setDate(weekStart.getDate() + 6);
+
             const count = reports.filter(report => {
                 const reportDate = new Date(report.reportDateTime);
                 return reportDate >= weekStart && reportDate <= weekEnd;
             }).length;
-    
-            monthlyData.push({ weekStart: new Date(weekStart), weekEnd: new Date(weekEnd), count });
+
+            monthlyData.push({ weekStart: new Date(weekStart), count });
         }
-    
+
         if (monthlyChart) {
             monthlyChart.destroy();
         }
-    
+
         monthlyChart = new Chart(monthlyChartCtx, {
             type: 'line',
             data: {
@@ -318,8 +318,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-    
-        document.getElementById('monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
+
+        document.getElementById('monthly-header').textContent = `Month: ${monthStart.toLocaleDateString().split('/')[0]}-${monthStart.getFullYear()}`;
     }
 
     function displayYearlyChart(reports) {
