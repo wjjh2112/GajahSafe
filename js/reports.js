@@ -24,36 +24,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     $('#locationFilter').change(filterReports);
-    $('#clearFiltersBtn').click(function() {
-        $('#dateRangePicker').val('');
-        $('#locationFilter').val('');
-        filterReports();
-    });
 });
-
-let reports = [];
 
 function fetchReports() {
     fetch('/reports')
         .then(response => response.json())
-        .then(data => {
+        .then(reports => {
             // Sort reports from newest to oldest
-            reports = data.sort((a, b) => new Date(b.reportDateTime) - new Date(a.reportDateTime));
-            filterReports();
+            reports.sort((a, b) => new Date(b.reportDateTime) - new Date(a.reportDateTime));
+            displayReports(reports);
         })
         .catch(error => console.error('Error:', error));
 }
 
-function displayReports(filteredReports) {
+function displayReports(reports) {
     const tableBody = document.getElementById('reportsTableBody');
     tableBody.innerHTML = '';
 
-    if (filteredReports.length === 0) {
+    if (reports.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
         return;
     }
 
-    filteredReports.forEach(report => {
+    reports.forEach(report => {
         const row = `
             <tr>
                 <td>${report.reportLocation}</td>
@@ -81,27 +74,30 @@ function addViewEventListeners() {
 }
 
 function filterReports() {
-    const locationFilter = $('#locationFilter').val();
+    const location = $('#locationFilter').val();
     const dateRange = $('#dateRangePicker').val();
-    let startDate = null, endDate = null;
+    let startDate, endDate;
 
     if (dateRange) {
-        [startDate, endDate] = dateRange.split(' - ').map(dateStr => new Date(dateStr));
+        [startDate, endDate] = dateRange.split(' - ').map(date => new Date(date));
     }
 
-    const filteredReports = reports.filter(report => {
-        const reportDate = new Date(report.reportDateTime);
-        const reportLocation = report.reportLocation;
+    const rows = document.querySelectorAll('#reportsTableBody tr');
 
-        const dateInRange = !dateRange || (reportDate >= startDate && reportDate <= endDate);
-        const locationMatches = !locationFilter || locationFilter === reportLocation;
+    rows.forEach(row => {
+        const rowLocation = row.cells[0].textContent;
+        const rowDate = new Date(row.cells[3].textContent);
+        const locationMatch = location === 'Location' || rowLocation === location;
+        const dateMatch = !dateRange || (rowDate >= startDate && rowDate <= endDate);
 
-        return dateInRange && locationMatches;
+        if (locationMatch && dateMatch) {
+            row.style.display = '';
+            visibleRows++;
+        } else {
+            row.style.display = 'none';
+        }
     });
-
-    displayReports(filteredReports);
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
