@@ -394,10 +394,10 @@ app.get('/images/:imageKey', async (req, res) => {
     };
 
     const { Body, ContentType } = await s3.getObject(params).promise();
+    const base64 = Buffer.from(Body).toString('base64');
+    const dataUrl = `data:${ContentType};base64,${base64}`;
 
-    res.set('Content-Type', ContentType);
-    res.set('Content-Disposition', 'inline');
-    res.send(Body);
+    res.json({ dataUrl });
   } catch (error) {
     console.error('Error fetching image from S3:', error);
     res.status(404).send('Image not found');

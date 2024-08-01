@@ -60,24 +60,30 @@ function displayRadioButtons(prefix, value) {
 
 function displayImages(images) {
     const fileList = document.getElementById('file-list');
-    fileList.innerHTML = '';
+    fileList.innerHTML = ''; // Clear any existing content
 
     images.forEach(imageKey => {
         const li = document.createElement('li');
-        const a = document.createElement('a');
         const img = document.createElement('img');
 
-        img.src = `/images/${imageKey}`; // Use the new image route
         img.alt = 'Report Image';
         img.style.maxWidth = '100%';
         img.style.height = 'auto';
+        img.style.cursor = 'pointer';
 
-        a.href = `/images/${imageKey}`; // Use the new image route
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
+        // Fetch the data URL
+        fetch(`/images/${imageKey}`)
+            .then(response => response.json())
+            .then(data => {
+                img.src = data.dataUrl;
+                img.addEventListener('click', () => {
+                    const newWindow = window.open();
+                    newWindow.document.write(`<img src="${data.dataUrl}" style="max-width: 100%; height: auto;">`);
+                });
+            })
+            .catch(error => console.error('Error:', error));
 
-        a.appendChild(img);
-        li.appendChild(a);
+        li.appendChild(img);
         fileList.appendChild(li);
     });
 }
