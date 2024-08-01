@@ -96,17 +96,6 @@ function filterReports() {
             row.style.display = 'none';
         }
     });
-
-    // Display "No records found" message if no rows are visible
-    const tableBody = document.getElementById('reportsTableBody');
-    if (visibleRows === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
-    } else if (tableBody.querySelector('tr')) {
-        // Make sure we remove the "No records found" message if there are visible rows
-        if (tableBody.querySelector('tr').innerText === 'No records found') {
-            fetchReports(); // Re-fetch to repopulate the table if the message is still displayed
-        }
-    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
