@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#dateRangePicker').daterangepicker({
         autoUpdateInput: false,
         locale: {
-            format: 'DD/MM/YYYY',
             cancelLabel: 'Clear'
         }
     });
@@ -32,7 +31,7 @@ function fetchReports() {
         .then(response => response.json())
         .then(reports => {
             // Sort reports from newest to oldest
-            reports.sort((a, b) => new Date(b.reportDateTime.$date) - new Date(a.reportDateTime.$date));
+            reports.sort((a, b) => new Date(b.reportDateTime) - new Date(a.reportDateTime));
             displayReports(reports);
         })
         .catch(error => console.error('Error:', error));
@@ -53,7 +52,7 @@ function displayReports(reports) {
                 <td>${report.reportLocation}</td>
                 <td>${report.reportEFDamage === 'damaged' ? 'Yes' : 'No'}</td>
                 <td>${report.reportCAMDamage === 'damaged' ? 'Yes' : 'No'}</td>
-                <td>${new Date(report.reportDateTime.$date).toLocaleDateString('en-GB')}</td>
+                <td>${new Date(report.reportDateTime).toLocaleDateString()}</td>
                 <td>${report.reportingOfficer}</td>
                 <td><a href="#" class="view-report-btn" data-report-id="${report.reportID}">View</a></td>
             </tr>
@@ -80,36 +79,25 @@ function filterReports() {
     let startDate, endDate;
 
     if (dateRange) {
-        [startDate, endDate] = dateRange.split(' - ').map(date => {
-            const [day, month, year] = date.split('/');
-            return new Date(`${year}-${month}-${day}`);
-        });
+        [startDate, endDate] = dateRange.split(' - ').map(date => new Date(date));
     }
 
     const rows = document.querySelectorAll('#reportsTableBody tr');
 
     rows.forEach(row => {
         const rowLocation = row.cells[0].textContent;
-        const [day, month, year] = row.cells[3].textContent.split('/');
-        const rowDate = new Date(`${year}-${month}-${day}`);
+        const rowDate = new Date(row.cells[3].textContent);
         const locationMatch = location === 'Location' || rowLocation === location;
         const dateMatch = !dateRange || (rowDate >= startDate && rowDate <= endDate);
 
         if (locationMatch && dateMatch) {
             row.style.display = '';
+            visibleRows++;
         } else {
             row.style.display = 'none';
         }
     });
-
-    // Display 'No records found' message if all rows are hidden
-    const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
-    if (visibleRows.length === 0) {
-        const tableBody = document.getElementById('reportsTableBody');
-        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
-    }
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
