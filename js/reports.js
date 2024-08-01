@@ -79,20 +79,19 @@ function filterReports() {
     let startDate, endDate;
 
     if (dateRange) {
-        [startDate, endDate] = dateRange.split(' - ').map(date => new Date(date));
+        [startDate, endDate] = dateRange.split(' - ').map(date => new Date(date.split('/').reverse().join('-'))); // Convert DD/MM/YYYY to YYYY-MM-DD
     }
 
     const rows = document.querySelectorAll('#reportsTableBody tr');
 
     rows.forEach(row => {
-        const rowLocation = row.cells[0].textContent;
-        const rowDate = new Date(row.cells[3].textContent);
+        const rowLocation = row.cells[0].textContent.trim();
+        const rowDate = new Date(row.cells[3].textContent.split('/').reverse().join('-')); // Convert DD/MM/YYYY to YYYY-MM-DD
         const locationMatch = location === 'Location' || rowLocation === location;
         const dateMatch = !dateRange || (rowDate >= startDate && rowDate <= endDate);
 
         if (locationMatch && dateMatch) {
             row.style.display = '';
-            visibleRows++;
         } else {
             row.style.display = 'none';
         }
