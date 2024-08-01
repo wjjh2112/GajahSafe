@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('weekly-header').textContent = `Week: ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
+        document.getElementById('monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
     }
 
     function displayMonthlyChart(reports) {
