@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: labels,
                 datasets: [{
                     label: "Total of Reports",
-                    data: data.totalReports,
+                    data: data.shutdown,
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(220,53,69,0.75)',
                     borderWidth: 3,
@@ -287,12 +287,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Number of Reports',
+                            labelString: 'Value',
                             fontFamily: "Poppins"
                         },
                         ticks: {
                             fontFamily: "Poppins",
                             beginAtZero: true,
+                            suggestedMin: 0,
+                            suggestedMax: 5,
                             stepSize: 1,
                         }
                     }]
@@ -303,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
-    }    
+    }
 
     function updateChart(chart, data, labels) {
         chart.data.datasets[0].data = data.shutdown;
@@ -317,35 +319,39 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function parseTableData() {
-        const tableRows = document.querySelectorAll('#reportsTableBody tr');
+        const tableRows = document.querySelectorAll('.table-earning tbody tr');
         let parsedData = [];
-    
+
         tableRows.forEach(row => {
-            const location = row.cells[0].innerText.trim();
-            const date = new Date(row.cells[3].innerText.trim().replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1'));
-            const action = row.cells[5].innerText.trim();
-    
+            const deviceId = row.cells[0].innerText.trim();
+            const shutdown = row.cells[1].innerText.trim() === 'Yes' ? 1 : 0;
+            const pushedPulled = row.cells[2].innerText.trim() === 'Yes' ? 1 : 0;
+            const datetime = new Date(row.cells[3].innerText.trim().replace(/(\d{2})\/(\d{2})\/(\d{4}), (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
+
             parsedData.push({
-                location: location,
-                date: date,
-                action: action
+                deviceId: deviceId,
+                shutdown: shutdown,
+                pushedPulled: pushedPulled,
+                datetime: datetime
             });
         });
-    
-        return parsedData.filter(item => item.date >= new Date(2024, 0, 1) && item.date <= new Date());
-    }    
+
+        return parsedData.filter(item => item.datetime >= new Date(2024, 0, 1) && item.datetime <= new Date());
+    }
 
     function calculateWeeklyData(weekNumber, year, data) {
-        let weeklyReports = Array(7).fill(0); // Array for each day of the week
+        let weeklyShutdown = [0, 0, 0, 0, 0, 0, 0];
+        let weeklyPushedPulled = [0, 0, 0, 0, 0, 0, 0];
         let labels = [];
-    
+
         data.forEach(item => {
-            if (getCurrentWeekNumber(item.date) === weekNumber && item.date.getFullYear() === year) {
-                const dayOfWeek = item.date.getDay();
-                weeklyReports[dayOfWeek] += 1; // Count reports for each day of the week
+            if (getCurrentWeekNumber(item.datetime) === weekNumber && item.datetime.getFullYear() === year) {
+                const dayOfWeek = item.datetime.getDay();
+                weeklyShutdown[dayOfWeek] += item.shutdown;
+                weeklyPushedPulled[dayOfWeek] += item.pushedPulled;
             }
         });
-    
+
         // Generate the dates for the current week
         const firstDayOfYear = new Date(year, 0, 1);
         const daysOffset = firstDayOfYear.getDay();
@@ -355,55 +361,64 @@ document.addEventListener('DOMContentLoaded', function () {
             date.setDate(startDate.getDate() + i);
             labels.push(date.toLocaleDateString());
         }
-    
+
         return {
-            totalReports: weeklyReports,
+            shutdown: weeklyShutdown,
+            pushedPulled: weeklyPushedPulled,
             labels: labels
         };
     }
 
     function calculateMonthlyData(month, year, data) {
-        let monthlyReports = Array(Math.ceil(new Date(year, month + 1, 0).getDate() / 7)).fill(0); // Array for weeks
+        let monthlyShutdown = [0, 0, 0, 0, 0];
+        let monthlyPushedPulled = [0, 0, 0, 0, 0];
         let labels = [];
-        
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+        const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get total days in the month
+        const weeksCount = Math.ceil(daysInMonth / 7); // Calculate total full weeks in the month
     
         data.forEach(item => {
-            if (item.date.getMonth() === month && item.date.getFullYear() === year) {
-                const dayOfMonth = item.date.getDate() - 1; // Zero-based index for days
+            if (item.datetime.getMonth() === month && item.datetime.getFullYear() === year) {
+                const dayOfMonth = item.datetime.getDate() - 1; // Zero-based index for days
                 const weekIndex = Math.floor(dayOfMonth / 7); // Determine the week index for the day
-                monthlyReports[weekIndex] += 1; // Count reports for each week
+    
+                monthlyShutdown[weekIndex] += item.shutdown;
+                monthlyPushedPulled[weekIndex] += item.pushedPulled;
             }
         });
     
         // Generate the date ranges for each week of the month
-        for (let week = 0; week < monthlyReports.length; week++) {
+        for (let week = 0; week < weeksCount; week++) {
             const startDay = week * 7 + 1;
-            const endDay = Math.min(startDay + 6, daysInMonth);
+            const endDay = Math.min(startDay + 6, daysInMonth); // Ensure end day does not exceed month days
             const startDate = new Date(year, month, startDay);
             const endDate = new Date(year, month, endDay);
             labels.push(`${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`);
         }
     
         return {
-            totalReports: monthlyReports,
+            shutdown: monthlyShutdown,
+            pushedPulled: monthlyPushedPulled,
             labels: labels
         };
-    }    
+    }
     
+
     function calculateYearlyData(year, data) {
-        let yearlyReports = Array(12).fill(0); // Array for each month
-    
+        let yearlyShutdown = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let yearlyPushedPulled = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         data.forEach(item => {
-            if (item.date.getFullYear() === year) {
-                const monthOfYear = item.date.getMonth();
-                yearlyReports[monthOfYear] += 1; // Count reports for each month
+            if (item.datetime.getFullYear() === year) {
+                const monthOfYear = item.datetime.getMonth();
+                yearlyShutdown[monthOfYear] += item.shutdown;
+                yearlyPushedPulled[monthOfYear] += item.pushedPulled;
             }
         });
-    
+
         return {
-            totalReports: yearlyReports,
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            shutdown: yearlyShutdown,
+            pushedPulled: yearlyPushedPulled
         };
     }
 
