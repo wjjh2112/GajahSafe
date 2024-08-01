@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
         monthlyChart = new Chart(monthlyChartCtx, {
             type: 'line',
             data: {
-                labels: monthlyData.map(d => `${d.weekStart.toLocaleDateString()} - ${new Date(d.weekStart.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString()}`),
+                labels: monthlyData.map(d => `${d.startDate.toLocaleDateString()} - ${d.endDate.toLocaleDateString()}`),
                 datasets: [{
                     label: 'Total of Reports',
                     backgroundColor: 'transparent',
