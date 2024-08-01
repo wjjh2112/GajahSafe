@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: labels,
                 datasets: [{
                     label: "Total of Reports",
-                    data: data.shutdown,
+                    data: data.total,
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(220,53,69,0.75)',
                     borderWidth: 3,
@@ -308,11 +308,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateChart(chart, data, labels) {
-        chart.data.datasets[0].data = data.shutdown;
-        chart.data.datasets[1].data = data.pushedPulled;
+        chart.data.datasets[0].data = data.total; // Update total data
         chart.data.labels = labels;
         chart.update();
-    }
+    }    
 
     function updateHeader(id, text) {
         document.getElementById(id).innerText = text;
@@ -340,18 +339,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function calculateWeeklyData(weekNumber, year, data) {
-        let weeklyShutdown = [0, 0, 0, 0, 0, 0, 0];
-        let weeklyPushedPulled = [0, 0, 0, 0, 0, 0, 0];
+        let weeklyTotal = [0, 0, 0, 0, 0, 0, 0];
         let labels = [];
-
+    
         data.forEach(item => {
             if (getCurrentWeekNumber(item.datetime) === weekNumber && item.datetime.getFullYear() === year) {
                 const dayOfWeek = item.datetime.getDay();
-                weeklyShutdown[dayOfWeek] += item.shutdown;
-                weeklyPushedPulled[dayOfWeek] += item.pushedPulled;
+                weeklyTotal[dayOfWeek] += item.shutdown + item.pushedPulled;
             }
         });
-
+    
         // Generate the dates for the current week
         const firstDayOfYear = new Date(year, 0, 1);
         const daysOffset = firstDayOfYear.getDay();
@@ -361,32 +358,29 @@ document.addEventListener('DOMContentLoaded', function () {
             date.setDate(startDate.getDate() + i);
             labels.push(date.toLocaleDateString());
         }
-
+    
         return {
-            shutdown: weeklyShutdown,
-            pushedPulled: weeklyPushedPulled,
+            total: weeklyTotal,
             labels: labels
         };
     }
-
-    function calculateMonthlyData(month, year, data) {
-        let monthlyShutdown = [0, 0, 0, 0, 0];
-        let monthlyPushedPulled = [0, 0, 0, 0, 0];
-        let labels = [];
     
+    function calculateMonthlyData(month, year, data) {
+        let monthlyTotal = [0, 0, 0, 0, 0];
+        let labels = [];
+        
         const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get total days in the month
         const weeksCount = Math.ceil(daysInMonth / 7); // Calculate total full weeks in the month
-    
+        
         data.forEach(item => {
             if (item.datetime.getMonth() === month && item.datetime.getFullYear() === year) {
                 const dayOfMonth = item.datetime.getDate() - 1; // Zero-based index for days
                 const weekIndex = Math.floor(dayOfMonth / 7); // Determine the week index for the day
-    
-                monthlyShutdown[weekIndex] += item.shutdown;
-                monthlyPushedPulled[weekIndex] += item.pushedPulled;
+        
+                monthlyTotal[weekIndex] += item.shutdown + item.pushedPulled;
             }
         });
-    
+        
         // Generate the date ranges for each week of the month
         for (let week = 0; week < weeksCount; week++) {
             const startDay = week * 7 + 1;
@@ -395,33 +389,28 @@ document.addEventListener('DOMContentLoaded', function () {
             const endDate = new Date(year, month, endDay);
             labels.push(`${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`);
         }
-    
+        
         return {
-            shutdown: monthlyShutdown,
-            pushedPulled: monthlyPushedPulled,
+            total: monthlyTotal,
             labels: labels
         };
     }
     
-
     function calculateYearlyData(year, data) {
-        let yearlyShutdown = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        let yearlyPushedPulled = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
+        let yearlyTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    
         data.forEach(item => {
             if (item.datetime.getFullYear() === year) {
                 const monthOfYear = item.datetime.getMonth();
-                yearlyShutdown[monthOfYear] += item.shutdown;
-                yearlyPushedPulled[monthOfYear] += item.pushedPulled;
+                yearlyTotal[monthOfYear] += item.shutdown + item.pushedPulled;
             }
         });
-
+    
         return {
-            shutdown: yearlyShutdown,
-            pushedPulled: yearlyPushedPulled
+            total: yearlyTotal
         };
     }
-
+    
     function getWeekRange(weekNumber, year) {
         const firstDayOfYear = new Date(year, 0, 1);
         const daysOffset = firstDayOfYear.getDay();
