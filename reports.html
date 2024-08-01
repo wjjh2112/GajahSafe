@@ -259,51 +259,44 @@
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
                                         <h3 class="title-2 m-b-40"><span data-i18n="damages"></span></h3>
-                                        <ul class="nav nav-tabs" id="reports-tab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="weekly-tab" data-toggle="tab" href="#weekly" role="tab" aria-controls="weekly" aria-selected="true"><span data-i18n="weekly"></span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false"><span data-i18n="monthly"></span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="yearly-tab" data-toggle="tab" href="#yearly" role="tab" aria-controls="yearly" aria-selected="false"><span data-i18n="yearly"></a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content" id="reports-tab-content">
-                                            <div class="tab-pane fade show active" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
-                                                <div class="au-card m-b-30">
-                                                    <div class="au-card-inner">
-                                                        <canvas id="weekly-chart"></canvas>
+                                        <div class="default-tab">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="nav-weekly-tab" data-toggle="tab" href="#nav-week" role="tab" aria-controls="nav-week" aria-selected="true"><span data-i18n="weekly"></span></a>
+                                                    <a class="nav-item nav-link" id="nav-monthly-tab" data-toggle="tab" href="#nav-month" role="tab" aria-controls="nav-month" aria-selected="false"><span data-i18n="monthly"></span></a>
+                                                    <a class="nav-item nav-link" id="nav-yearly-tab" data-toggle="tab" href="#nav-year" role="tab" aria-controls="nav-year" aria-selected="false"><span data-i18n="yearly"></span></a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="nav-week" role="tabpanel" aria-labelledby="nav-week-tab">
+                                                    <div class="d-flex justify-content-between">
                                                         <button id="prev-week" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
                                                         <button id="next-week" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
                                                     </div>
+                                                    <div class="chart-header" id="weekly-header"></div>
+                                                    <canvas id="weekly-chart"></canvas>
                                                 </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab">
-                                                <div class="au-card m-b-30">
-                                                    <div class="au-card-inner">
-                                                        <canvas id="monthly-chart"></canvas>
+                                                <div class="tab-pane fade" id="nav-month" role="tabpanel" aria-labelledby="nav-month-tab">
+                                                    <div class="d-flex justify-content-between">
                                                         <button id="prev-month" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
                                                         <button id="next-month" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
                                                     </div>
+                                                    <div class="chart-header" id="monthly-header"><i class="fas fa-arrow-right"></i></div>
+                                                    <canvas id="monthly-chart"></canvas>
                                                 </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="yearly" role="tabpanel" aria-labelledby="yearly-tab">
-                                                <div class="au-card m-b-30">
-                                                    <div class="au-card-inner">
-                                                        <canvas id="yearly-chart"></canvas>
+                                                <div class="tab-pane fade" id="nav-year" role="tabpanel" aria-labelledby="nav-year-tab">
+                                                    <div class="d-flex justify-content-between">
                                                         <button id="prev-year" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
                                                         <button id="next-year" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
                                                     </div>
+                                                    <div class="chart-header" id="yearly-header"></div>
+                                                    <canvas id="yearly-chart"></canvas>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-
                             <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
