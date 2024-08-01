@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('monthly-header').textContent = `Month: ${monthStart.toLocaleDateString().split('/')[0]}-${monthStart.getFullYear()}`;
+        document.getElementById('monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
     }
 
     function displayYearlyChart(reports) {
