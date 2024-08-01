@@ -48,15 +48,12 @@ function displayReports(reports) {
     }
 
     reports.forEach(report => {
-        const reportDate = new Date(report.reportDateTime.$date);
-        const formattedDate = reportDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
         const row = `
             <tr>
                 <td>${report.reportLocation}</td>
                 <td>${report.reportEFDamage === 'damaged' ? 'Yes' : 'No'}</td>
                 <td>${report.reportCAMDamage === 'damaged' ? 'Yes' : 'No'}</td>
-                <td>${formattedDate}</td>
+                <td>${new Date(report.reportDateTime.$date).toLocaleDateString('en-GB')}</td>
                 <td>${report.reportingOfficer}</td>
                 <td><a href="#" class="view-report-btn" data-report-id="${report.reportID}">View</a></td>
             </tr>
@@ -90,7 +87,6 @@ function filterReports() {
     }
 
     const rows = document.querySelectorAll('#reportsTableBody tr');
-    let visibleRows = 0;
 
     rows.forEach(row => {
         const rowLocation = row.cells[0].textContent;
@@ -101,21 +97,20 @@ function filterReports() {
 
         if (locationMatch && dateMatch) {
             row.style.display = '';
-            visibleRows++;
         } else {
             row.style.display = 'none';
         }
     });
 
     // Display 'No records found' message if all rows are hidden
-    if (visibleRows === 0) {
+    const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+    if (visibleRows.length === 0) {
         const tableBody = document.getElementById('reportsTableBody');
         tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No records found</td></tr>';
     }
 }
 
 
-// Graph
 document.addEventListener('DOMContentLoaded', function () {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
     const monthlyChartCtx = document.getElementById('monthly-chart').getContext('2d');
