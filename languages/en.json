@@ -57,6 +57,7 @@
     "images": "Images",
     "addImagesPlaceholder": "Click to add images",
     "fileTypeUploadValidation": "File Type: .JPEG, .JPG, or .PNG only.",
+    "clickImage": "Click image to download.",
     "reportingOfficer": "Reporting Officer",
     "reportingOfficerPlaceholder": "Enter Reporting Officer",
     "submit": "Submit",

@@ -67,12 +67,12 @@ function displayImages(images) {
         const a = document.createElement('a');
         const img = document.createElement('img');
 
-        img.src = `/images/${imageKey}`; // Use the new image route
+        img.src = `/images/${imageKey}`;
         img.alt = 'Report Image';
         img.style.maxWidth = '100%';
         img.style.height = 'auto';
 
-        a.href = `/images/${imageKey}`; // Use the new image route
+        a.href = `/images/${imageKey}`;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
 
