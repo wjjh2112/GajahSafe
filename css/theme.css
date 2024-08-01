@@ -4346,6 +4346,14 @@ input[type="file"] {
     margin-bottom: 60px;
 }
 
+
+.chart-header {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 .chart-info {
     display: -webkit-box;
     display: -webkit-flex;
