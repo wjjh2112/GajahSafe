@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('weekly-header').textContent = `Week: ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
+        document.getElementById('weekly-header').textContent = `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
     }
 
     function displayMonthlyChart(reports) {
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('yearly-header').textContent = `Year: ${currentYear}`;
+        document.getElementById('yearly-header').textContent = `${currentYear}`;
     }
 
     function navigateWeek(offset) {
