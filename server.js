@@ -41,12 +41,13 @@ const uploadFile = (filePath, fileName) => {
   const fileContent = fs.readFileSync(filePath);
 
   const params = {
-    Bucket: 'gajahsafe-report-images', // e.g., 'my-gajahsafe-bucket'
-    Key: fileName, // File name you want to save as in S3
+    Bucket: 'gajahsafe-report-images',
+    Key: fileName,
     Body: fileContent
   };
 
-  return s3.upload(params).promise();
+  return s3.upload(params).promise()
+    .then(data => fileName); // Return the fileName (key) instead of the full URL
 };
 
 // Serve static files (from root directory)
@@ -383,22 +384,37 @@ const reportSchema = new mongoose.Schema({
 
 const Report = mongoose.model('Report', reportSchema);
 
+app.get('/images/:imageKey', async (req, res) => {
+  const imageKey = req.params.imageKey;
+
+  try {
+    const params = {
+      Bucket: 'gajahsafe-report-images',
+      Key: imageKey
+    };
+
+    const { Body, ContentType } = await s3.getObject(params).promise();
+
+    res.set('Content-Type', ContentType);
+    res.set('Content-Disposition', 'inline');
+    res.send(Body);
+  } catch (error) {
+    console.error('Error fetching image from S3:', error);
+    res.status(404).send('Image not found');
+  }
+});
+
 app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
   try {
     const reportID = 'REP' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    const currentDate = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
+    const currentDate = new Date().toISOString().slice(0, 10);
 
-    // Upload each file to S3 with the new file name format
     const uploadPromises = req.files.map(file => {
       const fileName = `${reportID}_${currentDate}_${file.originalname}`;
       return uploadFile(file.path, fileName);
     });
 
-    // Wait for all files to be uploaded
-    const uploadResults = await Promise.all(uploadPromises);
-
-    // Get the URLs of uploaded files
-    const fileUrls = uploadResults.map(result => result.Location);
+    const imageKeys = await Promise.all(uploadPromises);
 
     const report = new Report({
       reportID: reportID,
@@ -437,7 +453,7 @@ app.post('/submit-report', upload.array('reportImages[]'), async (req, res) => {
       reportEFDamage: req.body.reportEFDamage,
       reportCAMDamage: req.body.reportCAMDamage,
       reportDateTime: new Date(req.body.reportDateTime),
-      reportImages: fileUrls, // Use S3 URLs
+      reportImages: imageKeys, // Store image keys instead of full URLs
       reportingOfficer: req.body.reportingOfficer
     });
 

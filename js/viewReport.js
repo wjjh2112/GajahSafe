@@ -60,20 +60,19 @@ function displayRadioButtons(prefix, value) {
 
 function displayImages(images) {
     const fileList = document.getElementById('file-list');
-    fileList.innerHTML = ''; // Clear any existing content
+    fileList.innerHTML = '';
 
-    images.forEach(image => {
+    images.forEach(imageKey => {
         const li = document.createElement('li');
         const a = document.createElement('a');
         const img = document.createElement('img');
 
-        // Assuming 'image' is a URL to the image file
-        img.src = image;
+        img.src = `/images/${imageKey}`; // Use the new image route
         img.alt = 'Report Image';
         img.style.maxWidth = '100%';
         img.style.height = 'auto';
 
-        a.href = image;
+        a.href = `/images/${imageKey}`; // Use the new image route
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
 
