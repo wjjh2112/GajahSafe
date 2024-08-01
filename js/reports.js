@@ -98,355 +98,239 @@ function filterReports() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
-    const monthlyChartCtx = document.getElementById('monthly-chart').getContext('2d');
-    const yearlyChartCtx = document.getElementById('yearly-chart').getContext('2d');
-
-    let currentWeek = getCurrentWeekNumber(new Date());
-    let currentMonth = new Date().getMonth();
-    let currentWeeklyYear = new Date().getFullYear();
-    let currentMonthlyYear = new Date().getFullYear();
-    let currentYearlyYear = new Date().getFullYear();
-
-    const tableData = parseTableData(); // Parse table data for calculations
-
-    let weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
-    let monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
-    const yearlyData = calculateYearlyData(currentYearlyYear, tableData);
-
-    let weeklyChart = createChart(weeklyChartCtx, weeklyData, weeklyData.labels);
-    const monthlyChart = createChart(monthlyChartCtx, monthlyData, monthlyData.labels);
-    const yearlyChart = createChart(yearlyChartCtx, yearlyData, ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
-
-    updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
-    updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
-    updateHeader('yearly-header', `${currentYearlyYear}`);
-
-    // Previous and Next buttons for weekly chart
-    const prevWeekButton = document.getElementById('prev-week');
-    const nextWeekButton = document.getElementById('next-week');
-
-    prevWeekButton.addEventListener('click', function () {
-        if (currentWeeklyYear > 2024 || (currentWeeklyYear === 2024 && currentWeek > 1)) {
-            currentWeek = (currentWeek > 1) ? currentWeek - 1 : 52;
-            if (currentWeek === 52) {
-                currentWeeklyYear -= 1;
-            }
-            updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
-            weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
-            updateChart(weeklyChart, weeklyData, weeklyData.labels);
-        }
-        updatePrevNextButtons();
+document.addEventListener('DOMContentLoaded', function() {
+    fetchReports();
+    
+    // Initialize chart instances
+    let weeklyChart, monthlyChart, yearlyChart;
+    let currentWeek = 0, currentMonth = 0, currentYear = 0;
+    
+    const ctxWeekly = document.getElementById('weekly-chart').getContext('2d');
+    const ctxMonthly = document.getElementById('monthly-chart').getContext('2d');
+    const ctxYearly = document.getElementById('yearly-chart').getContext('2d');
+    
+    document.getElementById('prev-week').addEventListener('click', function() {
+        currentWeek--;
+        updateWeeklyChart();
     });
-
-    nextWeekButton.addEventListener('click', function () {
-        const currentDate = new Date();
-        const maxWeek = getCurrentWeekNumber(currentDate);
-        if (currentWeeklyYear < currentDate.getFullYear() || (currentWeeklyYear === currentDate.getFullYear() && currentWeek < maxWeek)) {
-            currentWeek = (currentWeek < 52) ? currentWeek + 1 : 1;
-            if (currentWeek === 1) {
-                currentWeeklyYear += 1;
-            }
-            updateHeader('weekly-header', `${getWeekRange(currentWeek, currentWeeklyYear)}`);
-            weeklyData = calculateWeeklyData(currentWeek, currentWeeklyYear, tableData);
-            updateChart(weeklyChart, weeklyData, weeklyData.labels);
-        }
-        updatePrevNextButtons();
+    
+    document.getElementById('next-week').addEventListener('click', function() {
+        currentWeek++;
+        updateWeeklyChart();
     });
-
-    // Previous and Next buttons for monthly chart
-    const prevMonthButton = document.getElementById('prev-month');
-    const nextMonthButton = document.getElementById('next-month');
-
-    prevMonthButton.addEventListener('click', function () {
-        if (currentMonthlyYear > 2024 || (currentMonthlyYear === 2024 && currentMonth > 0)) {
-            currentMonth = (currentMonth > 0) ? currentMonth - 1 : 11;
-            if (currentMonth === 11) {
-                currentMonthlyYear -= 1;
-            }
-            updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
-            monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
-            updateChart(monthlyChart, monthlyData, monthlyData.labels);
-        }
-        updatePrevNextButtons();
+    
+    document.getElementById('prev-month').addEventListener('click', function() {
+        currentMonth--;
+        updateMonthlyChart();
     });
-
-    nextMonthButton.addEventListener('click', function () {
-        const currentDate = new Date();
-        const maxMonth = currentDate.getMonth();
-        if (currentMonthlyYear < currentDate.getFullYear() || (currentMonthlyYear === currentDate.getFullYear() && currentMonth < maxMonth)) {
-            currentMonth = (currentMonth < 11) ? currentMonth + 1 : 0;
-            if (currentMonth === 0) {
-                currentMonthlyYear += 1;
-            }
-            updateHeader('monthly-header', `${getMonthName(currentMonth)} ${currentMonthlyYear}`);
-            monthlyData = calculateMonthlyData(currentMonth, currentMonthlyYear, tableData);
-            updateChart(monthlyChart, monthlyData, monthlyData.labels);
-        }
-        updatePrevNextButtons();
+    
+    document.getElementById('next-month').addEventListener('click', function() {
+        currentMonth++;
+        updateMonthlyChart();
     });
-
-    // Previous and Next buttons for yearly chart
-    const prevYearButton = document.getElementById('prev-year');
-    const nextYearButton = document.getElementById('next-year');
-
-    prevYearButton.addEventListener('click', function () {
-        if (currentYearlyYear > 2024) {
-            currentYearlyYear -= 1;
-            updateHeader('yearly-header', `${currentYearlyYear}`);
-            updateChart(yearlyChart, calculateYearlyData(currentYearlyYear, tableData), yearlyChart.data.labels);
-        }
-        updatePrevNextButtons();
+    
+    document.getElementById('prev-year').addEventListener('click', function() {
+        currentYear--;
+        updateYearlyChart();
     });
-
-    nextYearButton.addEventListener('click', function () {
-        const currentDate = new Date();
-        if (currentYearlyYear < currentDate.getFullYear()) {
-            currentYearlyYear += 1;
-            updateHeader('yearly-header', `${currentYearlyYear}`);
-            updateChart(yearlyChart, calculateYearlyData(currentYearlyYear, tableData), yearlyChart.data.labels);
-        }
-        updatePrevNextButtons();
+    
+    document.getElementById('next-year').addEventListener('click', function() {
+        currentYear++;
+        updateYearlyChart();
     });
-
-    function updatePrevNextButtons() {
-        // For weekly chart
-        const maxWeeklyDate = new Date();
-        maxWeeklyDate.setDate(maxWeeklyDate.getDate() - maxWeeklyDate.getDay()); // Get start of current week
-        prevWeekButton.disabled = (currentWeeklyYear <= 2024 && currentWeek <= 1);
-        nextWeekButton.disabled = (currentWeeklyYear >= maxWeeklyDate.getFullYear() && currentWeek >= getCurrentWeekNumber(maxWeeklyDate));
-
-        // For monthly chart
-        const maxMonthlyDate = new Date();
-        prevMonthButton.disabled = (currentMonthlyYear <= 2024 && currentMonth <= 0);
-        nextMonthButton.disabled = (currentMonthlyYear >= maxMonthlyDate.getFullYear() && currentMonth >= maxMonthlyDate.getMonth());
-
-        // For yearly chart
-        prevYearButton.disabled = (currentYearlyYear <= 2024);
-        nextYearButton.disabled = (currentYearlyYear >= maxMonthlyDate.getFullYear());
+    
+    function fetchReports() {
+        fetch('/reports')
+            .then(response => response.json())
+            .then(reports => {
+                // Process the report data for charts
+                const reportData = processReportData(reports);
+                initializeCharts(reportData);
+            })
+            .catch(error => console.error('Error:', error));
     }
-
-    function createChart(ctx, data, labels) {
-        return new Chart(ctx, {
+    
+    function processReportData(reports) {
+        const weeklyData = [], monthlyData = [], yearlyData = [];
+        const weekCounts = {}, monthCounts = {}, yearCounts = {};
+        
+        reports.forEach(report => {
+            const date = new Date(report.reportDateTime);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; // months are 0-based
+            const week = getWeekOfYear(date);
+            
+            if (!weekCounts[year]) weekCounts[year] = {};
+            if (!weekCounts[year][week]) weekCounts[year][week] = 0;
+            weekCounts[year][week]++;
+            
+            if (!monthCounts[year]) monthCounts[year] = {};
+            if (!monthCounts[year][month]) monthCounts[year][month] = 0;
+            monthCounts[year][month]++;
+            
+            if (!yearCounts[year]) yearCounts[year] = 0;
+            yearCounts[year]++;
+        });
+        
+        Object.keys(weekCounts).forEach(year => {
+            Object.keys(weekCounts[year]).forEach(week => {
+                weeklyData.push({ year: parseInt(year), week: parseInt(week), count: weekCounts[year][week] });
+            });
+        });
+        
+        Object.keys(monthCounts).forEach(year => {
+            Object.keys(monthCounts[year]).forEach(month => {
+                monthlyData.push({ year: parseInt(year), month: parseInt(month), count: monthCounts[year][month] });
+            });
+        });
+        
+        Object.keys(yearCounts).forEach(year => {
+            yearlyData.push({ year: parseInt(year), count: yearCounts[year] });
+        });
+        
+        return { weeklyData, monthlyData, yearlyData };
+    }
+    
+    function getWeekOfYear(date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+    
+    function initializeCharts(reportData) {
+        weeklyChart = new Chart(ctxWeekly, {
             type: 'line',
             data: {
-                labels: labels,
+                labels: [],
                 datasets: [{
-                    label: "Total of Reports",
-                    data: data.shutdown,
-                    backgroundColor: 'transparent',
-                    borderColor: 'rgba(220,53,69,0.75)',
-                    borderWidth: 3,
-                    pointStyle: 'circle',
-                    pointRadius: 5,
-                    pointBorderColor: 'transparent',
-                    pointBackgroundColor: 'rgba(220,53,69,0.75)',
+                    label: 'Reports',
+                    borderColor: 'rgba(0, 123, 255, 0.9)',
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    data: []
                 }]
             },
             options: {
                 responsive: true,
-                tooltips: {
-                    mode: 'index',
-                    titleFontSize: 12,
-                    titleFontColor: '#000',
-                    bodyFontColor: '#000',
-                    backgroundColor: '#fff',
-                    titleFontFamily: 'Poppins',
-                    bodyFontFamily: 'Poppins',
-                    cornerRadius: 3,
-                    intersect: false,
-                },
-                legend: {
-                    display: false,
-                    labels: {
-                        usePointStyle: true,
-                        fontFamily: 'Poppins',
-                    },
-                },
                 scales: {
-                    xAxes: [{
-                        display: true,
-                        gridLines: {
-                            display: false,
-                            drawBorder: false
-                        },
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Time'
-                        },
-                        ticks: {
-                            fontFamily: "Poppins"
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        gridLines: {
-                            display: false,
-                            drawBorder: false
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value',
-                            fontFamily: "Poppins"
-                        },
-                        ticks: {
-                            fontFamily: "Poppins",
-                            beginAtZero: true,
-                            suggestedMin: 0,
-                            suggestedMax: 5,
-                            stepSize: 1,
-                        }
-                    }]
-                },
-                title: {
-                    display: false,
-                    text: 'Normal Legend'
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
                 }
             }
         });
-    }
-
-    function updateChart(chart, data, labels) {
-        chart.data.datasets[0].data = data.shutdown;
-        chart.data.datasets[1].data = data.pushedPulled;
-        chart.data.labels = labels;
-        chart.update();
-    }
-
-    function updateHeader(id, text) {
-        document.getElementById(id).innerText = text;
-    }
-
-    function parseTableData() {
-        const tableRows = document.querySelectorAll('.table-earning tbody tr');
-        let parsedData = [];
-
-        tableRows.forEach(row => {
-            const deviceId = row.cells[0].innerText.trim();
-            const shutdown = row.cells[1].innerText.trim() === 'Yes' ? 1 : 0;
-            const pushedPulled = row.cells[2].innerText.trim() === 'Yes' ? 1 : 0;
-            const datetime = new Date(row.cells[3].innerText.trim().replace(/(\d{2})\/(\d{2})\/(\d{4}), (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
-
-            parsedData.push({
-                deviceId: deviceId,
-                shutdown: shutdown,
-                pushedPulled: pushedPulled,
-                datetime: datetime
-            });
-        });
-
-        return parsedData.filter(item => item.datetime >= new Date(2024, 0, 1) && item.datetime <= new Date());
-    }
-
-    function calculateWeeklyData(weekNumber, year, data) {
-        let weeklyShutdown = [0, 0, 0, 0, 0, 0, 0];
-        let weeklyPushedPulled = [0, 0, 0, 0, 0, 0, 0];
-        let labels = [];
-
-        data.forEach(item => {
-            if (getCurrentWeekNumber(item.datetime) === weekNumber && item.datetime.getFullYear() === year) {
-                const dayOfWeek = item.datetime.getDay();
-                weeklyShutdown[dayOfWeek] += item.shutdown;
-                weeklyPushedPulled[dayOfWeek] += item.pushedPulled;
+        
+        monthlyChart = new Chart(ctxMonthly, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Reports',
+                    borderColor: 'rgba(0, 123, 255, 0.9)',
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    data: []
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
             }
         });
-
-        // Generate the dates for the current week
-        const firstDayOfYear = new Date(year, 0, 1);
-        const daysOffset = firstDayOfYear.getDay();
-        const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7 - daysOffset);
-        for (let i = 0; i < 7; i++) {
-            let date = new Date(startDate);
-            date.setDate(startDate.getDate() + i);
-            labels.push(date.toLocaleDateString());
+        
+        yearlyChart = new Chart(ctxYearly, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Reports',
+                    borderColor: 'rgba(0, 123, 255, 0.9)',
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    data: []
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+        
+        updateWeeklyChart(reportData);
+        updateMonthlyChart(reportData);
+        updateYearlyChart(reportData);
+    }
+    
+    function updateWeeklyChart(reportData) {
+        const { weeklyData } = reportData;
+        const weekLabels = [];
+        const weekCounts = [];
+        
+        const currentYear = new Date().getFullYear();
+        const startWeek = currentWeek * 7;
+        const endWeek = startWeek + 7;
+        
+        for (let i = startWeek; i < endWeek; i++) {
+            const week = i + 1;
+            const weekLabel = `Week ${week}`;
+            weekLabels.push(weekLabel);
+            const weekData = weeklyData.find(wd => wd.year === currentYear && wd.week === week);
+            weekCounts.push(weekData ? weekData.count : 0);
         }
-
-        return {
-            shutdown: weeklyShutdown,
-            pushedPulled: weeklyPushedPulled,
-            labels: labels
-        };
+        
+        weeklyChart.data.labels = weekLabels;
+        weeklyChart.data.datasets[0].data = weekCounts;
+        weeklyChart.update();
     }
-
-    function calculateMonthlyData(month, year, data) {
-        let monthlyShutdown = [0, 0, 0, 0, 0];
-        let monthlyPushedPulled = [0, 0, 0, 0, 0];
-        let labels = [];
     
-        const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get total days in the month
-        const weeksCount = Math.ceil(daysInMonth / 7); // Calculate total full weeks in the month
-    
-        data.forEach(item => {
-            if (item.datetime.getMonth() === month && item.datetime.getFullYear() === year) {
-                const dayOfMonth = item.datetime.getDate() - 1; // Zero-based index for days
-                const weekIndex = Math.floor(dayOfMonth / 7); // Determine the week index for the day
-    
-                monthlyShutdown[weekIndex] += item.shutdown;
-                monthlyPushedPulled[weekIndex] += item.pushedPulled;
-            }
-        });
-    
-        // Generate the date ranges for each week of the month
-        for (let week = 0; week < weeksCount; week++) {
-            const startDay = week * 7 + 1;
-            const endDay = Math.min(startDay + 6, daysInMonth); // Ensure end day does not exceed month days
-            const startDate = new Date(year, month, startDay);
-            const endDate = new Date(year, month, endDay);
-            labels.push(`${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`);
+    function updateMonthlyChart(reportData) {
+        const { monthlyData } = reportData;
+        const monthLabels = [];
+        const monthCounts = [];
+        
+        const currentYear = new Date().getFullYear();
+        const startMonth = currentMonth * 12;
+        const endMonth = startMonth + 12;
+        
+        for (let i = startMonth; i < endMonth; i++) {
+            const month = i + 1;
+            const monthLabel = `Month ${month}`;
+            monthLabels.push(monthLabel);
+            const monthData = monthlyData.find(md => md.year === currentYear && md.month === month);
+            monthCounts.push(monthData ? monthData.count : 0);
         }
-    
-        return {
-            shutdown: monthlyShutdown,
-            pushedPulled: monthlyPushedPulled,
-            labels: labels
-        };
+        
+        monthlyChart.data.labels = monthLabels;
+        monthlyChart.data.datasets[0].data = monthCounts;
+        monthlyChart.update();
     }
     
-
-    function calculateYearlyData(year, data) {
-        let yearlyShutdown = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        let yearlyPushedPulled = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-        data.forEach(item => {
-            if (item.datetime.getFullYear() === year) {
-                const monthOfYear = item.datetime.getMonth();
-                yearlyShutdown[monthOfYear] += item.shutdown;
-                yearlyPushedPulled[monthOfYear] += item.pushedPulled;
-            }
-        });
-
-        return {
-            shutdown: yearlyShutdown,
-            pushedPulled: yearlyPushedPulled
-        };
+    function updateYearlyChart(reportData) {
+        const { yearlyData } = reportData;
+        const yearLabels = [];
+        const yearCounts = [];
+        
+        const startYear = currentYear * 5;
+        const endYear = startYear + 5;
+        
+        for (let i = startYear; i < endYear; i++) {
+            const year = i + 1;
+            const yearLabel = `Year ${year}`;
+            yearLabels.push(yearLabel);
+            const yearData = yearlyData.find(yd => yd.year === year);
+            yearCounts.push(yearData ? yearData.count : 0);
+        }
+        
+        yearlyChart.data.labels = yearLabels;
+        yearlyChart.data.datasets[0].data = yearCounts;
+        yearlyChart.update();
     }
-
-    function getWeekRange(weekNumber, year) {
-        const firstDayOfYear = new Date(year, 0, 1);
-        const daysOffset = firstDayOfYear.getDay();
-        const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7 - daysOffset);
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 6);
-        return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
-    }
-
-    function getMonthName(monthIndex) {
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        return monthNames[monthIndex];
-    }
-
-    function getCurrentWeekNumber(d) {
-        const firstDayOfYear = new Date(d.getFullYear(), 0, 1);
-        const pastDaysOfYear = (d - firstDayOfYear) / 86400000;
-        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-    }
-
-    // Initialize buttons state
-    updatePrevNextButtons();
 });
-
-
 
     //pie chart
     var ctx = document.getElementById("pieChart");
