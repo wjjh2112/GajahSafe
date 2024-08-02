@@ -133,6 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error:', error));
     }
 
+    function navigateWeek(offset) {
+        currentWeek.setDate(currentWeek.getDate() + offset * 7);
+        fetchReports().then(displayWeeklyChart);
+    }
+
+    function navigateMonth(offset) {
+        currentMonth.setMonth(currentMonth.getMonth() + offset);
+        fetchReports().then(displayMonthlyChart);
+    }
+
+    function navigateYear(offset) {
+        currentYear += offset;
+        fetchReports().then(displayYearlyChart);
+    }
+
     function displayWeeklyChart(reports) {
         const weekStart = new Date(currentWeek);
         weekStart.setDate(currentWeek.getDate() - currentWeek.getDay());
@@ -423,20 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('yearly-header').textContent = `${currentYear}`;
     }
 
-    function navigateWeek(offset) {
-        currentWeek.setDate(currentWeek.getDate() + offset * 7);
-        fetchReports().then(displayWeeklyChart);
-    }
-
-    function navigateMonth(offset) {
-        currentMonth.setMonth(currentMonth.getMonth() + offset);
-        fetchReports().then(displayMonthlyChart);
-    }
-
-    function navigateYear(offset) {
-        currentYear += offset;
-        fetchReports().then(displayYearlyChart);
-    }
 });
 
 // Pie Chart
@@ -473,24 +474,21 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error:', error));
     }
 
-    function navigateWeek(direction) {
+    function navigateWeek(offset) {
         const weekStart = new Date(currentWeek);
         weekStart.setDate(currentWeek.getDate() - currentWeek.getDay());
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 6);
-
-        currentWeek.setDate(currentWeek.getDate() + (direction * 7));
-        displayPieWeeklyChart();
+        currentWeek.setDate(currentWeek.getDate() + (offset * 7));
+        fetchReports().then(reports => displayPieWeeklyChart(reports));
     }
 
-    function navigateMonth(direction) {
-        currentMonth.setMonth(currentMonth.getMonth() + direction);
-        displayPieMonthlyChart();
+    function navigateMonth(offset) {
+        currentMonth.setMonth(currentMonth.getMonth() + offset);
+        fetchReports().then(reports => displayPieMonthlyChart(reports));
     }
 
-    function navigateYear(direction) {
-        currentYear += direction;
-        displayPieYearlyChart();
+    function navigateYear(offset) {
+        currentYear += offset;
+        fetchReports().then(reports => displayPieYearlyChart(reports));
     }
 
     function displayPieWeeklyChart(reports) {
