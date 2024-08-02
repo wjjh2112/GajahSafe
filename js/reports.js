@@ -98,6 +98,8 @@ function filterReports() {
     });
 }
 
+
+// Line Graph
 document.addEventListener('DOMContentLoaded', function() {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
     const monthlyChartCtx = document.getElementById('monthly-chart').getContext('2d');
@@ -437,45 +439,221 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Pie Chart
+document.addEventListener('DOMContentLoaded', function() {
+    const pieWeeklyChartCtx = document.getElementById('pie-weekly-chart').getContext('2d');
+    const pieMonthlyChartCtx = document.getElementById('pie-monthly-chart').getContext('2d');
+    const pieYearlyChartCtx = document.getElementById('pie-yearly-chart').getContext('2d');
+    
+    let pieWeeklyChart, pieMonthlyChart, pieYearlyChart;
+    let currentWeek = new Date();
+    let currentMonth = new Date();
+    let currentYear = new Date().getFullYear();
 
-    //pie chart
-    var ctx = document.getElementById("pieChart");
-    if (ctx) {
-      ctx.height = 200;
-      var myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          datasets: [{
-            data: [45, 25, 20, 10],
-            backgroundColor: [
-              "rgba(0, 123, 255,0.9)",
-              "rgba(0, 123, 255,0.7)",
-              "rgba(0, 123, 255,0.5)",
-              "rgba(0,0,0,0.07)"
-            ],
-            hoverBackgroundColor: [
-              "rgba(0, 123, 255,0.9)",
-              "rgba(0, 123, 255,0.7)",
-              "rgba(0, 123, 255,0.5)",
-              "rgba(0,0,0,0.07)"
-            ]
+    document.getElementById('pie-prev-week').addEventListener('click', () => navigateWeek(-1));
+    document.getElementById('pie-next-week').addEventListener('click', () => navigateWeek(1));
+    document.getElementById('pie-prev-month').addEventListener('click', () => navigateMonth(-1));
+    document.getElementById('pie-next-month').addEventListener('click', () => navigateMonth(1));
+    document.getElementById('pie-prev-year').addEventListener('click', () => navigateYear(-1));
+    document.getElementById('pie-next-year').addEventListener('click', () => navigateYear(1));
 
-          }],
-          labels: [
-            "Green",
-            "Green",
-            "Green"
-          ]
-        },
-        options: {
-          legend: {
-            position: 'top',
-            labels: {
-              fontFamily: 'Poppins'
-            }
+    fetchReports().then(reports => {
+        displayPieWeeklyChart(reports);
+        displayPieMonthlyChart(reports);
+        displayPieYearlyChart(reports);
+    });
 
-          },
-          responsive: true
-        }
-      });
+    function fetchReports() {
+        return fetch('/reports')
+            .then(response => response.json())
+            .then(reports => {
+                reports.sort((a, b) => new Date(a.reportDateTime) - new Date(b.reportDateTime));
+                return reports;
+            })
+            .catch(error => console.error('Error:', error));
     }
+
+    function displayPieWeeklyChart(reports) {
+        const weekStart = new Date(currentWeek);
+        weekStart.setDate(currentWeek.getDate() - currentWeek.getDay());
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        const damages = aggregateDamages(reports, weekStart, weekEnd);
+
+        if (pieWeeklyChart) {
+            pieWeeklyChart.destroy();
+        }
+
+        pieWeeklyChart = new Chart(pieWeeklyChartCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(damages),
+                datasets: [{
+                    data: Object.values(damages),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Weekly Damages'
+                }
+            }
+        });
+
+        document.getElementById('pie-weekly-header').textContent = `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
+    }
+
+    function displayPieMonthlyChart(reports) {
+        const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+        const nextMonthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+
+        const damages = aggregateDamages(reports, monthStart, nextMonthStart);
+
+        if (pieMonthlyChart) {
+            pieMonthlyChart.destroy();
+        }
+
+        pieMonthlyChart = new Chart(pieMonthlyChartCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(damages),
+                datasets: [{
+                    data: Object.values(damages),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Monthly Damages'
+                }
+            }
+        });
+
+        document.getElementById('pie-monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
+    }
+
+    function displayPieYearlyChart(reports) {
+        const yearStart = new Date(currentYear, 0, 1);
+        const nextYearStart = new Date(currentYear + 1, 0, 1);
+
+        const damages = aggregateDamages(reports, yearStart, nextYearStart);
+
+        if (pieYearlyChart) {
+            pieYearlyChart.destroy();
+        }
+
+        pieYearlyChart = new Chart(pieYearlyChartCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(damages),
+                datasets: [{
+                    data: Object.values(damages),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Yearly Damages'
+                }
+            }
+        });
+
+        document.getElementById('pie-yearly-header').textContent = `${currentYear}`;
+    }
+
+    function aggregateDamages(reports, start, end) {
+        const damages = {};
+        reports.forEach(report => {
+            const reportDate = new Date(report.reportDateTime);
+            if (reportDate >= start && reportDate < end) {
+                report.damageType.forEach(type => {
+                    if (damages[type]) {
+                        damages[type]++;
+                    } else {
+                        damages[type] = 1;
+                    }
+                });
+            }
+        });
+        return damages;
+    }
+
+    function navigateWeek(step) {
+        currentWeek.setDate(currentWeek.getDate() + step * 7);
+        fetchReports().then(reports => displayPieWeeklyChart(reports));
+    }
+
+    function navigateMonth(step) {
+        currentMonth.setMonth(currentMonth.getMonth() + step);
+        fetchReports().then(reports => displayPieMonthlyChart(reports));
+    }
+
+    function navigateYear(step) {
+        currentYear += step;
+        fetchReports().then(reports => displayPieYearlyChart(reports));
+    }
+});

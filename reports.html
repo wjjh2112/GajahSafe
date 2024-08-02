@@ -255,6 +255,7 @@
                                 </div>
                             </div>
 
+                            <!-- LINE GRAPH -->
                             <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
@@ -297,6 +298,51 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- PIE CHART -->
+                            <div class="col-12">
+                                <div class="au-card m-b-30">
+                                    <div class="au-card-inner">
+                                        <h3 class="title-2 m-b-40"><span data-i18n="typesOfDamages"></span></h3>
+                                        <div class="default-tab">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="pie-nav-weekly-tab" data-toggle="tab" href="#pie-nav-week" role="tab" aria-controls="pie-nav-week" aria-selected="true"><span data-i18n="weekly"></span></a>
+                                                    <a class="nav-item nav-link" id="pie-nav-monthly-tab" data-toggle="tab" href="#pie-nav-month" role="tab" aria-controls="pie-nav-month" aria-selected="false"><span data-i18n="monthly"></span></a>
+                                                    <a class="nav-item nav-link" id="pie-nav-yearly-tab" data-toggle="tab" href="#pie-nav-year" role="tab" aria-controls="pie-nav-year" aria-selected="false"><span data-i18n="yearly"></span></a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="pie-nav-week" role="tabpanel" aria-labelledby="nav-week-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="pie-prev-week" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="pie-next-week" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="pie-weekly-header"></div>
+                                                    <canvas id="pie-weekly-chart"></canvas>
+                                                </div>
+                                                <div class="tab-pane fade" id="pie-nav-month" role="tabpanel" aria-labelledby="nav-month-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="pie-prev-month" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="pie-next-month" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="pie-monthly-header"></div>
+                                                    <canvas id="pie-monthly-chart"></canvas>
+                                                </div>
+                                                <div class="tab-pane fade" id="pie-nav-year" role="tabpanel" aria-labelledby="nav-year-tab">
+                                                    <div class="d-flex justify-content-between">
+                                                        <button id="pie-prev-year" class="au-btn--small"><i class="fas fa-arrow-left"></i></button>
+                                                        <button id="pie-next-year" class="au-btn--small"><i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                    <div class="chart-header" id="pie-yearly-header"></div>
+                                                    <canvas id="pie-yearly-chart"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-12">
                                 <div class="au-card m-b-30">
                                     <div class="au-card-inner">
