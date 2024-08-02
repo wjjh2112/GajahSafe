@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const pieWeeklyChartCtx = document.getElementById('pie-weekly-chart').getContext('2d');
     const pieMonthlyChartCtx = document.getElementById('pie-monthly-chart').getContext('2d');
     const pieYearlyChartCtx = document.getElementById('pie-yearly-chart').getContext('2d');
-    
+
     let pieWeeklyChart, pieMonthlyChart, pieYearlyChart;
     let currentWeek = new Date();
     let currentMonth = new Date();
@@ -467,11 +467,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return fetch('/reports')
             .then(response => response.json())
             .then(reports => {
-                console.log('Fetched Reports:', reports);  // Debugging line
                 reports.sort((a, b) => new Date(a.reportDateTime) - new Date(b.reportDateTime));
                 return reports;
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function navigateWeek(direction) {
+        const weekStart = new Date(currentWeek);
+        weekStart.setDate(currentWeek.getDate() - currentWeek.getDay());
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        currentWeek.setDate(currentWeek.getDate() + (direction * 7));
+        displayPieWeeklyChart();
+    }
+
+    function navigateMonth(direction) {
+        currentMonth.setMonth(currentMonth.getMonth() + direction);
+        displayPieMonthlyChart();
+    }
+
+    function navigateYear(direction) {
+        currentYear += direction;
+        displayPieYearlyChart();
     }
 
     function displayPieWeeklyChart(reports) {
@@ -480,8 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const weekEnd = new Date(weekStart);
         weekEnd.setDate(weekStart.getDate() + 6);
 
-        const damages = aggregateDamages(reports, weekStart, weekEnd);
-        console.log('Weekly Damages:', damages);  // Debugging line
+        const weeklyData = calculateDamageTypes(reports, weekStart, weekEnd);
 
         if (pieWeeklyChart) {
             pieWeeklyChart.destroy();
@@ -490,26 +508,10 @@ document.addEventListener('DOMContentLoaded', function() {
         pieWeeklyChart = new Chart(pieWeeklyChartCtx, {
             type: 'pie',
             data: {
-                labels: Object.keys(damages),
+                labels: Object.keys(weeklyData),
                 datasets: [{
-                    data: Object.values(damages),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
+                    data: Object.values(weeklyData),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7824F', '#6A0D91', '#B0B0B0']
                 }]
             },
             options: {
@@ -517,9 +519,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 legend: {
                     position: 'top',
                 },
-                title: {
-                    display: true,
-                    text: 'Weekly Damages'
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.value}`;
+                        }
+                    }
                 }
             }
         });
@@ -531,8 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
         const nextMonthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
 
-        const damages = aggregateDamages(reports, monthStart, nextMonthStart);
-        console.log('Monthly Damages:', damages);  // Debugging line
+        const monthlyData = calculateDamageTypes(reports, monthStart, nextMonthStart);
 
         if (pieMonthlyChart) {
             pieMonthlyChart.destroy();
@@ -541,26 +545,10 @@ document.addEventListener('DOMContentLoaded', function() {
         pieMonthlyChart = new Chart(pieMonthlyChartCtx, {
             type: 'pie',
             data: {
-                labels: Object.keys(damages),
+                labels: Object.keys(monthlyData),
                 datasets: [{
-                    data: Object.values(damages),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
+                    data: Object.values(monthlyData),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7824F', '#6A0D91', '#B0B0B0']
                 }]
             },
             options: {
@@ -568,22 +556,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 legend: {
                     position: 'top',
                 },
-                title: {
-                    display: true,
-                    text: 'Monthly Damages'
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.value}`;
+                        }
+                    }
                 }
             }
         });
 
-        document.getElementById('pie-monthly-header').textContent = `${monthStart.toLocaleDateString()} - ${nextMonthStart.toLocaleDateString()}`;
+        document.getElementById('pie-monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
     }
 
     function displayPieYearlyChart(reports) {
         const yearStart = new Date(currentYear, 0, 1);
-        const nextYearStart = new Date(currentYear + 1, 0, 1);
+        const yearEnd = new Date(currentYear, 12, 0);
 
-        const damages = aggregateDamages(reports, yearStart, nextYearStart);
-        console.log('Yearly Damages:', damages);  // Debugging line
+        const yearlyData = calculateDamageTypes(reports, yearStart, yearEnd);
 
         if (pieYearlyChart) {
             pieYearlyChart.destroy();
@@ -592,26 +582,10 @@ document.addEventListener('DOMContentLoaded', function() {
         pieYearlyChart = new Chart(pieYearlyChartCtx, {
             type: 'pie',
             data: {
-                labels: Object.keys(damages),
+                labels: Object.keys(yearlyData),
                 datasets: [{
-                    data: Object.values(damages),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
+                    data: Object.values(yearlyData),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#F7824F', '#6A0D91', '#B0B0B0']
                 }]
             },
             options: {
@@ -619,43 +593,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 legend: {
                     position: 'top',
                 },
-                title: {
-                    display: true,
-                    text: 'Yearly Damages'
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `${tooltipItem.label}: ${tooltipItem.value}`;
+                        }
+                    }
                 }
             }
         });
 
-        document.getElementById('pie-yearly-header').textContent = `${yearStart.getFullYear()}`;
+        document.getElementById('pie-yearly-header').textContent = `${currentYear}`;
     }
 
-    function navigateWeek(offset) {
-        currentWeek.setDate(currentWeek.getDate() + offset * 7);
-        fetchReports().then(reports => displayPieWeeklyChart(reports));
-    }
+    function calculateDamageTypes(reports, startDate, endDate) {
+        const damageTypes = {
+            fence: 0,
+            vehicle: 0,
+            assets: 0,
+            paddock: 0,
+            pipe: 0,
+            casualties: 0,
+            other: 0
+        };
 
-    function navigateMonth(offset) {
-        currentMonth.setMonth(currentMonth.getMonth() + offset);
-        fetchReports().then(reports => displayPieMonthlyChart(reports));
-    }
-
-    function navigateYear(offset) {
-        currentYear += offset;
-        fetchReports().then(reports => displayPieYearlyChart(reports));
-    }
-
-    function aggregateDamages(reports, startDate, endDate) {
-        const damages = {};
         reports.forEach(report => {
             const reportDate = new Date(report.reportDateTime);
-            if (reportDate >= startDate && reportDate < endDate) {
-                report.reportInfo.forEach(info => {
-                    if (info.typeOfDamage) {
-                        damages[info.typeOfDamage] = (damages[info.typeOfDamage] || 0) + 1;
+            if (reportDate >= startDate && reportDate <= endDate) {
+                for (const [type, damage] of Object.entries(report.reportDamages)) {
+                    if (damage.damaged) {
+                        damageTypes[type]++;
                     }
-                });
+                }
             }
         });
-        return damages;
+
+        return damageTypes;
     }
 });
