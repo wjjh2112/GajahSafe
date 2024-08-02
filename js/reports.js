@@ -467,6 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return fetch('/reports')
             .then(response => response.json())
             .then(reports => {
+                console.log('Fetched Reports:', reports);  // Debugging line
                 reports.sort((a, b) => new Date(a.reportDateTime) - new Date(b.reportDateTime));
                 return reports;
             })
@@ -480,6 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
         weekEnd.setDate(weekStart.getDate() + 6);
 
         const damages = aggregateDamages(reports, weekStart, weekEnd);
+        console.log('Weekly Damages:', damages);  // Debugging line
 
         if (pieWeeklyChart) {
             pieWeeklyChart.destroy();
@@ -530,6 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextMonthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
 
         const damages = aggregateDamages(reports, monthStart, nextMonthStart);
+        console.log('Monthly Damages:', damages);  // Debugging line
 
         if (pieMonthlyChart) {
             pieMonthlyChart.destroy();
@@ -572,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('pie-monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
+        document.getElementById('pie-monthly-header').textContent = `${monthStart.toLocaleDateString()} - ${nextMonthStart.toLocaleDateString()}`;
     }
 
     function displayPieYearlyChart(reports) {
@@ -580,6 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextYearStart = new Date(currentYear + 1, 0, 1);
 
         const damages = aggregateDamages(reports, yearStart, nextYearStart);
+        console.log('Yearly Damages:', damages);  // Debugging line
 
         if (pieYearlyChart) {
             pieYearlyChart.destroy();
@@ -622,38 +626,36 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('pie-yearly-header').textContent = `${currentYear}`;
+        document.getElementById('pie-yearly-header').textContent = `${yearStart.getFullYear()}`;
     }
 
-    function aggregateDamages(reports, start, end) {
+    function navigateWeek(offset) {
+        currentWeek.setDate(currentWeek.getDate() + offset * 7);
+        fetchReports().then(reports => displayPieWeeklyChart(reports));
+    }
+
+    function navigateMonth(offset) {
+        currentMonth.setMonth(currentMonth.getMonth() + offset);
+        fetchReports().then(reports => displayPieMonthlyChart(reports));
+    }
+
+    function navigateYear(offset) {
+        currentYear += offset;
+        fetchReports().then(reports => displayPieYearlyChart(reports));
+    }
+
+    function aggregateDamages(reports, startDate, endDate) {
         const damages = {};
         reports.forEach(report => {
             const reportDate = new Date(report.reportDateTime);
-            if (reportDate >= start && reportDate < end) {
-                report.damageType.forEach(type => {
-                    if (damages[type]) {
-                        damages[type]++;
-                    } else {
-                        damages[type] = 1;
+            if (reportDate >= startDate && reportDate < endDate) {
+                report.reportInfo.forEach(info => {
+                    if (info.typeOfDamage) {
+                        damages[info.typeOfDamage] = (damages[info.typeOfDamage] || 0) + 1;
                     }
                 });
             }
         });
         return damages;
-    }
-
-    function navigateWeek(step) {
-        currentWeek.setDate(currentWeek.getDate() + step * 7);
-        fetchReports().then(reports => displayPieWeeklyChart(reports));
-    }
-
-    function navigateMonth(step) {
-        currentMonth.setMonth(currentMonth.getMonth() + step);
-        fetchReports().then(reports => displayPieMonthlyChart(reports));
-    }
-
-    function navigateYear(step) {
-        currentYear += step;
-        fetchReports().then(reports => displayPieYearlyChart(reports));
     }
 });
