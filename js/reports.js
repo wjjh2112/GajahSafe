@@ -99,7 +99,6 @@ function filterReports() {
 }
 
 
-// Line Graph
 document.addEventListener('DOMContentLoaded', function() {
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
     const monthlyChartCtx = document.getElementById('monthly-chart').getContext('2d');
@@ -109,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentWeek = new Date();
     let currentMonth = new Date();
     let currentYear = new Date().getFullYear();
+    let oldestDate, latestDate;
 
     document.getElementById('prev-week').addEventListener('click', () => navigateWeek(-1));
     document.getElementById('next-week').addEventListener('click', () => navigateWeek(1));
@@ -118,9 +118,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('next-year').addEventListener('click', () => navigateYear(1));
 
     fetchReports().then(reports => {
+        oldestDate = new Date(reports[0].reportDateTime);
+        latestDate = new Date(reports[reports.length - 1].reportDateTime);
         displayWeeklyChart(reports);
         displayMonthlyChart(reports);
         displayYearlyChart(reports);
+        updateNavigationButtons();
     });
 
     function fetchReports() {
@@ -135,17 +138,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function navigateWeek(offset) {
         currentWeek.setDate(currentWeek.getDate() + offset * 7);
-        fetchReports().then(displayWeeklyChart);
+        fetchReports().then(reports => {
+            displayWeeklyChart(reports);
+            updateNavigationButtons();
+        });
     }
 
     function navigateMonth(offset) {
         currentMonth.setMonth(currentMonth.getMonth() + offset);
-        fetchReports().then(displayMonthlyChart);
+        fetchReports().then(reports => {
+            displayMonthlyChart(reports);
+            updateNavigationButtons();
+        });
     }
 
     function navigateYear(offset) {
         currentYear += offset;
-        fetchReports().then(displayYearlyChart);
+        fetchReports().then(reports => {
+            displayYearlyChart(reports);
+            updateNavigationButtons();
+        });
+    }
+
+    function updateNavigationButtons() {
+        const weekStart = new Date(currentWeek);
+        weekStart.setDate(currentWeek.getDate() - currentWeek.getDay());
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+        const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+
+        const prevWeekBtn = document.getElementById('prev-week');
+        const nextWeekBtn = document.getElementById('next-week');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const prevYearBtn = document.getElementById('prev-year');
+        const nextYearBtn = document.getElementById('next-year');
+
+        prevWeekBtn.disabled = weekStart <= oldestDate;
+        nextWeekBtn.disabled = weekEnd >= latestDate;
+        prevMonthBtn.disabled = monthStart <= oldestDate;
+        nextMonthBtn.disabled = monthEnd >= latestDate;
+        prevYearBtn.disabled = currentYear <= oldestDate.getFullYear();
+        nextYearBtn.disabled = currentYear >= latestDate.getFullYear();
+
+        prevWeekBtn.style.color = prevWeekBtn.disabled ? 'grey' : 'black';
+        nextWeekBtn.style.color = nextWeekBtn.disabled ? 'grey' : 'black';
+        prevMonthBtn.style.color = prevMonthBtn.disabled ? 'grey' : 'black';
+        nextMonthBtn.style.color = nextMonthBtn.disabled ? 'grey' : 'black';
+        prevYearBtn.style.color = prevYearBtn.disabled ? 'grey' : 'black';
+        nextYearBtn.style.color = nextYearBtn.disabled ? 'grey' : 'black';
     }
 
     function displayWeeklyChart(reports) {
@@ -244,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayMonthlyChart(reports) {
         const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
         const nextMonthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
-    
+
         const monthlyData = [];
         for (let date = new Date(monthStart); date < nextMonthStart; date.setDate(date.getDate() + 1)) {
             const endDate = new Date(date);
@@ -252,16 +295,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (endDate >= nextMonthStart) {
                 endDate.setDate(nextMonthStart.getDate() - 1);
             }
-    
+
             const count = reports.filter(report => {
                 const reportDate = new Date(report.reportDateTime);
                 return reportDate >= date && reportDate <= endDate;
             }).length;
-    
+
             monthlyData.push({ startDate: new Date(date), endDate: new Date(endDate), count });
             date.setDate(endDate.getDate());
         }
-    
+
         if (monthlyChart) {
             monthlyChart.destroy();
         }
@@ -340,21 +383,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('monthly-header').textContent = `${monthStart.toLocaleDateString('default', { month: 'long' })} ${monthStart.getFullYear()}`;
+        document.getElementById('monthly-header').textContent = `${monthStart.toLocaleDateString()} - ${monthEnd.toLocaleDateString()}`;
     }
 
     function displayYearlyChart(reports) {
         const yearlyData = [];
+
         for (let month = 0; month < 12; month++) {
             const monthStart = new Date(currentYear, month, 1);
-            const monthEnd = new Date(currentYear, month + 1, 0);
+            const nextMonthStart = new Date(currentYear, month + 1, 1);
 
             const count = reports.filter(report => {
                 const reportDate = new Date(report.reportDateTime);
-                return reportDate >= monthStart && reportDate <= monthEnd;
+                return reportDate >= monthStart && reportDate < nextMonthStart;
             }).length;
 
-            yearlyData.push({ month: monthStart.toLocaleString('default', { month: 'long' }), count });
+            yearlyData.push({ month: monthStart.toLocaleString('default', { month: 'short' }), count });
         }
 
         if (yearlyChart) {
@@ -406,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         scaleLabel: {
                             display: false,
-                            labelString: 'Date'
+                            labelString: 'Month'
                         },
                         ticks: {
                             fontFamily: "Poppins"
@@ -437,7 +481,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('yearly-header').textContent = `${currentYear}`;
     }
-
 });
 
 // Pie Chart
