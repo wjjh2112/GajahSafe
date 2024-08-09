@@ -84,6 +84,9 @@
     "role": "Peranan",
     "status": "Status",
     "userFullname": "Nama Penuh",
+    "userEmail": "E-mail",
+    "editUser": "Edit Pengguna:",
+    "deleteUserConfirmation": "Sahkan untuk Buang Pengguna:",
 
     "newDevice": "Peranti Baharu",
     "editDevice": "Edit Peranti",

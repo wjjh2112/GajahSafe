@@ -84,6 +84,9 @@
     "role": "Role",
     "status": "Status",
     "userFullname": "Fullname",
+    "userEmail": "E-mail",
+    "editUser": "Edit User:",
+    "deleteUserConfirmation": "Confirm to Delete user:",
 
     "newDevice": "New Device",
     "addNewDevice": "Add New Device",
