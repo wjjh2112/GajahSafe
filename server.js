@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Connect to MongoDB
-mongoose.connect('mongodb://admin:!NanaWaji060524!@13.229.129.54:27017/dummydb', {
+mongoose.connect('mongodb://admin:!NanaWaji060524!@13.229.129.54:27017/GajahSafe', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   authSource: 'admin' // the database where the user is created
