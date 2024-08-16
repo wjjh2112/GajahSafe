@@ -41,7 +41,7 @@ const uploadFile = (filePath, fileName) => {
   const fileContent = fs.readFileSync(filePath);
 
   const params = {
-    Bucket: 'gajahsafe-report-images',
+    Bucket: 'gajahsafe',
     Key: fileName,
     Body: fileContent,
     ContentDisposition: 'inline'
@@ -390,7 +390,7 @@ app.get('/images/:imageKey', async (req, res) => {
 
   try {
     const params = {
-      Bucket: 'gajahsafe-report-images',
+      Bucket: 'gajahsafe',
       Key: imageKey
     };
 

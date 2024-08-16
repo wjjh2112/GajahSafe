@@ -37,7 +37,17 @@ document.getElementById('file-upload').addEventListener('change', handleFileSele
 
 function handleFileSelect(event) {
     const newFiles = Array.from(event.target.files);
-    fileArray.push(...newFiles);
+    const validExtensions = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    const validFiles = newFiles.filter(file => {
+        if (!validExtensions.includes(file.type)) {
+            alert(`${file.name} is not a valid file type. Only JPEG, JPG, and PNG are allowed.`);
+            return false;
+        }
+        return true;
+    });
+
+    fileArray.push(...validFiles);
 
     updateFileList();
 }
