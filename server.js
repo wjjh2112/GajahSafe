@@ -40,33 +40,15 @@ const upload = multer({ dest: 'uploads/' });
 const uploadFile = (filePath, fileName) => {
   const fileContent = fs.readFileSync(filePath);
 
-  let contentType;
-  if (ext === '.jpg' || ext === '.jpeg') {
-    contentType = 'image/jpeg';
-  } else if (ext === '.png') {
-    contentType = 'image/png';
-  } else {
-    throw new Error('Unsupported file type. Only JPEG and PNG are allowed.');
-  }
-
   const params = {
-    Bucket: 'gajahsafe',
+    Bucket: 'gajahsafe-report-images',
     Key: fileName,
     Body: fileContent,
-    ContentDisposition: 'inline',
-    ContentType: contentType
+    ContentDisposition: 'inline'
   };
 
   return s3.upload(params).promise()
-        .then(data => {
-            // Delete the file from local after upload
-            fs.unlinkSync(filePath);
-            return fileName; // Return the fileName (key) instead of the full URL
-        })
-        .catch(err => {
-            console.error('Error uploading file:', err);
-            throw err;
-        });
+    .then(data => fileName); // Return the fileName (key) instead of the full URL
 };
 
 // Serve static files (from root directory)
@@ -408,7 +390,7 @@ app.get('/images/:imageKey', async (req, res) => {
 
   try {
     const params = {
-      Bucket: 'gajahsafe',
+      Bucket: 'gajahsafe-report-images',
       Key: imageKey
     };
 
