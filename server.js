@@ -39,12 +39,21 @@ const upload = multer({ dest: 'uploads/' });
 // Function to upload file to S3
 const uploadFile = (filePath, fileName) => {
   const fileContent = fs.readFileSync(filePath);
+  let contentType;
+    if (ext === '.jpg' || ext === '.jpeg') {
+      contentType = 'image/jpeg';
+    } else if (ext === '.png') {
+      contentType = 'image/png';
+    } else {
+      throw new Error('Unsupported file type. Only JPEG and PNG are allowed.');
+    }
 
   const params = {
     Bucket: 'gajahsafe',
     Key: fileName,
     Body: fileContent,
-    ContentDisposition: 'inline'
+    ContentDisposition: 'inline',
+    ContentType: contentType
   };
 
   return s3.upload(params).promise()
