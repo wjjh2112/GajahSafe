@@ -39,6 +39,7 @@ const upload = multer({ dest: 'uploads/' });
 // Function to upload file to S3
 const uploadFile = (filePath, fileName) => {
   const fileContent = fs.readFileSync(filePath);
+  const ext = path.extname(fileName).toLowerCase();
   let contentType;
     if (ext === '.jpg' || ext === '.jpeg') {
       contentType = 'image/jpeg';
